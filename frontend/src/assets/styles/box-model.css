@@ -1,0 +1,12 @@
+/* Document flow spacing */
+.flow-spacing {
+  > * + * {
+    margin-top: var(--flow-spacing);
+  }
+}
+
+/* Container */
+.container {
+  max-width: min(var(--max-w-container), 100% - 2 * var(--p-inline-container));
+  margin: 0 auto;
+}

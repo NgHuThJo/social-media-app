@@ -1,0 +1,12 @@
+.form {
+  composes: grid from global;
+  gap: 2rem;
+  padding: 2rem;
+  font-weight: var(--fw-form);
+  background-color: var(--bgc-content);
+}
+
+.buttons {
+  composes: flex-wrap from global;
+  gap: 1rem;
+}

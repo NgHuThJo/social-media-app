@@ -1,0 +1,50 @@
+/* Font weight related utility classes */
+.fw-thin {
+  font-weight: 100;
+}
+
+.fw-extra-light {
+  font-weight: 200;
+}
+
+.fw-light {
+  font-weight: 300;
+}
+
+.fw-normal {
+  font-weight: 400;
+}
+
+.fw-medium {
+  font-weight: 500;
+}
+
+.fw-semi-bold {
+  font-weight: 600;
+}
+
+.fw-bold {
+  font-weight: 700;
+}
+
+.fw-extra-bold {
+  font-weight: 800;
+}
+
+.fw-heavy {
+  font-weight: 900;
+}
+
+/* Heading levels */
+.h1 {
+  font-size: var(--fs-h1);
+}
+.h2 {
+  font-size: var(--fs-h2);
+}
+.h3 {
+  font-size: var(--fs-h3);
+}
+.h4 {
+  font-size: var(--fs-h4);
+}

@@ -1,0 +1,3 @@
+.layout {
+  composes: macro-grid from global;
+}

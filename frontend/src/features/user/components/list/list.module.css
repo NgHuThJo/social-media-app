@@ -1,0 +1,11 @@
+.sidebar {
+  background-color: orange;
+}
+
+.layout {
+  composes: grid from global;
+}
+
+.item {
+  padding: 1rem;
+}

@@ -1,0 +1,18 @@
+.list {
+  composes: grid from global;
+  gap: 2rem;
+}
+
+.info {
+  font-weight: var(--fw-button);
+  font-size: var(--fs-profile);
+  background-color: var(--bgc-content);
+
+  > * {
+    padding: 1rem;
+  }
+
+  > :not(:last-child) {
+    border-bottom: 1px solid var(--c-box-shadow);
+  }
+}

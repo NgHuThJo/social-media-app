@@ -1,0 +1,11 @@
+.post {
+  composes: flow-spacing from global;
+  padding: 2rem;
+  background-color: var(--bgc-content);
+}
+
+.flex-row {
+  composes: flex-wrap from global;
+  gap: 1rem;
+  font-weight: var(--fw-heading);
+}

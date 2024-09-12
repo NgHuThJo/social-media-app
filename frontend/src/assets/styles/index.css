@@ -1,0 +1,129 @@
+/* custom properties */
+:root {
+  /* box model */
+  --max-w-container: var(--macro--grid-content-max-w);
+  --min-w-root: 20rem;
+  --w-icon: 2rem;
+  --p-inline-container: 2rem;
+  --flow-spacing: 1em;
+
+  /* grid */
+  --auto-grid-column-w: 15rem;
+
+  --macro-grid-gap: 2rem;
+  --macro-grid-breakout-max-w: 90rem;
+  --macro-grid-content-max-w: 70rem;
+  --macro-grid-breakout-column-w: calc(
+    (var(--macro-grid-breakout-max-w) - var(--macro-grid-content-max-w)) / 2
+  );
+
+  /* typography */
+  --ff-root: system-ui, sans-serif;
+
+  --fw-root: 400;
+  --fw-button: 600;
+  --fw-heading: 700;
+  --fw-link: 500;
+  --fw-form: 500;
+
+  --fs-root: 0.9375rem;
+  --fs-label: 0.8125rem;
+  --fs-profile: 1.125rem;
+  --fs-h1: 3rem;
+  --fs-h2: 2rem;
+  --fs-h3: 1.5rem;
+  --fs-h4: 1.125rem;
+
+  /* colors */
+  --c-root: #71728c;
+  --c-logo: #fff;
+  --c-link: #000;
+  --c-box-shadow: #d8e1ef;
+  --c-error: #da3633;
+
+  --bgc-brand: #2d5be3;
+  --bgc-root: #eff4fb;
+  --bgc-content: #fff;
+  --bgc-button: #67c5ed;
+
+  /* transition */
+  --transition-duration: 0.5s;
+}
+
+/* reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+}
+
+html {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+
+body {
+  flex-grow: 1;
+}
+
+a,
+button,
+input {
+  cursor: pointer;
+}
+
+a {
+  font-weight: var(--fw-link);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: revert;
+  }
+}
+
+button {
+  border: none;
+  font-weight: var(--fw-button);
+  background-color: transparent;
+  transition: opacity var(--transition-duration);
+
+  &:hover {
+    opacity: 0.5;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: revert;
+  font-weight: var(--fw-heading);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+/* root styles */
+#root {
+  min-width: var(--min-w-root);
+  min-height: 100svh;
+  font-family: var(--ff-root);
+  font-weight: var(--fw-root);
+  font-size: var(--fs-root);
+  color: var(--c-root);
+  background-color: var(--bgc-root);
+}

@@ -1,0 +1,11 @@
+.default {
+  composes: flex from global;
+  align-items: center;
+  gap: 1rem;
+}
+
+.chatroom {
+  composes: flex-col from global;
+  gap: 1rem;
+  font-weight: var(--fw-button);
+}

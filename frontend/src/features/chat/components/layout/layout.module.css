@@ -1,0 +1,6 @@
+.layout {
+  composes: grid from global;
+  grid-template-columns: auto 1fr;
+  padding: 2rem;
+  background-color: purple;
+}

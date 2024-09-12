@@ -1,0 +1,13 @@
+.layout {
+  composes: grid from global;
+  grid-template-rows: 1fr auto;
+  background-color: var(--bgc-content);
+}
+
+.form {
+  display: flex;
+
+  > input {
+    flex-grow: 1;
+  }
+}

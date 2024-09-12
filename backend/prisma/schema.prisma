@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                     Int           @id @default(autoincrement())
+  email                  String        @unique
+  name                   String
+  password               String
+  posts                  Post[]
+  comments               Comment[]
+  messages               Message[]
+  sentFriendRequests     Friendship[]  @relation("sentRequests")
+  receivedFriendRequests Friendship[]  @relation("receivedRequests")
+  postLike               PostLike[]
+  commentLike            CommentLike[]
+}
+
+enum FriendshipStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+model Friendship {
+  id          Int              @id @default(autoincrement())
+  requester   User             @relation("sentRequests", fields: [requesterId], references: [id])
+  requesterId Int
+  addressee   User             @relation("receivedRequests", fields: [addresseeId], references: [id])
+  addresseeId Int
+  status      FriendshipStatus @default(PENDING)
+
+  @@unique([requesterId, addresseeId])
+}
+
+model Post {
+  id        Int        @id @default(autoincrement())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  title     String     @db.VarChar(255)
+  content   String
+  author    User       @relation(fields: [authorId], references: [id])
+  authorId  Int
+  comments  Comment[]
+  likes     PostLike[]
+}
+
+model PostLike {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+  post   Post @relation(fields: [postId], references: [id])
+  postId Int
+
+  @@unique([userId, postId])
+}
+
+model Comment {
+  id              Int           @id @default(autoincrement())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  content         String
+  author          User          @relation(fields: [authorId], references: [id])
+  authorId        Int
+  parentPost      Post?         @relation(fields: [parentPostId], references: [id], onDelete: Cascade)
+  parentPostId    Int?
+  parentComment   Comment?      @relation("commentReplies", fields: [parentCommentId], references: [id], onDelete: Cascade)
+  parentCommentId Int?
+  replies         Comment[]     @relation("commentReplies")
+  likes           CommentLike[]
+}
+
+model CommentLike {
+  id        Int     @id @default(autoincrement())
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
+  comment   Comment @relation(fields: [commentId], references: [id])
+  commentId Int
+
+  @@unique([userId, commentId])
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  author     User     @relation(fields: [authorId], references: [id])
+  authorId   Int
+  createdAt  DateTime @default(now())
+  content    String
+  chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
+  chatroomId Int
+}
+
+model Chatroom {
+  id       Int       @id @default(autoincrement())
+  title    String
+  messages Message[]
+}

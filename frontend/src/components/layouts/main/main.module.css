@@ -1,0 +1,4 @@
+.layout {
+  display: grid;
+  padding-inline: var(--p-inline-container);
+}

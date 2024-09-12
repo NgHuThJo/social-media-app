@@ -1,0 +1,22 @@
+.container {
+  --line-spacing: 2rem;
+
+  padding-left: var(--line-spacing);
+  margin-left: var(--line-spacing);
+  border-left: 2px solid var(--c-box-shadow);
+}
+
+.comment {
+  composes: flow-spacing from global;
+}
+
+.metadata {
+  composes: flex-wrap from global;
+  gap: 1rem;
+  font-weight: var(--fw-heading);
+}
+
+.options {
+  composes: flex-wrap from global;
+  gap: 2rem;
+}

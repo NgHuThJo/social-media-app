@@ -1,0 +1,5 @@
+.default {
+  max-width: min(100%, 45rem);
+  margin: auto;
+  background-color: var(--bgc-brand);
+}

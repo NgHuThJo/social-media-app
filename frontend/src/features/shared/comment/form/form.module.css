@@ -1,0 +1,25 @@
+.form {
+  composes: flow-spacing from global;
+
+  padding: 2rem;
+  background-color: var(--bgc-root);
+
+  textarea {
+    min-width: 100%;
+  }
+}
+
+.flex-row {
+  composes: flex-wrap from global;
+  gap: 2rem;
+
+  > button {
+    padding: 1rem;
+    background-color: var(--bgc-button);
+    transition: opacity var(--transition-duration);
+  }
+
+  > button:hover {
+    opacity: 0.8;
+  }
+}

@@ -1,0 +1,16 @@
+.list {
+  display: grid;
+  grid-template-columns: 1fr;
+  background-color: pink;
+}
+
+.list-item {
+  display: block;
+  padding: 1rem;
+  text-align: left;
+}
+
+.list-item-active {
+  composes: list-item;
+  background-color: blue;
+}

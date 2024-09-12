@@ -1,0 +1,19 @@
+.nav {
+  composes: flex-wrap from global;
+
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: var(--p-inline-container);
+  color: var(--c-link);
+  background-color: var(--bgc-brand);
+
+  h1 {
+    color: var(--c-logo);
+  }
+}
+
+.navlist {
+  composes: flex from global;
+  gap: 1rem;
+}
