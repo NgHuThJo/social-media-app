@@ -1,17 +1,24 @@
+import { useAuthContext } from "@frontend/providers/auth-context";
 import { ChatroomType } from "../layout/layout";
 import styles from "./room-list.module.css";
 
 type ChatroomListProps = {
   data: ChatroomType;
   currentRoom: number | undefined;
-  handleChooseRoom: (roomId: number) => void;
+  handleSelectRoom: (
+    userId: string,
+    currentRoomId: number | undefined,
+    newRoomId: number,
+  ) => void;
 };
 
 export function ChatroomList({
   data,
   currentRoom,
-  handleChooseRoom,
+  handleSelectRoom,
 }: ChatroomListProps) {
+  const { userId } = useAuthContext();
+
   return (
     <div className={styles.list}>
       {data?.map((chatroom) => (
@@ -23,7 +30,7 @@ export function ChatroomList({
               : styles["list-item-active"]
           }
           onClick={() => {
-            handleChooseRoom(chatroom.id);
+            handleSelectRoom(userId, currentRoom, chatroom.id);
           }}
         >
           <p>

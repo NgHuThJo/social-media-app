@@ -45,7 +45,8 @@ export function ChatLayout() {
   const [onlineUsers, setOnlineUsers] = useState<OnlineUserType>();
   const [chatrooms, setChatrooms] = useState<ChatroomType>();
   const [currentRoom, setCurrentRoom] = useState<number>();
-  const { createChatroom, getOnlineUsers } = useWebSocketContextApi();
+  const { createChatroom, getOnlineUsers, joinChatroom } =
+    useWebSocketContextApi();
   const { chatroomsData, onlineUsersData } =
     useLoaderData() as ChatLoaderDataType;
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -79,8 +80,13 @@ export function ChatLayout() {
     }
   };
 
-  const selectChatroom = (roomId: number) => {
-    setCurrentRoom(roomId);
+  const selectChatroom = (
+    userId: string,
+    currentRoomId: number | undefined,
+    newRoomId: number,
+  ) => {
+    setCurrentRoom(newRoomId);
+    joinChatroom(userId, currentRoomId, newRoomId);
   };
 
   return (
@@ -94,7 +100,7 @@ export function ChatLayout() {
             <ChatroomList
               data={chatrooms}
               currentRoom={currentRoom}
-              handleChooseRoom={selectChatroom}
+              handleSelectRoom={selectChatroom}
             />
           )}
         </section>
@@ -109,7 +115,11 @@ export function ChatLayout() {
           />
         </section>
       </aside>
-      {currentRoom ? <ChatBox /> : <p>No chatroom chosen.</p>}
+      {currentRoom ? (
+        <ChatBox currentRoomId={currentRoom} />
+      ) : (
+        <p>No chatroom chosen.</p>
+      )}
     </section>
   );
 }

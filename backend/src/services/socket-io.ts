@@ -2,7 +2,6 @@ import { Server as HttpServer } from "node:http";
 import { Server as SocketIOServer, Socket } from "socket.io";
 import { messageService } from "./message";
 import { userService } from "./user";
-import { messageRouter } from "@backend/routers/message";
 
 export type SocketServiceType = typeof SocketService;
 
@@ -60,23 +59,16 @@ export class SocketService {
         console.log("A user disconnected");
       });
 
-      socket.on("joinRoom", (data) => {
-        const { id, roomId } = data;
-        this.joinRoom(id, roomId);
+      socket.on("joinChatroom", (data) => {
+        const { userId, currentRoomId, newRoomId } = data;
 
-        socket
-          .to(roomId)
-          .emit("joinRoom", `User "${id}" has joined room "${roomId}"`);
+        this.leaveRoom(userId, currentRoomId);
+        this.joinRoom(userId, newRoomId);
       });
 
       socket.on("chatMessage", async (data) => {
         const { message, id, roomId } = data;
-        const newMessage = await messageService.createMessage(
-          message,
-          id,
-          roomId,
-        );
-        const allRoomMessages = await messageService.getAllRoomMessages(roomId);
+        await messageService.createMessage(message, id, roomId);
       });
     });
   }
@@ -94,8 +86,9 @@ export class SocketService {
     this.#onlineUsers.get(userId)?.join(convertedRoomId);
   }
 
-  leaveRoom(userId: number, roomName: string) {
-    this.#onlineUsers.get(userId)?.leave(roomName);
+  leaveRoom(userId: number, roomId: number) {
+    const convertedRoomId = String(roomId);
+    this.#onlineUsers.get(userId)?.leave(convertedRoomId);
   }
 
   broadcast(event: string, data: any, userId: number) {

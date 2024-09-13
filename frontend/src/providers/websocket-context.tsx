@@ -13,6 +13,7 @@ import {
   ChatroomType,
   OnlineUserType,
 } from "@frontend/features/chat/components/layout/layout";
+import { RoomMessagesType } from "@frontend/features/chat/components/box/box";
 
 type WebSocketContextType = {
   socket: MutableRefObject<Socket | undefined>;
@@ -23,9 +24,17 @@ type WebSocketContextApiType = {
   createChatroom: (
     setChatrooms: Dispatch<SetStateAction<ChatroomType>>,
   ) => () => void;
+  createMessage: (
+    setMessages: Dispatch<SetStateAction<RoomMessagesType>>,
+  ) => () => void;
   getOnlineUsers: (
     setOnlineUsers: Dispatch<SetStateAction<OnlineUserType>>,
   ) => () => void;
+  joinChatroom: (
+    userId: string,
+    currentRoomId: number | undefined,
+    newRoomId: number,
+  ) => void;
   removeWebSocket: (userId: string) => void;
 } | null;
 
@@ -90,6 +99,32 @@ export function WebSocketContextProvider({ children }: PropsWithChildren) {
       socket.current = undefined;
     };
 
+    const createMessage = (
+      setMessages: Dispatch<SetStateAction<RoomMessagesType>>,
+    ) => {
+      const createMessageFn = (data: RoomMessagesType) => {
+        setMessages(data);
+      };
+
+      socket.current?.on("chatMessage", createMessageFn);
+
+      return () => {
+        socket.current?.removeListener("chatMessage", createMessageFn);
+      };
+    };
+
+    const joinChatroom = (
+      userId: string,
+      currentRoomId: number | undefined,
+      newRoomId: number,
+    ) => {
+      socket.current?.emit("joinChatroom", {
+        userId,
+        currentRoomId,
+        newRoomId,
+      });
+    };
+
     const getOnlineUsers = (
       setOnlineUsers: Dispatch<SetStateAction<OnlineUserType>>,
     ) => {
@@ -118,7 +153,14 @@ export function WebSocketContextProvider({ children }: PropsWithChildren) {
       };
     };
 
-    return { createWebSocket, createChatroom, getOnlineUsers, removeWebSocket };
+    return {
+      createWebSocket,
+      createChatroom,
+      createMessage,
+      getOnlineUsers,
+      joinChatroom,
+      removeWebSocket,
+    };
   }, []);
 
   return (
