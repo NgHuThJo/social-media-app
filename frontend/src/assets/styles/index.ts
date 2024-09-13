@@ -3,3 +3,4 @@ import "./index.css";
 import "./box-model.css";
 import "./layout.css";
 import "./typography.css";
+import "./animation.css";

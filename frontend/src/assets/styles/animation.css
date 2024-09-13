@@ -1,0 +1,15 @@
+.fade-in {
+  visibility: visible;
+  opacity: 0.5;
+  transition:
+    visibility 0s linear 0s,
+    opacity 0.5s;
+}
+
+.fade-out {
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    visibility 0s linear 0.5s,
+    opacity 0.5s;
+}
