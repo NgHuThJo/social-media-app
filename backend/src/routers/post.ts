@@ -1,7 +1,11 @@
 import { z } from "zod";
+import { publicProcedure, router } from "./trpc";
 import { postService } from "@backend/services/post";
 import { logError } from "@backend/utils/error-logger";
-import { publicProcedure, router } from "./trpc";
+import {
+  nonEmptyStringSchema,
+  numericIdSchema,
+} from "@backend/utils/zod-schema";
 
 export const postRouter = router({
   getAllPosts: publicProcedure.query(async () => {
@@ -17,28 +21,34 @@ export const postRouter = router({
   createPost: publicProcedure
     .input(
       z.object({
-        userId: z.number().gt(0),
-        title: z.string().min(1),
-        content: z.string().min(1),
+        userId: numericIdSchema,
+        title: nonEmptyStringSchema,
+        content: nonEmptyStringSchema,
       }),
     )
     .mutation(async ({ input }) => {
       const { userId, title, content } = input;
 
       try {
-        const friends = await postService.createPost(userId, title, content);
+        const post = await postService.createPost(userId, title, content);
 
-        return friends;
+        return post;
       } catch (error) {
         logError(error);
       }
     }),
 
   getParentComments: publicProcedure
-    .input(z.number().gt(0))
+    .input(
+      z.object({
+        postId: numericIdSchema,
+      }),
+    )
     .query(async ({ input }) => {
+      const { postId } = input;
+
       try {
-        const parentComments = await postService.getParentComments(input);
+        const parentComments = await postService.getParentComments(postId);
 
         return parentComments;
       } catch (error) {
@@ -47,10 +57,16 @@ export const postRouter = router({
     }),
 
   getChildComments: publicProcedure
-    .input(z.number().gt(0))
+    .input(
+      z.object({
+        commentId: numericIdSchema,
+      }),
+    )
     .query(async ({ input }) => {
+      const { commentId } = input;
+
       try {
-        const childComments = await postService.getChildComments(input);
+        const childComments = await postService.getChildComments(commentId);
 
         return childComments;
       } catch (error) {
@@ -61,9 +77,9 @@ export const postRouter = router({
   createPostComment: publicProcedure
     .input(
       z.object({
-        content: z.string().min(1),
-        postId: z.number().gt(0),
-        userId: z.number().gt(0),
+        content: nonEmptyStringSchema,
+        postId: numericIdSchema,
+        userId: numericIdSchema,
       }),
     )
     .mutation(async ({ input }) => {
@@ -85,18 +101,18 @@ export const postRouter = router({
   createCommentReply: publicProcedure
     .input(
       z.object({
-        content: z.string().min(1),
-        postId: z.number().gt(0),
-        userId: z.number().gt(0),
+        commentId: numericIdSchema,
+        content: nonEmptyStringSchema,
+        userId: numericIdSchema,
       }),
     )
     .mutation(async ({ input }) => {
-      const { content, postId, userId } = input;
+      const { commentId, content, userId } = input;
 
       try {
         const newComment = postService.createCommentReply(
           content,
-          postId,
+          commentId,
           userId,
         );
 
@@ -107,10 +123,16 @@ export const postRouter = router({
     }),
 
   getAllFeeds: publicProcedure
-    .input(z.number().gt(0))
+    .input(
+      z.object({
+        userId: numericIdSchema,
+      }),
+    )
     .query(async ({ input }) => {
+      const { userId } = input;
+
       try {
-        const feeds = await postService.getAllFeeds(input);
+        const feeds = await postService.getAllFeeds(userId);
 
         return feeds;
       } catch (error) {

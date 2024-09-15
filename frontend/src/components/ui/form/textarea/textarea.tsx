@@ -3,7 +3,7 @@ import { Error } from "../error/error";
 import styles from "./textarea.module.css";
 
 type TextAreaProps = ComponentPropsWithoutRef<"textarea"> & {
-  error?: string;
+  error?: string[];
 };
 
 export function TextArea({
@@ -15,7 +15,7 @@ export function TextArea({
   return (
     <div className={styles[className]}>
       <textarea name={name} id={name} {...restProps}></textarea>
-      {error && <Error message={error} />}
+      {error?.map((message) => <Error message={message} />)}
     </div>
   );
 }

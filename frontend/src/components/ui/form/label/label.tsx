@@ -4,7 +4,7 @@ import styles from "./label.module.css";
 
 type LabelProps = ComponentPropsWithoutRef<"label"> & {
   label?: string;
-  error?: string;
+  error?: string[];
 };
 
 export function Label({
@@ -19,7 +19,7 @@ export function Label({
     <label className={styles[className]} htmlFor={htmlFor} {...restProps}>
       {label}
       {children}
-      {error && <Error message={error} />}
+      {error?.map((message) => <Error message={message} />)}
     </label>
   );
 }

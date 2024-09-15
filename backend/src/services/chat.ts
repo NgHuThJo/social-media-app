@@ -1,5 +1,4 @@
 import { prisma } from "@backend/models";
-import { AppError } from "@backend/utils/app-error";
 
 class ChatService {
   async createChatroom(title: string) {
@@ -11,9 +10,7 @@ class ChatService {
   }
 
   async getAllChatrooms() {
-    const allChatrooms = await prisma.chatroom.findMany();
-
-    return allChatrooms;
+    return await prisma.chatroom.findMany();
   }
 }
 

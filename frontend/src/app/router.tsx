@@ -39,7 +39,7 @@ export function Router() {
       element: <ProtectedRoute />,
       children: [
         {
-          path: ":id",
+          path: ":userId",
           element: <AppRoot />,
           children: [
             {

@@ -6,30 +6,19 @@ import {
   useActionData,
 } from "react-router-dom";
 import { TRPCClientError } from "@trpc/client";
-import { z } from "zod";
 import { AuthContextApiType } from "@frontend/providers/auth-context";
 import { Button } from "@frontend/components/ui/button/button";
 import { Error } from "@frontend/components/ui/form/error/error";
 import { Input } from "@frontend/components/ui/form/input/input";
 import { client } from "@frontend/lib/trpc";
+import { authSchema, AuthSchemaError } from "@frontend/types/zod-schema";
 import styles from "./login-form.module.css";
-
-const loginFormSchema = z.object({
-  email: z.string().email("Email is not available"),
-  password: z.string().min(1, "Password must have at least 1 character"),
-});
-
-type LoginActionData = {
-  errors?: z.infer<typeof loginFormSchema> & {
-    general: string;
-  };
-};
 
 export const loginAction =
   (authContextApi: AuthContextApiType): ActionFunction =>
   async ({ request }) => {
     const formData = Object.fromEntries(await request.formData());
-    const validatedInput = loginFormSchema.safeParse(formData);
+    const validatedInput = authSchema.safeParse(formData);
 
     if (!validatedInput.success) {
       return {
@@ -62,7 +51,7 @@ export const loginAction =
   };
 
 export function LoginForm() {
-  const actionData = useActionData() as LoginActionData;
+  const actionData = useActionData() as AuthSchemaError;
 
   return (
     <div className={styles.layout}>
@@ -81,7 +70,7 @@ export function LoginForm() {
           error={actionData?.errors?.password}
         />
         {actionData?.errors?.general && (
-          <Error message={actionData?.errors?.general} />
+          <Error message={actionData.errors.general} />
         )}
         <div className={styles.cta}>
           <Button type="submit" className="auth">

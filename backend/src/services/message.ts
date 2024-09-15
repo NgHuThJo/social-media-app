@@ -1,5 +1,4 @@
 import { prisma } from "@backend/models";
-import { AppError } from "@backend/utils/app-error";
 
 class MessageService {
   async getAllRoomMessages(roomId: number) {

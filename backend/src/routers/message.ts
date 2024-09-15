@@ -2,14 +2,18 @@ import { z } from "zod";
 import { messageService } from "@backend/services/message";
 import { logError } from "@backend/utils/error-logger";
 import { publicProcedure, router } from "./trpc";
+import {
+  nonEmptyStringSchema,
+  numericIdSchema,
+} from "@backend/utils/zod-schema";
 
 export const messageRouter = router({
   createMessage: publicProcedure
     .input(
       z.object({
-        content: z.string().min(1, "No empty content"),
-        userId: z.number().gt(0, "Invalid userId"),
-        roomId: z.number().gt(0, "Invalid roomId"),
+        content: nonEmptyStringSchema,
+        userId: numericIdSchema,
+        roomId: numericIdSchema,
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -30,10 +34,16 @@ export const messageRouter = router({
     }),
 
   getAllRoomMessages: publicProcedure
-    .input(z.number().gt(0))
+    .input(
+      z.object({
+        roomId: numericIdSchema,
+      }),
+    )
     .query(async ({ input }) => {
+      const { roomId } = input;
+
       try {
-        const messages = await messageService.getAllRoomMessages(input);
+        const messages = await messageService.getAllRoomMessages(roomId);
 
         return messages;
       } catch (error) {

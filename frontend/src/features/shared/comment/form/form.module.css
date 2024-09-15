@@ -9,7 +9,7 @@
   }
 }
 
-.flex-row {
+.actions {
   composes: flex-wrap from global;
   gap: 2rem;
 

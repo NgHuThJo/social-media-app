@@ -2,13 +2,25 @@ import { z } from "zod";
 import { userService } from "@backend/services/user";
 import { publicProcedure, router } from "./trpc";
 import { logError } from "@backend/utils/error-logger";
+import {
+  emailSchema,
+  nameSchema,
+  numericIdSchema,
+  passwordSchema,
+} from "@backend/utils/zod-schema";
 
 export const userRouter = router({
   getUser: publicProcedure
-    .input(z.number().gt(0, "Invalid userId"))
+    .input(
+      z.object({
+        userId: numericIdSchema,
+      }),
+    )
     .query(async ({ input }) => {
+      const { userId } = input;
+
       try {
-        const user = await userService.getUser(input);
+        const user = await userService.getUser(userId);
 
         return user;
       } catch (error) {
@@ -17,10 +29,16 @@ export const userRouter = router({
     }),
 
   getListOfUsers: publicProcedure
-    .input(z.array(z.number()))
+    .input(
+      z.object({
+        userIdList: z.array(z.number()),
+      }),
+    )
     .query(async ({ input }) => {
+      const { userIdList } = input;
+
       try {
-        const users = await userService.getListOfUsers(input);
+        const users = await userService.getListOfUsers(userIdList);
 
         return users;
       } catch (error) {
@@ -39,10 +57,16 @@ export const userRouter = router({
   }),
 
   getAllOtherUsers: publicProcedure
-    .input(z.number().gt(0, "Invalid userId"))
+    .input(
+      z.object({
+        userId: numericIdSchema,
+      }),
+    )
     .query(async ({ input }) => {
+      const { userId } = input;
+
       try {
-        const otherUsers = await userService.getAllOtherUsers(input);
+        const otherUsers = await userService.getAllOtherUsers(userId);
 
         return otherUsers;
       } catch (error) {
@@ -66,18 +90,17 @@ export const userRouter = router({
   registerUser: publicProcedure
     .input(
       z.object({
-        email: z.string().email(),
-        name: z.string(),
-        password: z.string().min(1),
+        email: emailSchema,
+        name: nameSchema,
+        password: passwordSchema,
       }),
     )
     .mutation(async ({ input }) => {
+      const { email, name, password } = input;
+
       try {
-        const newUser = await userService.registerUser(
-          input.email,
-          input.name,
-          input.password,
-        );
+        const newUser = await userService.registerUser(email, name, password);
+
         return newUser;
       } catch (error) {
         logError(error);

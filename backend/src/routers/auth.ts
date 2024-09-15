@@ -1,19 +1,22 @@
 import { z } from "zod";
+import { publicProcedure, router } from "./trpc";
 import { authService } from "@backend/services/auth";
 import { logError } from "@backend/utils/error-logger";
-import { publicProcedure, router } from "./trpc";
+import { emailSchema, passwordSchema } from "@backend/utils/zod-schema";
 
 export const authRouter = router({
   loginUser: publicProcedure
     .input(
       z.object({
-        email: z.string().email(),
-        password: z.string().min(1),
+        email: emailSchema,
+        password: passwordSchema,
       }),
     )
     .mutation(async ({ input }) => {
+      const { email, password } = input;
+
       try {
-        const user = await authService.loginUser(input.email, input.password);
+        const user = await authService.loginUser(email, password);
 
         return user;
       } catch (error) {

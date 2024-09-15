@@ -1,31 +1,17 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { z } from "zod";
 import { useWebSocketContextApi } from "@frontend/providers/websocket-context";
 import { useToggle } from "@frontend/hooks/useToggle";
 import { useError } from "@frontend/hooks/useError";
-import { client } from "@frontend/lib/trpc";
 import { Button } from "@frontend/components/ui/button/button";
+import { client } from "@frontend/lib/trpc";
 import { formatRelativeTimeDate } from "@frontend/utils/intl";
-
+import { messageSchema, MessageSchemaError } from "@frontend/types/zod-schema";
 import styles from "./box.module.css";
 
 export type RoomMessagesType = Awaited<
   ReturnType<typeof client.message.getAllRoomMessages.query>
 >;
-
-const chatBoxSchema = z.object({
-  content: z.string().min(1, "No empty string"),
-  userId: z.number().gt(0, "Invalid userId"),
-  roomId: z.number().gt(0, "Invalid roomId"),
-});
-
-type ChatBoxError = {
-  errors: {
-    content?: string[];
-    userId?: string[];
-  };
-};
 
 type ChatBoxProps = {
   currentRoomId: number;
@@ -35,7 +21,7 @@ export function ChatBox({ currentRoomId }: ChatBoxProps) {
   const [messages, setMessages] = useState<RoomMessagesType>();
   const messageInputRef = useRef<HTMLInputElement>(null);
   const { createMessage } = useWebSocketContextApi();
-  const { error, addError, resetError } = useError<ChatBoxError>();
+  const { error, addError, resetError } = useError<MessageSchemaError>();
   const { isOpen: isEmojiOpen, toggle: toggleEmoji } = useToggle();
   const { id } = useParams();
 
@@ -62,10 +48,10 @@ export function ChatBox({ currentRoomId }: ChatBoxProps) {
     const formData = new FormData(event.currentTarget);
     const data = {
       ...Object.fromEntries(formData),
-      userId: Number(id),
-      roomId: currentRoomId,
+      userId: id,
+      roomId: String(currentRoomId),
     };
-    const validatedData = chatBoxSchema.safeParse(data);
+    const validatedData = messageSchema.safeParse(data);
     event.currentTarget.reset();
 
     if (!validatedData.success) {

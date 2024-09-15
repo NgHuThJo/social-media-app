@@ -2,24 +2,28 @@ import { z } from "zod";
 import { publicProcedure, router } from "./trpc";
 import { chatService } from "@backend/services/chat";
 import { logError } from "@backend/utils/error-logger";
+import {
+  nonEmptyStringSchema,
+  numericIdSchema,
+} from "@backend/utils/zod-schema";
 
 export const chatRouter = router({
   createChatroom: publicProcedure
     .input(
       z.object({
-        title: z.string().min(1),
-        id: z.number().gt(0),
+        title: nonEmptyStringSchema,
+        userId: numericIdSchema,
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      const { id, title } = input;
+      const { userId, title } = input;
       const { socketService } = ctx;
 
       try {
         const newChatroom = await chatService.createChatroom(title);
+        socketService.joinRoom(userId, newChatroom.id);
         const allChatrooms = await chatService.getAllChatrooms();
-        socketService.joinRoom(id, newChatroom.id);
-        socketService.broadcast("createChatroom", allChatrooms, id);
+        socketService.broadcast("createChatroom", allChatrooms, userId);
 
         return allChatrooms;
       } catch (error) {
@@ -29,9 +33,9 @@ export const chatRouter = router({
 
   getAllChatrooms: publicProcedure.query(async () => {
     try {
-      const chatrooms = await chatService.getAllChatrooms();
+      const allChatrooms = await chatService.getAllChatrooms();
 
-      return chatrooms;
+      return allChatrooms;
     } catch (error) {
       logError(error);
     }

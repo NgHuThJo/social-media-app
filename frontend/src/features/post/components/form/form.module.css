@@ -6,7 +6,7 @@
   background-color: var(--bgc-content);
 }
 
-.buttons {
+.actions {
   composes: flex-wrap from global;
   gap: 1rem;
 }

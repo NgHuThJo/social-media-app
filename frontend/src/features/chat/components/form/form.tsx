@@ -1,11 +1,16 @@
 import { MouseEvent, forwardRef } from "react";
 import { ActionFunctionArgs, Form, useActionData } from "react-router-dom";
 import { z } from "zod";
-import { client } from "@frontend/lib/trpc";
 import { Button } from "@frontend/components/ui/button/button";
 import { Dialog } from "@frontend/components/ui/dialog/dialog";
 import { Error } from "@frontend/components/ui/form/error/error";
 import { Input } from "@frontend/components/ui/form/input/input";
+import { client } from "@frontend/lib/trpc";
+import {
+  nonEmptyStringSchema,
+  numericIdSchema,
+  SchemaError,
+} from "@frontend/types/zod-schema";
 import styles from "./form.module.css";
 
 type ChatFormProps = {
@@ -13,15 +18,11 @@ type ChatFormProps = {
   onClose: () => void;
 };
 
-type ChatActionData = {
-  errors?: z.infer<typeof chatActionSchema> & {
-    general: string;
-  };
-};
+type ChatActionSchemaError = SchemaError<typeof chatActionSchema>;
 
 const chatActionSchema = z.object({
-  title: z.string().min(1, "No empty string allowed"),
-  id: z.number().gt(0, "Invalid userId"),
+  title: nonEmptyStringSchema,
+  userId: numericIdSchema,
 });
 
 export const chatAction = async ({ request, params }: ActionFunctionArgs) => {
@@ -53,7 +54,7 @@ export const chatAction = async ({ request, params }: ActionFunctionArgs) => {
 
 export const ChatForm = forwardRef<HTMLDialogElement, ChatFormProps>(
   ({ handleDialogClick, onClose }, ref) => {
-    const actionData = useActionData() as ChatActionData;
+    const actionData = useActionData() as ChatActionSchemaError;
 
     return (
       <Dialog ref={ref} onClick={handleDialogClick}>

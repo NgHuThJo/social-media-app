@@ -1,25 +1,14 @@
 import { Form, useActionData } from "react-router-dom";
 import { TRPCClientError } from "@trpc/client";
-import { z } from "zod";
 import { client } from "@frontend/lib/trpc";
 import { Button } from "@frontend/components/ui/button/button";
 import { Error } from "@frontend/components/ui/form/error/error";
 import { Input } from "@frontend/components/ui/form/input/input";
 import { TextArea } from "@frontend/components/ui/form/textarea/textarea";
+import { handleError } from "@frontend/utils/error-handling";
 import { ActionDispatchFunction } from "@frontend/types";
+import { commentSchema, CommentSchemaError } from "@frontend/types/zod-schema";
 import styles from "./form.module.css";
-
-const commentFormSchema = z.object({
-  content: z.string().min(1, "No empty content"),
-  postId: z.number().gt(0, "Invalid postId"),
-  userId: z.number().gt(0),
-});
-
-type CommentFormActionData = {
-  errors?: z.infer<typeof commentFormSchema> & {
-    general: string;
-  };
-};
 
 type CommentProps = {
   intent: string;
@@ -40,7 +29,7 @@ export const createPostComment: ActionDispatchFunction = async (
     postId: convertedPostId,
     userId,
   };
-  const validatedInput = commentFormSchema.safeParse(payload);
+  const validatedInput = commentSchema.safeParse(payload);
 
   if (!validatedInput.success) {
     return {
@@ -54,17 +43,7 @@ export const createPostComment: ActionDispatchFunction = async (
     );
     return response;
   } catch (error) {
-    if (error instanceof TRPCClientError) {
-      console.error(error.message);
-    } else {
-      console.error((error as Error).message);
-    }
-
-    return {
-      errors: {
-        general: "Creation of comment failed",
-      },
-    };
+    return handleError(error, "Creation of comment failed");
   }
 };
 
@@ -81,7 +60,7 @@ export const createComment: ActionDispatchFunction = async (
     postId: convertedPostId,
     userId,
   };
-  const validatedInput = commentFormSchema.safeParse(payload);
+  const validatedInput = commentSchema.safeParse(payload);
 
   console.log(payload);
 
@@ -97,22 +76,12 @@ export const createComment: ActionDispatchFunction = async (
     );
     return response;
   } catch (error) {
-    if (error instanceof TRPCClientError) {
-      console.error(error.message);
-    } else {
-      console.error((error as Error).message);
-    }
-
-    return {
-      errors: {
-        general: "Creation of comment failed",
-      },
-    };
+    return handleError(error, "Creation of comment failed");
   }
 };
 
 export function CommentForm({ intent, onClose, postId }: CommentProps) {
-  const actionData = useActionData() as CommentFormActionData;
+  const actionData = useActionData() as CommentSchemaError;
 
   return (
     <Form method="post" className={styles.form}>
@@ -126,7 +95,7 @@ export function CommentForm({ intent, onClose, postId }: CommentProps) {
         <Error message={actionData.errors.general} />
       )}
       <Input type="hidden" name="postId" value={postId} />
-      <div className={styles["flex-row"]}>
+      <div className={styles.actions}>
         <Button type="submit" name="intent" value={intent}>
           Submit post
         </Button>

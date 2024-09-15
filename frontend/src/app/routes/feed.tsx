@@ -19,7 +19,7 @@ import { ContentLayout } from "@frontend/components/layouts/content/content";
 export type FeedLoaderData = LoaderData<typeof feedLoader>;
 
 export const feedLoader = async ({ params }: LoaderFunctionArgs) => {
-  const { id: userId } = params;
+  const { userId } = params;
 
   const response = await client.post.getAllFeeds.query(Number(userId));
 

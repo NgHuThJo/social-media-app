@@ -6,23 +6,17 @@ import {
   useActionData,
 } from "react-router-dom";
 import { TRPCClientError } from "@trpc/client";
-import { z } from "zod";
+import { Input } from "@frontend/components/ui/form/input/input";
 import { client } from "@frontend/lib/trpc";
-import logger from "@shared/utils/logger";
-
-const registerFormSchema = z.object({
-  email: z.string().email(),
-  name: z.string().min(1),
-  password: z.string().min(1),
-});
-
-type RegisterActionData = {
-  errors?: z.infer<typeof registerFormSchema>;
-};
+import {
+  registrationSchema,
+  RegistrationSchemaError,
+} from "@frontend/types/zod-schema";
+import { Button } from "@frontend/components/ui/button/button";
 
 export const registerAction: ActionFunction = async ({ request }) => {
   const formData = Object.fromEntries(await request.formData());
-  const validatedInput = registerFormSchema.safeParse(formData);
+  const validatedInput = registrationSchema.safeParse(formData);
 
   if (!validatedInput.success) {
     return { errors: validatedInput.error.flatten().fieldErrors };
@@ -32,10 +26,11 @@ export const registerAction: ActionFunction = async ({ request }) => {
     const response = await client.user.registerUser.mutate(validatedInput.data);
   } catch (error) {
     if (error instanceof TRPCClientError) {
-      logger.error(error.message);
+      console.error(error.message);
     } else {
-      logger.error((error as Error).message);
+      console.error((error as Error).message);
     }
+
     return {
       errors: {
         general: "Registration failed",
@@ -47,18 +42,32 @@ export const registerAction: ActionFunction = async ({ request }) => {
 };
 
 export function RegisterForm() {
-  const actionData = useActionData() as RegisterActionData;
+  const actionData = useActionData() as RegistrationSchemaError;
 
   return (
     <>
       <Form method="post">
-        <input type="text" name="name" placeholder="Name" />
-        {actionData?.errors?.name && <p>{actionData.errors.name}</p>}
-        <input type="email" name="email" placeholder="Email address" />
-        {actionData?.errors?.email && <p>{actionData.errors.email}</p>}
-        <input type="password" name="password" placeholder="Password" />
-        {actionData?.errors?.password && <p>{actionData.errors.password}</p>}
-        <button type="submit">Register</button>
+        <Input
+          type="text"
+          name="name"
+          placeholder="Name"
+          error={actionData?.errors?.name}
+        />
+        <Input
+          type="email"
+          name="email"
+          placeholder="Email address"
+          error={actionData?.errors?.email}
+        />
+        <Input
+          type="password"
+          name="password"
+          placeholder="Password"
+          error={actionData?.errors?.password}
+        />
+        <Button type="submit" className="auth">
+          Register
+        </Button>
       </Form>
       <Link to="/">Back to home</Link>
     </>

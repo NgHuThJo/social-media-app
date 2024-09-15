@@ -6,7 +6,7 @@ type InputProps = ComponentPropsWithRef<"input"> & {
   inputClassName?: string;
   labelClassName?: string;
   label?: string;
-  error?: string;
+  error?: string[];
 };
 
 export function Input({
