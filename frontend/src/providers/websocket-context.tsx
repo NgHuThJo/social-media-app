@@ -20,6 +20,9 @@ type WebSocketContextType = {
 } | null;
 
 type WebSocketContextApiType = {
+  addNotification: (
+    setNotification: Dispatch<SetStateAction<string[]>>,
+  ) => () => void;
   createWebSocket: (userId: string) => void;
   createChatroom: (
     setChatrooms: Dispatch<SetStateAction<ChatroomType>>,
@@ -99,6 +102,20 @@ export function WebSocketContextProvider({ children }: PropsWithChildren) {
       socket.current = undefined;
     };
 
+    const addNotification = (
+      setNotification: Dispatch<SetStateAction<string[]>>,
+    ) => {
+      const addNotificationFn = (data: string) => {
+        setNotification((prev) => [...prev, data]);
+      };
+
+      socket.current?.on("notification", addNotificationFn);
+
+      return () => {
+        socket.current?.removeListener("notification", addNotificationFn);
+      };
+    };
+
     const createMessage = (
       setMessages: Dispatch<SetStateAction<RoomMessagesType>>,
     ) => {
@@ -154,6 +171,7 @@ export function WebSocketContextProvider({ children }: PropsWithChildren) {
     };
 
     return {
+      addNotification,
       createWebSocket,
       createChatroom,
       createMessage,

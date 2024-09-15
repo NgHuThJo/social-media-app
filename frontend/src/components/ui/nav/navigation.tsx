@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAuthContext } from "@frontend/providers/auth-context";
 import { LogoutButton } from "@frontend/features/auth/components/logout/logout-button";
+import { NotificationList } from "../notifiication/list";
 import styles from "./navigation.module.css";
 
 const navMap = new Map([
@@ -28,8 +29,15 @@ export function Navigation() {
           ))}
         </ul>
       )}
-      {!userId && <Link to="/auth/login">Login</Link>}
-      {userId && <LogoutButton />}
+      <div className={styles["flex-row"]}>
+        {!userId && <Link to="/auth/login">Login</Link>}
+        {userId && (
+          <>
+            <LogoutButton />
+            {<NotificationList />}
+          </>
+        )}
+      </div>
     </nav>
   );
 }

@@ -4,7 +4,6 @@ export function LandingRoute() {
   return (
     <>
       <Navigation />
-      <main />
     </>
   );
 }

@@ -1,0 +1,32 @@
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: pink;
+  visibility: hidden;
+  z-index: 1;
+
+  > * {
+    padding: 1rem;
+  }
+}
+
+.notification {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  font-weight: var(--fw-button);
+}
+
+.bell {
+  composes: grid-stack from global;
+
+  > span {
+    justify-self: end;
+    align-self: end;
+    font-weight: var(--fw-heading);
+    color: var(--bgc-button);
+  }
+}

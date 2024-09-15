@@ -34,7 +34,7 @@ export class SocketService {
   }
 
   #setupListeners() {
-    this.#io.on("connection", (socket) => {
+    this.#io.on("connect", (socket) => {
       console.log("A user connected");
 
       socket.on("login", async (data) => {
@@ -42,8 +42,12 @@ export class SocketService {
 
         const onlineUserIds = this.getOnlineUserList();
         const onlineUsers = await userService.getListOfUsers(onlineUserIds);
+        socket.broadcast.emit(
+          "notification",
+          `UserId ${data.userId} logged in`,
+        );
+        socket.broadcast.emit("getOnlineUsers", onlineUsers);
         this.#io.emit("login", `UserId ${data.userId} logged in`);
-        this.#io.emit("getOnlineUsers", onlineUsers);
       });
 
       socket.on("logout", async (data) => {
@@ -51,11 +55,15 @@ export class SocketService {
 
         const onlineUserIds = this.getOnlineUserList();
         const onlineUsers = await userService.getListOfUsers(onlineUserIds);
-        this.#io.emit("logout", `UserId ${data.userId} logged out`);
+        socket.broadcast.emit(
+          "notification",
+          `UserId ${data.userId} logged out`,
+        );
         socket.broadcast.emit("getOnlineUsers", onlineUsers);
+        this.#io.emit("logout", `UserId ${data.userId} logged out`);
       });
 
-      socket.once("close", () => {
+      socket.once("disconnect", () => {
         console.log("A user disconnected");
       });
 
@@ -64,11 +72,12 @@ export class SocketService {
 
         this.leaveRoom(userId, currentRoomId);
         this.joinRoom(userId, newRoomId);
-      });
-
-      socket.on("chatMessage", async (data) => {
-        const { message, id, roomId } = data;
-        await messageService.createMessage(message, id, roomId);
+        socket
+          .to(newRoomId)
+          .emit(
+            "notification",
+            `User "${userId} has joined room "${newRoomId}"`,
+          );
       });
     });
   }

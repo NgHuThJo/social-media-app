@@ -100,7 +100,7 @@ export function ChatBox({ currentRoomId }: ChatBoxProps) {
         <div>
           {messages?.map((message) => (
             <p key={message.id}>
-              {message.authorId} (
+              {message.author.name} (
               {formatRelativeTimeDate(new Date(message.createdAt), "en")}):{" "}
               {message.content}
             </p>

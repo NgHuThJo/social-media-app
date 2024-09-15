@@ -5,6 +5,7 @@ import { client } from "@frontend/lib/trpc";
 import { Button } from "@frontend/components/ui/button/button";
 import { ChatBox } from "@frontend/features/chat/components/box/box";
 import { ChatForm } from "../form/form";
+import { ChatPlaceholder } from "../placeholder/placeholder";
 import { ChatroomList } from "../room-list/room-list";
 import { UserList } from "@frontend/features/user/components/list/list";
 import styles from "./layout.module.css";
@@ -50,8 +51,10 @@ export function ChatLayout() {
   const { chatroomsData, onlineUsersData } =
     useLoaderData() as ChatLoaderDataType;
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const layoutRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    layoutRef.current?.classList.add("slide-in");
     const getOnlineUsersCleanupFn = getOnlineUsers(setOnlineUsers);
     const createChatroomCleanupFn = createChatroom(setChatrooms);
 
@@ -90,7 +93,7 @@ export function ChatLayout() {
   };
 
   return (
-    <section className={styles.layout}>
+    <div className={styles.layout} ref={layoutRef}>
       <aside>
         <section>
           <h2>Online users</h2>
@@ -118,8 +121,8 @@ export function ChatLayout() {
       {currentRoom ? (
         <ChatBox currentRoomId={currentRoom} />
       ) : (
-        <p>No chatroom chosen.</p>
+        <ChatPlaceholder />
       )}
-    </section>
+    </div>
   );
 }

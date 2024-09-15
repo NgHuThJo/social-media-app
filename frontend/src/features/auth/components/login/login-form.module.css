@@ -1,0 +1,20 @@
+.layout {
+  composes: flow-spacing from global;
+
+  place-self: center;
+  padding: 2rem;
+  background-color: var(--bgc-brand);
+}
+
+.form {
+  composes: flow-spacing from global;
+
+  a {
+    display: inline-block;
+  }
+}
+
+.cta {
+  display: flex;
+  gap: 1rem;
+}

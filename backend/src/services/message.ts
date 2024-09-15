@@ -7,6 +7,9 @@ class MessageService {
       where: {
         chatroomId: roomId,
       },
+      include: {
+        author: true,
+      },
     });
   }
 

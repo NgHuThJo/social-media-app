@@ -119,6 +119,7 @@ ul {
 
 /* root styles */
 #root {
+  display: grid;
   min-width: var(--min-w-root);
   min-height: 100svh;
   font-family: var(--ff-root);

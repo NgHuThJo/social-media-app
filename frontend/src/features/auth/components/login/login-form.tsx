@@ -1,6 +1,7 @@
 import {
   ActionFunction,
   Form,
+  Link,
   redirect,
   useActionData,
 } from "react-router-dom";
@@ -8,7 +9,10 @@ import { TRPCClientError } from "@trpc/client";
 import { z } from "zod";
 import { AuthContextApiType } from "@frontend/providers/auth-context";
 import { Button } from "@frontend/components/ui/button/button";
+import { Error } from "@frontend/components/ui/form/error/error";
+import { Input } from "@frontend/components/ui/form/input/input";
 import { client } from "@frontend/lib/trpc";
+import styles from "./login-form.module.css";
 
 const loginFormSchema = z.object({
   email: z.string().email("Email is not available"),
@@ -61,15 +65,34 @@ export function LoginForm() {
   const actionData = useActionData() as LoginActionData;
 
   return (
-    <Form method="post">
-      <input type="email" name="email" placeholder="Email address" />
-      {actionData?.errors?.email && <p>{actionData.errors.email}</p>}
-      <input type="password" name="password" placeholder="Password" />
-      {actionData?.errors?.password && <p>{actionData.errors.password}</p>}
-      {actionData?.errors?.general && <p>{actionData.errors.general}</p>}
-      <Button type="submit" className="auth">
-        Login
-      </Button>
-    </Form>
+    <div className={styles.layout}>
+      <h1>Login</h1>
+      <Form method="post" className={styles.form}>
+        <Input
+          type="email"
+          name="email"
+          placeholder="Email address"
+          error={actionData?.errors?.email}
+        />
+        <Input
+          type="password"
+          name="password"
+          placeholder="Password"
+          error={actionData?.errors?.password}
+        />
+        {actionData?.errors?.general && (
+          <Error message={actionData?.errors?.general} />
+        )}
+        <div className={styles.cta}>
+          <Button type="submit" className="auth">
+            Login
+          </Button>
+          <Button type="button" className="auth">
+            Sign up
+          </Button>
+        </div>
+        <Link to="/">Back to home</Link>
+      </Form>
+    </div>
   );
 }

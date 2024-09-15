@@ -5,6 +5,7 @@
   align-items: center;
   gap: 1rem;
   padding: var(--p-inline-container);
+  position: relative;
   color: var(--c-link);
   background-color: var(--bgc-brand);
 
@@ -15,5 +16,10 @@
 
 .navlist {
   composes: flex from global;
+  gap: 1rem;
+}
+
+.flex-row {
+  display: flex;
   gap: 1rem;
 }

@@ -13,3 +13,37 @@
     visibility 0s linear 0.5s,
     opacity 0.5s;
 }
+
+@keyframes slideIn {
+  0% {
+    visibility: hidden;
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    visibility: visible;
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-in {
+  animation: slideIn 0.5s ease-in-out forwards;
+}
+
+@keyframes slideOut {
+  0% {
+    visibility: visible;
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    visibility: hidden;
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+.slide-out {
+  animation: slideOut 0.5s ease-in-out forwards;
+}
