@@ -1,28 +1,66 @@
-import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import { Suspense } from "react";
+import {
+  Await,
+  defer,
+  LoaderFunctionArgs,
+  useLoaderData,
+} from "react-router-dom";
 import { ContentLayout } from "@frontend/components/layouts/content/content";
 import { ProfileInfo } from "@frontend/features/profile/components/info/info";
+import { Spinner } from "@frontend/components/ui/spinner/spinner";
 import { client } from "@frontend/lib/trpc";
+import { handleError } from "@frontend/utils/error-handling";
 import { LoaderData } from "@frontend/types";
+import { userIdSchema } from "@frontend/types/zod-schema";
 
-export type ProfileLoaderData = LoaderData<typeof profileLoader>;
-
-export const profileLoader = async ({ params }: LoaderFunctionArgs) => {
-  const { id } = params;
-
-  const response = await client.user.getUser.query(Number(id));
-
-  return {
-    data: response,
-  };
+type ProfileLoaderData = {
+  data: LoaderData<typeof profileLoader>;
 };
 
+export type ProfileData = Awaited<ReturnType<typeof client.user.getUser.query>>;
+
+export const profileLoader = ({ params }: LoaderFunctionArgs) => {
+  const { userId } = params;
+  const payload = {
+    userId,
+  };
+  const validatedData = userIdSchema.safeParse(payload);
+
+  if (!validatedData.success) {
+    throw new Response(
+      JSON.stringify({ errors: validatedData.error.flatten().fieldErrors }),
+      { status: 400, statusText: "Invalid userId" },
+    );
+  }
+
+  try {
+    const response = client.user.getUser.query(validatedData.data);
+    // When using defer, pass response as unawaited promise
+    return defer({
+      data: response,
+    });
+  } catch (error) {
+    throw new Response(
+      JSON.stringify(handleError(error, "Could not fetch feed data")),
+      {
+        status: 500,
+        statusText: "Internal Server Error",
+      },
+    );
+  }
+};
+//
 export function ProfileRoute() {
-  const { data } = useLoaderData() as ProfileLoaderData;
+  const loaderData = useLoaderData() as ProfileLoaderData;
 
   return (
     <ContentLayout>
       <h2>Profile Info</h2>
-      <ProfileInfo data={data} />
+      <Suspense fallback={<Spinner />}>
+        <Await resolve={loaderData.data}>
+          {(profile) => <ProfileInfo data={profile} />}
+        </Await>
+      </Suspense>
     </ContentLayout>
   );
 }

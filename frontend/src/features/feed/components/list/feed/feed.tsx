@@ -1,12 +1,13 @@
 import { useToggle } from "@frontend/hooks/useToggle";
 import { Button } from "@frontend/components/ui/button/button";
-import { CommentList } from "@frontend/features/shared/comment/list/list";
 import { CommentForm } from "@frontend/features/shared/comment/form/form";
+import { CommentList } from "@frontend/features/shared/comment/list/list";
 import { formatRelativeTimeDate } from "@frontend/utils/intl";
 import { FeedLoaderData } from "@frontend/app/routes/feed";
 import styles from "./feed.module.css";
 
 type FeedData = NonNullable<FeedLoaderData["data"]>[number];
+
 type FeedProps = {
   data: FeedData;
 };

@@ -5,7 +5,7 @@ import { publicProcedure, router } from "./trpc";
 import {
   nonEmptyStringSchema,
   numericIdSchema,
-} from "@backend/utils/zod-schema";
+} from "@backend/types/zod-schema";
 
 export const messageRouter = router({
   createMessage: publicProcedure

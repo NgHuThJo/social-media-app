@@ -5,14 +5,14 @@ import {
   redirect,
   useActionData,
 } from "react-router-dom";
-import { TRPCClientError } from "@trpc/client";
+import { Button } from "@frontend/components/ui/button/button";
 import { Input } from "@frontend/components/ui/form/input/input";
 import { client } from "@frontend/lib/trpc";
+import { handleError } from "@frontend/utils/error-handling";
 import {
   registrationSchema,
   RegistrationSchemaError,
 } from "@frontend/types/zod-schema";
-import { Button } from "@frontend/components/ui/button/button";
 
 export const registerAction: ActionFunction = async ({ request }) => {
   const formData = Object.fromEntries(await request.formData());
@@ -25,17 +25,7 @@ export const registerAction: ActionFunction = async ({ request }) => {
   try {
     const response = await client.user.registerUser.mutate(validatedInput.data);
   } catch (error) {
-    if (error instanceof TRPCClientError) {
-      console.error(error.message);
-    } else {
-      console.error((error as Error).message);
-    }
-
-    return {
-      errors: {
-        general: "Registration failed",
-      },
-    };
+    return handleError(error, "Registration failed");
   }
 
   return redirect("/auth/login");

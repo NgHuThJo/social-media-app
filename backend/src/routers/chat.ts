@@ -5,7 +5,7 @@ import { logError } from "@backend/utils/error-logger";
 import {
   nonEmptyStringSchema,
   numericIdSchema,
-} from "@backend/utils/zod-schema";
+} from "@backend/types/zod-schema";
 
 export const chatRouter = router({
   createChatroom: publicProcedure

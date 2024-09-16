@@ -14,7 +14,7 @@ type PostCommentProps = {
 };
 
 export function CommentList({ parentId, isPostId }: PostCommentProps) {
-  const [data, setData] = useState<CommentListData>();
+  const [comments, setComments] = useState<CommentListData>();
   const { loading, error, abortControllerRef, fetchData } = useFetch();
 
   useEffect(() => {
@@ -22,14 +22,20 @@ export function CommentList({ parentId, isPostId }: PostCommentProps) {
       controller,
     ) => {
       const response = isPostId
-        ? await client.post.getParentComments.query(parentId, {
-            signal: controller.signal,
-          })
-        : await client.post.getChildComments.query(parentId, {
-            signal: controller.signal,
-          });
+        ? await client.post.getParentComments.query(
+            { postId: String(parentId) },
+            {
+              signal: controller.signal,
+            },
+          )
+        : await client.post.getChildComments.query(
+            { commentId: String(parentId) },
+            {
+              signal: controller.signal,
+            },
+          );
 
-      setData(response);
+      setComments(response);
     };
 
     fetchData(fetchFn);
@@ -49,12 +55,12 @@ export function CommentList({ parentId, isPostId }: PostCommentProps) {
     return <div>Error</div>;
   }
 
-  if (!data || data.length === 0) {
+  if (!comments || comments.length === 0) {
     return <div>No comments available</div>;
   }
   return (
     <ul className={styles.list}>
-      {data?.map((comment) => (
+      {comments?.map((comment) => (
         <Comment intent="comment" data={comment} key={comment.id} />
       ))}
     </ul>

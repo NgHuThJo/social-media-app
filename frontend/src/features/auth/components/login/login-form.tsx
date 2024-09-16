@@ -5,12 +5,12 @@ import {
   redirect,
   useActionData,
 } from "react-router-dom";
-import { TRPCClientError } from "@trpc/client";
 import { AuthContextApiType } from "@frontend/providers/auth-context";
 import { Button } from "@frontend/components/ui/button/button";
 import { Error } from "@frontend/components/ui/form/error/error";
 import { Input } from "@frontend/components/ui/form/input/input";
 import { client } from "@frontend/lib/trpc";
+import { handleError } from "@frontend/utils/error-handling";
 import { authSchema, AuthSchemaError } from "@frontend/types/zod-schema";
 import styles from "./login-form.module.css";
 
@@ -36,17 +36,7 @@ export const loginAction =
         return redirect(`/${response.id}/profile`);
       }
     } catch (error) {
-      if (error instanceof TRPCClientError) {
-        console.error(error.message);
-      } else {
-        console.error((error as Error).message);
-      }
-
-      return {
-        errors: {
-          general: "Login failed",
-        },
-      };
+      return handleError(error, "Login failed");
     }
   };
 
@@ -72,7 +62,7 @@ export function LoginForm() {
         {actionData?.errors?.general && (
           <Error message={actionData.errors.general} />
         )}
-        <div className={styles.cta}>
+        <div className={styles.actions}>
           <Button type="submit" className="auth">
             Login
           </Button>

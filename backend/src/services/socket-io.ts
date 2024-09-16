@@ -1,7 +1,7 @@
 import { Server as HttpServer } from "node:http";
 import { Server as SocketIOServer, Socket } from "socket.io";
-import { messageService } from "./message";
 import { userService } from "./user";
+import logger from "@shared/utils/logger";
 
 export type SocketServiceType = typeof SocketService;
 
@@ -35,7 +35,7 @@ export class SocketService {
 
   #setupListeners() {
     this.#io.on("connect", (socket) => {
-      console.log("A user connected");
+      logger.debug("A user connected");
 
       socket.on("login", async (data) => {
         this.addUser(data.userId, socket);
@@ -64,7 +64,7 @@ export class SocketService {
       });
 
       socket.once("disconnect", () => {
-        console.log("A user disconnected");
+        logger.debug("A user disconnected");
       });
 
       socket.on("joinChatroom", (data) => {

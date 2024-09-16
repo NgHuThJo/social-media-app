@@ -5,7 +5,7 @@ import { logError } from "@backend/utils/error-logger";
 import {
   nonEmptyStringSchema,
   numericIdSchema,
-} from "@backend/utils/zod-schema";
+} from "@backend/types/zod-schema";
 
 export const postRouter = router({
   getAllPosts: publicProcedure.query(async () => {
@@ -101,18 +101,18 @@ export const postRouter = router({
   createCommentReply: publicProcedure
     .input(
       z.object({
-        commentId: numericIdSchema,
+        postId: numericIdSchema,
         content: nonEmptyStringSchema,
         userId: numericIdSchema,
       }),
     )
     .mutation(async ({ input }) => {
-      const { commentId, content, userId } = input;
+      const { postId, content, userId } = input;
 
       try {
         const newComment = postService.createCommentReply(
           content,
-          commentId,
+          postId,
           userId,
         );
 

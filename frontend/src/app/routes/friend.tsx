@@ -1,28 +1,68 @@
-import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
-import { client } from "@frontend/lib/trpc";
-import { FriendList } from "@frontend/features/friend/components/list/list";
-import { LoaderData } from "@frontend/types";
+import { Suspense } from "react";
+import {
+  Await,
+  defer,
+  LoaderFunctionArgs,
+  useLoaderData,
+} from "react-router-dom";
 import { ContentLayout } from "@frontend/components/layouts/content/content";
+import { FriendList } from "@frontend/features/friend/components/list/list";
+import { Spinner } from "@frontend/components/ui/spinner/spinner";
+import { client } from "@frontend/lib/trpc";
+import { handleError } from "@frontend/utils/error-handling";
+import { LoaderData } from "@frontend/types";
+import { userIdSchema } from "@frontend/types/zod-schema";
 
-export type FriendLoaderData = LoaderData<typeof friendLoader>;
+type FriendLoaderData = {
+  data: LoaderData<typeof friendLoader>;
+};
 
-export const friendLoader = async ({ params }: LoaderFunctionArgs) => {
-  const { id } = params;
+export type FriendData = Awaited<
+  ReturnType<typeof client.friend.getAllFriends.query>
+>;
 
-  const response = await client.friend.getAllFriends.query(Number(id));
+export const friendLoader = ({ params }: LoaderFunctionArgs) => {
+  const { userId } = params;
+  const payload = {
+    userId,
+  };
+  const validatedData = userIdSchema.safeParse(payload);
 
-  console.log("Get all friends of current user", response);
+  if (!validatedData.success) {
+    throw new Response(
+      JSON.stringify({ errors: validatedData.error.flatten().fieldErrors }),
+      { status: 400, statusText: "Invalid userId" },
+    );
+  }
 
-  return { data: response };
+  try {
+    const response = client.friend.getAllFriends.query(validatedData.data);
+    // When using defer, pass response as unawaited promise
+    return defer({
+      data: response,
+    });
+  } catch (error) {
+    throw new Response(
+      JSON.stringify(handleError(error, "Could not fetch feed data")),
+      {
+        status: 500,
+        statusText: "Internal Server Error",
+      },
+    );
+  }
 };
 
 export function FriendRoute() {
-  const { data } = useLoaderData() as FriendLoaderData;
+  const loaderData = useLoaderData() as FriendLoaderData;
 
   return (
     <ContentLayout>
       <h2>Friends</h2>
-      <FriendList data={data} />
+      <Suspense fallback={<Spinner />}>
+        <Await resolve={loaderData.data}>
+          {(friends) => <FriendList data={friends} />}
+        </Await>
+      </Suspense>
     </ContentLayout>
   );
 }

@@ -6,8 +6,10 @@ import { CommentList } from "../../comment/list/list";
 import { formatRelativeTimeDate } from "@frontend/utils/intl";
 import styles from "./post.module.css";
 
+type PostData = NonNullable<PostLoaderData["data"]>[number];
+
 type PostProps = {
-  data: NonNullable<PostLoaderData["data"]>[number];
+  data: PostData;
 };
 
 export function Post({ data }: PostProps) {

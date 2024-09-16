@@ -1,38 +1,71 @@
+import { Suspense } from "react";
 import {
   ActionFunctionArgs,
+  Await,
+  defer,
   LoaderFunctionArgs,
   useLoaderData,
 } from "react-router-dom";
 import { useToggle } from "@frontend/hooks/useToggle";
+import { Button } from "@frontend/components/ui/button/button";
+import { ContentLayout } from "@frontend/components/layouts/content/content";
+import { FeedList } from "@frontend/features/feed/components/list/list";
+import { PostForm } from "@frontend/features/post/components/form/form";
+import { Spinner } from "@frontend/components/ui/spinner/spinner";
+import { client } from "@frontend/lib/trpc";
 import {
   createComment,
   createPostComment,
 } from "@frontend/features/shared/comment/form/form";
 import { createPost } from "@frontend/features/post/components/form/form";
-import { Button } from "@frontend/components/ui/button/button";
-import { FeedList } from "@frontend/features/feed/components/list/list";
-import { PostForm } from "@frontend/features/post/components/form/form";
-import { client } from "@frontend/lib/trpc";
 import { LoaderData } from "@frontend/types";
-import { ContentLayout } from "@frontend/components/layouts/content/content";
+import { userIdSchema } from "@frontend/types/zod-schema";
+import { handleError } from "@frontend/utils/error-handling";
 
-export type FeedLoaderData = LoaderData<typeof feedLoader>;
+type FeedLoaderData = {
+  data: LoaderData<typeof feedLoader>;
+};
 
-export const feedLoader = async ({ params }: LoaderFunctionArgs) => {
+export type FeedData = Awaited<
+  ReturnType<typeof client.post.getAllFeeds.query>
+>;
+
+export const feedLoader = ({ params }: LoaderFunctionArgs) => {
   const { userId } = params;
-
-  const response = await client.post.getAllFeeds.query(Number(userId));
-
-  console.log(response);
-
-  return {
-    data: response,
+  const payload = {
+    userId,
   };
+  const validatedData = userIdSchema.safeParse(payload);
+
+  if (!validatedData.success) {
+    throw new Response(
+      JSON.stringify({ errors: validatedData.error.flatten().fieldErrors }),
+      { status: 400, statusText: "Invalid userId" },
+    );
+  }
+
+  try {
+    const response = client.post.getAllFeeds.query(validatedData.data);
+    // When using defer, pass response as unawaited promise
+    return defer({
+      data: response,
+    });
+  } catch (error) {
+    throw new Response(
+      JSON.stringify(handleError(error, "Could not fetch feed data")),
+      {
+        status: 500,
+        statusText: "Internal Server Error",
+      },
+    );
+  }
 };
 
 export const feedAction = async ({ request, params }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const intent = formData.get("intent");
+  // Delete intent from FormData to prevent issues with Zod
+  formData.delete("intent");
 
   switch (intent) {
     case "post":
@@ -48,15 +81,23 @@ export const feedAction = async ({ request, params }: ActionFunctionArgs) => {
 
 export function FeedRoute() {
   const { isOpen, open, close } = useToggle();
-  const { data } = useLoaderData() as FeedLoaderData;
+  const loaderData = useLoaderData() as FeedLoaderData;
 
   return (
     <ContentLayout>
       <h2>Feeds</h2>
-      <FeedList data={data} />
-      <Button type="button" className="submit" onClick={open}>
-        Create post
-      </Button>
+      <Suspense fallback={<Spinner />}>
+        <Await resolve={loaderData.data}>
+          {(feeds: FeedData) => (
+            <>
+              <FeedList data={feeds} />
+              <Button type="button" className="submit" onClick={open}>
+                Create post
+              </Button>
+            </>
+          )}
+        </Await>
+      </Suspense>
       {isOpen && <PostForm onClose={close} />}
     </ContentLayout>
   );

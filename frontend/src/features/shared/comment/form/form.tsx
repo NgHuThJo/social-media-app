@@ -1,5 +1,4 @@
 import { Form, useActionData } from "react-router-dom";
-import { TRPCClientError } from "@trpc/client";
 import { client } from "@frontend/lib/trpc";
 import { Button } from "@frontend/components/ui/button/button";
 import { Error } from "@frontend/components/ui/form/error/error";
@@ -22,11 +21,9 @@ export const createPostComment: ActionDispatchFunction = async (
   formData,
 ) => {
   const convertedFormData = Object.fromEntries(formData);
-  const userId = Number(params.id);
-  const convertedPostId = Number(convertedFormData.postId);
+  const { userId } = params;
   const payload = {
     ...convertedFormData,
-    postId: convertedPostId,
     userId,
   };
   const validatedInput = commentSchema.safeParse(payload);
@@ -53,16 +50,12 @@ export const createComment: ActionDispatchFunction = async (
   formData,
 ) => {
   const convertedFormData = Object.fromEntries(formData);
-  const userId = Number(params.id);
-  const convertedPostId = Number(convertedFormData.postId);
+  const { userId } = params;
   const payload = {
     ...convertedFormData,
-    postId: convertedPostId,
     userId,
   };
   const validatedInput = commentSchema.safeParse(payload);
-
-  console.log(payload);
 
   if (!validatedInput.success) {
     return {

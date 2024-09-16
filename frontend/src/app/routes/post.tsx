@@ -1,27 +1,49 @@
-import { ActionFunctionArgs, useLoaderData } from "react-router-dom";
+import { Suspense } from "react";
+import {
+  ActionFunctionArgs,
+  Await,
+  defer,
+  useLoaderData,
+} from "react-router-dom";
 import { useToggle } from "@frontend/hooks/useToggle";
 import { client } from "@frontend/lib/trpc";
 import { Button } from "@frontend/components/ui/button/button";
+import { ContentLayout } from "@frontend/components/layouts/content/content";
 import {
   PostForm,
   createPost,
 } from "@frontend/features/post/components/form/form";
-import { ContentLayout } from "@frontend/components/layouts/content/content";
 import { PostList } from "@frontend/features/post/components/list/list";
 import {
   createComment,
   createPostComment,
 } from "@frontend/features/shared/comment/form/form";
+import { handleError } from "@frontend/utils/error-handling";
 import { LoaderData } from "@frontend/types";
+import { Spinner } from "@frontend/components/ui/spinner/spinner";
 
-export type PostLoaderData = LoaderData<typeof postLoader>;
+type PostLoaderData = LoaderData<typeof postLoader>;
 
-export const postLoader = async () => {
-  const posts = await client.post.getAllPosts.query();
+export type PostData = Awaited<
+  ReturnType<typeof client.post.getAllPosts.query>
+>;
 
-  return {
-    data: posts,
-  };
+export const postLoader = () => {
+  try {
+    const response = client.post.getAllPosts.query();
+    // When using defer, pass response as unawaited promise
+    return defer({
+      data: response,
+    });
+  } catch (error) {
+    throw new Response(
+      JSON.stringify(handleError(error, "Could not fetch feed data")),
+      {
+        status: 500,
+        statusText: "Internal Server Error",
+      },
+    );
+  }
 };
 
 export const postAction = async ({ request, params }: ActionFunctionArgs) => {
@@ -29,41 +51,41 @@ export const postAction = async ({ request, params }: ActionFunctionArgs) => {
   const intent = formData.get("intent");
   // Delete intent from FormData to prevent issues with Zod
   formData.delete("intent");
-  let response;
 
   switch (intent) {
     case "comment": {
-      response = await createComment(request, params, formData);
-      break;
+      return createComment(request, params, formData);
     }
     case "post": {
-      response = await createPost(request, params, formData);
-      break;
+      return createPost(request, params, formData);
     }
     case "postComment": {
-      response = await createPostComment(request, params, formData);
-      break;
+      return createPostComment(request, params, formData);
     }
     default:
       throw new Error("Unknown intent");
   }
-
-  console.log("Response in postAction", response);
-
-  return response;
 };
 
 export function PostRoute() {
-  const { data } = useLoaderData() as PostLoaderData;
+  const loaderData = useLoaderData() as PostLoaderData;
   const { isOpen, open, close } = useToggle();
 
   return (
     <ContentLayout>
       <h2>Posts</h2>
-      <PostList data={data} />
-      <Button type="button" className="submit" onClick={open}>
-        Create post
-      </Button>
+      <Suspense fallback={<Spinner />}>
+        <Await resolve={loaderData.data}>
+          {(posts: PostData) => (
+            <>
+              <PostList data={posts} />
+              <Button type="button" className="submit" onClick={open}>
+                Create post
+              </Button>
+            </>
+          )}
+        </Await>
+      </Suspense>
       {isOpen && <PostForm onClose={close} />}
     </ContentLayout>
   );

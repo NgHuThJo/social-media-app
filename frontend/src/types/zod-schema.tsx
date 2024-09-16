@@ -32,6 +32,10 @@ export type SchemaError<T extends z.ZodTypeAny> = {
   errors?: z.typeToFlattenedError<z.infer<T>>["fieldErrors"] & GeneralError;
 };
 
+export const userIdSchema = z.object({
+  userId: numericIdSchema,
+});
+
 export const authSchema = z.object({
   email: emailSchema,
   password: passwordSchema,

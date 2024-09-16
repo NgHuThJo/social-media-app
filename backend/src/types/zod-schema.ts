@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-export const emailSchema = z.string().trim().email("Email address is invalid");
+export const emailSchema = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .email("Email address is invalid");
 export const nonEmptyStringSchema = z
   .string()
   .trim()

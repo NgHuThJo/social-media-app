@@ -2,6 +2,7 @@ import { FriendLoaderData } from "@frontend/app/routes/friend";
 import styles from "./info.module.css";
 
 type FriendData = NonNullable<FriendLoaderData["data"]>[number];
+
 type FriendProps = {
   data: FriendData;
 };
