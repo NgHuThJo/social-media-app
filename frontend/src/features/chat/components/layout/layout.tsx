@@ -1,55 +1,29 @@
 import { MouseEvent, useEffect, useRef, useState } from "react";
-import { useLoaderData } from "react-router-dom";
 import { useWebSocketContextApi } from "@frontend/providers/websocket-context";
-import { client } from "@frontend/lib/trpc";
 import { Button } from "@frontend/components/ui/button/button";
 import { ChatBox } from "@frontend/features/chat/components/box/box";
 import { ChatForm } from "../form/form";
 import { ChatPlaceholder } from "../placeholder/placeholder";
 import { ChatroomList } from "../room-list/room-list";
 import { UserList } from "@frontend/features/user/components/list/list";
+import { ChatroomsData, OnlineUsersData } from "@frontend/app/routes/chat";
 import styles from "./layout.module.css";
 
-export type OnlineUserType = Awaited<
-  ReturnType<typeof client.user.getListOfUsers.query>
->;
-
-export type ChatroomType = Awaited<
-  ReturnType<typeof client.chat.getAllChatrooms.query>
->;
-
-type ChatLoaderDataType = {
-  chatroomsData: ChatroomType;
-  onlineUsersData: OnlineUserType;
+type ChatLayoutProps = {
+  chatroomsData: ChatroomsData;
+  onlineUsersData: OnlineUsersData;
 };
 
-export const chatLoader = async () => {
-  const chatroomFn = async () => {
-    const chatrooms = await client.chat.getAllChatrooms.query();
-    return chatrooms;
-  };
-
-  const onlineUsersFn = async () => {
-    const onlineUsers = await client.user.getAllOnlineUsers.query();
-    return onlineUsers;
-  };
-
-  const [chatroomsData, onlineUsersData] = await Promise.all([
-    chatroomFn(),
-    onlineUsersFn(),
-  ]);
-
-  return { chatroomsData, onlineUsersData };
-};
-
-export function ChatLayout() {
-  const [onlineUsers, setOnlineUsers] = useState<OnlineUserType>();
-  const [chatrooms, setChatrooms] = useState<ChatroomType>();
-  const [currentRoom, setCurrentRoom] = useState<number>();
+export function ChatLayout({
+  chatroomsData,
+  onlineUsersData,
+}: ChatLayoutProps) {
+  const [onlineUsers, setOnlineUsers] =
+    useState<OnlineUsersData>(onlineUsersData);
+  const [chatrooms, setChatrooms] = useState<ChatroomsData>(chatroomsData);
+  const [currentRoomId, setCurrentRoomId] = useState<number>();
   const { createChatroom, getOnlineUsers, joinChatroom } =
     useWebSocketContextApi();
-  const { chatroomsData, onlineUsersData } =
-    useLoaderData() as ChatLoaderDataType;
   const dialogRef = useRef<HTMLDialogElement>(null);
   const layoutRef = useRef<HTMLDivElement>(null);
 
@@ -63,11 +37,6 @@ export function ChatLayout() {
       createChatroomCleanupFn();
     };
   }, []);
-
-  useEffect(() => {
-    setOnlineUsers(onlineUsersData);
-    setChatrooms(chatroomsData);
-  }, [chatroomsData, onlineUsersData]);
 
   const openDialog = () => {
     dialogRef.current?.showModal();
@@ -88,7 +57,7 @@ export function ChatLayout() {
     currentRoomId: number | undefined,
     newRoomId: number,
   ) => {
-    setCurrentRoom(newRoomId);
+    setCurrentRoomId(newRoomId);
     joinChatroom(userId, currentRoomId, newRoomId);
   };
 
@@ -102,7 +71,7 @@ export function ChatLayout() {
           {chatrooms && (
             <ChatroomList
               data={chatrooms}
-              currentRoom={currentRoom}
+              currentRoomId={currentRoomId}
               handleSelectRoom={selectChatroom}
             />
           )}
@@ -118,8 +87,8 @@ export function ChatLayout() {
           />
         </section>
       </aside>
-      {currentRoom ? (
-        <ChatBox currentRoomId={currentRoom} />
+      {currentRoomId ? (
+        <ChatBox currentRoomId={currentRoomId} />
       ) : (
         <ChatPlaceholder />
       )}

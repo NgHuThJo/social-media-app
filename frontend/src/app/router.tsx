@@ -1,20 +1,19 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useAuthContextApi } from "@frontend/providers/auth-context";
-import { loginAction } from "@frontend/features/auth/components/login/login-form";
-import { registerAction } from "@frontend/features/auth/components/register/register-form";
 import { AppRoot } from "./root";
 import { chatAction } from "@frontend/features/chat/components/form/form";
-import { chatLoader } from "@frontend/features/chat/components/layout/layout";
-import { ChatRoute } from "./routes/chat";
+import { chatLoader, ChatRoute } from "./routes/chat";
 import { ErrorRoute } from "./routes/error";
 import { FeedRoute, feedAction, feedLoader } from "./routes/feed";
 import { FriendRoute, friendLoader } from "./routes/friend";
 import { LandingRoute } from "./routes/landing";
 import { LoginRoute } from "./routes/login";
+import { loginAction } from "@frontend/features/auth/components/login/login-form";
 import { PostRoute, postLoader, postAction } from "./routes/post";
 import { ProfileRoute, profileLoader } from "./routes/profile";
 import { ProtectedRoute } from "./routes/protected";
 import { RegisterRoute } from "./routes/register";
+import { registerAction } from "@frontend/features/auth/components/register/register-form";
 
 export function Router() {
   const authContextApi = useAuthContextApi();

@@ -21,9 +21,9 @@ export function ChatBox({ currentRoomId }: ChatBoxProps) {
   const [messages, setMessages] = useState<RoomMessagesType>();
   const messageInputRef = useRef<HTMLInputElement>(null);
   const { createMessage } = useWebSocketContextApi();
-  const { error, addError, resetError } = useError<MessageSchemaError>();
+  const { errors, addError, resetError } = useError<MessageSchemaError>();
   const { isOpen: isEmojiOpen, toggle: toggleEmoji } = useToggle();
-  const { id } = useParams();
+  const { userId } = useParams();
 
   useEffect(() => {
     const cleanupFn = createMessage(setMessages);
@@ -33,8 +33,9 @@ export function ChatBox({ currentRoomId }: ChatBoxProps) {
 
   useEffect(() => {
     const getMessages = async () => {
-      const response =
-        await client.message.getAllRoomMessages.query(currentRoomId);
+      const response = await client.message.getAllRoomMessages.query({
+        roomId: String(currentRoomId),
+      });
 
       setMessages(response);
     };
@@ -46,12 +47,12 @@ export function ChatBox({ currentRoomId }: ChatBoxProps) {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    const data = {
+    const payload = {
       ...Object.fromEntries(formData),
-      userId: id,
+      userId,
       roomId: String(currentRoomId),
     };
-    const validatedData = messageSchema.safeParse(data);
+    const validatedData = messageSchema.safeParse(payload);
     event.currentTarget.reset();
 
     if (!validatedData.success) {
@@ -113,7 +114,7 @@ export function ChatBox({ currentRoomId }: ChatBoxProps) {
           placeholder="Enter your message..."
           ref={messageInputRef}
         />
-        <input type="hidden" name="userId" id="userId" value={id} />
+        <input type="hidden" name="userId" id="userId" value={userId} />
         <Button type="submit">Submit message</Button>
       </form>
     </div>

@@ -1,15 +1,15 @@
 import { useState } from "react";
 
 export function useError<T>() {
-  const [error, setError] = useState<T | null>(null);
+  const [errors, setErrors] = useState<T | null>(null);
 
   const addError = (error: T) => {
-    setError(error);
+    setErrors(error);
   };
 
   const resetError = () => {
-    setError(null);
+    setErrors(null);
   };
 
-  return { error, addError, resetError };
+  return { errors, addError, resetError };
 }
