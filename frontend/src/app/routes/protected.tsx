@@ -12,6 +12,8 @@ export function ProtectedRoute() {
       return;
     }
 
+    console.log("In protected route");
+
     const cleanUpFn = createWebSocket(userId);
 
     return cleanUpFn;

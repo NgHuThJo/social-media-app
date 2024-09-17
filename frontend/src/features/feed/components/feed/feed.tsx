@@ -2,14 +2,13 @@ import { useToggle } from "@frontend/hooks/useToggle";
 import { Button } from "@frontend/components/ui/button/button";
 import { CommentForm } from "@frontend/features/shared/comment/form/form";
 import { CommentList } from "@frontend/features/shared/comment/list/list";
+import { Image } from "@frontend/components/ui/image/image";
 import { formatRelativeTimeDate } from "@frontend/utils/intl";
-import { FeedLoaderData } from "@frontend/app/routes/feed";
+import { FeedItemData } from "../list/list";
 import styles from "./feed.module.css";
 
-type FeedData = NonNullable<FeedLoaderData["data"]>[number];
-
 type FeedProps = {
-  data: FeedData;
+  data: FeedItemData;
 };
 
 export function Feed({ data }: FeedProps) {
@@ -24,6 +23,7 @@ export function Feed({ data }: FeedProps) {
       </div>
       <h3>{data.title}</h3>
       <p>{data.content}</p>
+      <Image src={data.asset?.url} alt=""></Image>
       <div className={styles["flex-row"]}>
         {data._count.comments > 0 && (
           <Button type="button" className="toggle" onClick={toggleComment}>

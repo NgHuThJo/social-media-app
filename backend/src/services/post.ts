@@ -1,5 +1,5 @@
 import { prisma } from "@backend/models";
-import { AppError } from "@backend/utils/app-error";
+// import { AppError } from "@backend/utils/app-error";
 
 class PostService {
   async getAllPosts() {
@@ -18,9 +18,9 @@ class PostService {
       },
     });
 
-    if (!posts.length) {
-      throw new AppError("NOT_FOUND", "No posts found");
-    }
+    // if (!posts.length) {
+    //   throw new AppError("NOT_FOUND", "No posts found");
+    // }
 
     return posts;
   }
@@ -58,9 +58,9 @@ class PostService {
       },
     });
 
-    if (!parentComments.length) {
-      throw new AppError("NOT_FOUND", "No parent comments found");
-    }
+    // if (!parentComments.length) {
+    //   throw new AppError("NOT_FOUND", "No parent comments found");
+    // }
 
     return parentComments;
   }
@@ -81,9 +81,9 @@ class PostService {
       },
     });
 
-    if (!childComments.length) {
-      throw new AppError("NOT_FOUND", "No child comments found");
-    }
+    // if (!childComments.length) {
+    //   throw new AppError("NOT_FOUND", "No child comments found");
+    // }
 
     return childComments;
   }
@@ -130,34 +130,77 @@ class PostService {
     });
   }
 
+  async createFeed(
+    content: string,
+    title: string,
+    userId: number,
+    assetUrl: string,
+  ) {
+    const newFeed = await prisma.post.create({
+      data: {
+        content,
+        title,
+        author: {
+          connect: {
+            id: userId,
+          },
+        },
+        asset: {
+          create: { url: assetUrl },
+        },
+      },
+      include: {
+        asset: true,
+        author: true,
+      },
+    });
+
+    return newFeed;
+  }
+
   async getAllFeeds(userId: number) {
     const feeds = await prisma.post.findMany({
       where: {
-        OR: [
+        AND: [
           {
-            author: {
-              sentFriendRequests: {
-                some: {
-                  addresseeId: userId,
-                  status: "ACCEPTED",
-                },
-              },
+            asset: {
+              is: {},
             },
           },
           {
-            author: {
-              receivedFriendRequests: {
-                some: {
-                  requesterId: userId,
-                  status: "ACCEPTED",
+            OR: [
+              {
+                author: {
+                  id: userId,
                 },
               },
-            },
+              {
+                author: {
+                  sentFriendRequests: {
+                    some: {
+                      addresseeId: userId,
+                      status: "ACCEPTED",
+                    },
+                  },
+                },
+              },
+              {
+                author: {
+                  receivedFriendRequests: {
+                    some: {
+                      requesterId: userId,
+                      status: "ACCEPTED",
+                    },
+                  },
+                },
+              },
+            ],
           },
         ],
       },
       include: {
         author: true,
+        asset: true,
         _count: {
           select: {
             likes: true,
@@ -170,9 +213,9 @@ class PostService {
       },
     });
 
-    if (!feeds.length) {
-      throw new AppError("NOT_FOUND", "No feeds found");
-    }
+    // if (!feeds.length) {
+    //   throw new AppError("NOT_FOUND", "No feeds found");
+    // }
 
     return feeds;
   }

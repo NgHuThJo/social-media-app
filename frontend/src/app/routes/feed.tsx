@@ -10,14 +10,14 @@ import { useToggle } from "@frontend/hooks/useToggle";
 import { Button } from "@frontend/components/ui/button/button";
 import { ContentLayout } from "@frontend/components/layouts/content/content";
 import { FeedList } from "@frontend/features/feed/components/list/list";
-import { PostForm } from "@frontend/features/post/components/form/form";
+import { FeedForm } from "@frontend/features/feed/components/form/form";
 import { Spinner } from "@frontend/components/ui/spinner/spinner";
 import { client } from "@frontend/lib/trpc";
 import {
   createComment,
   createPostComment,
 } from "@frontend/features/shared/comment/form/form";
-import { createPost } from "@frontend/features/post/components/form/form";
+import { createFeed } from "@frontend/features/feed/components/form/form";
 import { LoaderData } from "@frontend/types";
 import { userIdSchema } from "@frontend/types/zod-schema";
 import { handleError } from "@frontend/utils/error-handling";
@@ -31,6 +31,7 @@ export type FeedData = Awaited<
 >;
 
 export const feedLoader = ({ params }: LoaderFunctionArgs) => {
+  console.count("feedLoader");
   const { userId } = params;
   const payload = {
     userId,
@@ -68,8 +69,8 @@ export const feedAction = async ({ request, params }: ActionFunctionArgs) => {
   formData.delete("intent");
 
   switch (intent) {
-    case "post":
-      return createPost(request, params, formData);
+    case "feed":
+      return createFeed(request, params, formData);
     case "postComment":
       return createPostComment(request, params, formData);
     case "comment":
@@ -92,13 +93,13 @@ export function FeedRoute() {
             <>
               <FeedList data={feeds} />
               <Button type="button" className="submit" onClick={open}>
-                Create post
+                Create Feed
               </Button>
             </>
           )}
         </Await>
       </Suspense>
-      {isOpen && <PostForm onClose={close} />}
+      {isOpen && <FeedForm onClose={close} />}
     </ContentLayout>
   );
 }

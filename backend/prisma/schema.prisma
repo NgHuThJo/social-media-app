@@ -55,6 +55,7 @@ model Post {
   authorId  Int
   comments  Comment[]
   likes     PostLike[]
+  asset     Asset?
 }
 
 model PostLike {
@@ -106,4 +107,15 @@ model Chatroom {
   id       Int       @id @default(autoincrement())
   title    String
   messages Message[]
+}
+
+model Asset {
+  id        Int      @id @default(autoincrement())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int      @unique
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([postId])
 }

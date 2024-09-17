@@ -1,7 +1,10 @@
 // Third party
 import http from "node:http";
+import { v2 as cloudinary } from "cloudinary";
 import cors from "cors";
 import express, { ErrorRequestHandler } from "express";
+import multer from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { appRouter } from "@backend/routers/api.js";
 import { createContext } from "./routers/trpc.js";
@@ -18,6 +21,29 @@ server.listen(port, () => {
   logger.debug(`Server listening on port ${port}`);
 });
 
+// Cloudinary and multer config
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: async () => ({
+    folder: "uploads",
+    transformation: [
+      {
+        width: 480,
+        height: 480,
+        crop: "fit",
+      },
+    ],
+  }),
+});
+
+const upload = multer({ storage });
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -29,6 +55,18 @@ app.use(
 );
 
 // Routes
+app.post("/upload", upload.single("file"), (req, res, _next) => {
+  const file = req.file;
+
+  if (!file) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
+
+  const { path } = file;
+
+  res.status(200).json({ message: "File uploaded successfully", path });
+});
+
 app.use(
   "/api",
   createExpressMiddleware({

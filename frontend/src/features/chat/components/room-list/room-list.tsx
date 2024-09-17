@@ -1,10 +1,10 @@
 import { useAuthContext } from "@frontend/providers/auth-context";
-import { ChatroomType } from "../layout/layout";
+import { ChatroomsData } from "@frontend/app/routes/chat";
 import styles from "./room-list.module.css";
 
 type ChatroomListProps = {
-  data: ChatroomType;
-  currentRoom: number | undefined;
+  data: ChatroomsData;
+  currentRoomId: number | undefined;
   handleSelectRoom: (
     userId: string,
     currentRoomId: number | undefined,
@@ -14,7 +14,7 @@ type ChatroomListProps = {
 
 export function ChatroomList({
   data,
-  currentRoom,
+  currentRoomId,
   handleSelectRoom,
 }: ChatroomListProps) {
   const { userId } = useAuthContext();
@@ -25,12 +25,12 @@ export function ChatroomList({
         <button
           key={chatroom.id}
           className={
-            currentRoom !== chatroom.id
+            currentRoomId !== chatroom.id
               ? styles["list-item"]
               : styles["list-item-active"]
           }
           onClick={() => {
-            handleSelectRoom(userId, currentRoom, chatroom.id);
+            handleSelectRoom(userId, currentRoomId, chatroom.id);
           }}
         >
           <p>

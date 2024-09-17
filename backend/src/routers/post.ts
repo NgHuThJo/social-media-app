@@ -5,6 +5,7 @@ import { logError } from "@backend/utils/error-logger";
 import {
   nonEmptyStringSchema,
   numericIdSchema,
+  urlSchema,
 } from "@backend/types/zod-schema";
 
 export const postRouter = router({
@@ -117,6 +118,32 @@ export const postRouter = router({
         );
 
         return newComment;
+      } catch (error) {
+        logError(error);
+      }
+    }),
+
+  createFeed: publicProcedure
+    .input(
+      z.object({
+        assetUrl: urlSchema,
+        content: nonEmptyStringSchema,
+        title: nonEmptyStringSchema,
+        userId: numericIdSchema,
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const { assetUrl, content, title, userId } = input;
+
+      try {
+        const newFeed = await postService.createFeed(
+          content,
+          title,
+          userId,
+          assetUrl,
+        );
+
+        return newFeed;
       } catch (error) {
         logError(error);
       }

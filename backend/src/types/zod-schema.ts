@@ -32,3 +32,4 @@ export const passwordSchema = z
   .string()
   .trim()
   .min(8, "Password must have at least 8 characters");
+export const urlSchema = z.string().trim().url();

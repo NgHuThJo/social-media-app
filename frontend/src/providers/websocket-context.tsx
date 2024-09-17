@@ -9,10 +9,7 @@ import {
 } from "react";
 import { io, Socket } from "socket.io-client";
 import { useContextWrapper } from "@frontend/utils/context";
-import {
-  ChatroomType,
-  OnlineUserType,
-} from "@frontend/features/chat/components/layout/layout";
+import { ChatroomsData, OnlineUsersData } from "@frontend/app/routes/chat";
 import { RoomMessagesType } from "@frontend/features/chat/components/box/box";
 
 type WebSocketContextType = {
@@ -25,13 +22,13 @@ type WebSocketContextApiType = {
   ) => () => void;
   createWebSocket: (userId: string) => void;
   createChatroom: (
-    setChatrooms: Dispatch<SetStateAction<ChatroomType>>,
+    setChatrooms: Dispatch<SetStateAction<ChatroomsData>>,
   ) => () => void;
   createMessage: (
     setMessages: Dispatch<SetStateAction<RoomMessagesType>>,
   ) => () => void;
   getOnlineUsers: (
-    setOnlineUsers: Dispatch<SetStateAction<OnlineUserType>>,
+    setOnlineUsers: Dispatch<SetStateAction<OnlineUsersData>>,
   ) => () => void;
   joinChatroom: (
     userId: string,
@@ -143,9 +140,9 @@ export function WebSocketContextProvider({ children }: PropsWithChildren) {
     };
 
     const getOnlineUsers = (
-      setOnlineUsers: Dispatch<SetStateAction<OnlineUserType>>,
+      setOnlineUsers: Dispatch<SetStateAction<OnlineUsersData>>,
     ) => {
-      const getOnlineUsersFn = (data: OnlineUserType) => {
+      const getOnlineUsersFn = (data: OnlineUsersData) => {
         setOnlineUsers(data);
         console.log("Set online users", data);
       };
@@ -157,9 +154,9 @@ export function WebSocketContextProvider({ children }: PropsWithChildren) {
     };
 
     const createChatroom = (
-      setChatrooms: Dispatch<SetStateAction<ChatroomType>>,
+      setChatrooms: Dispatch<SetStateAction<ChatroomsData>>,
     ) => {
-      const createChatroomFn = (data: ChatroomType) => {
+      const createChatroomFn = (data: ChatroomsData) => {
         setChatrooms(data);
         console.log("Create new chatroom", data);
       };

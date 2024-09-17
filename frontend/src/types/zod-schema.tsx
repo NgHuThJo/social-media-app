@@ -72,3 +72,20 @@ export const postSchema = z.object({
 });
 
 export type PostSchemaError = SchemaError<typeof postSchema>;
+
+const fileSchema = z.object({
+  name: z.string().min(1, "File name is required"),
+  size: z.number().max(10 * 1024 * 1024, "File size must be less than 10MB"),
+  type: z.string().regex(/^image\/(jpeg|jpg|png)$/, "Invalid file type"),
+  lastModified: z.number(),
+  lastModifiedDate: z.date(),
+});
+
+export const feedFormSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  content: z.string().min(1, "Content is required"),
+  file: fileSchema,
+  userId: numericIdSchema,
+});
+
+export type FeedFormSchemaError = SchemaError<typeof feedFormSchema>;
