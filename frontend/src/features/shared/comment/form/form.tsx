@@ -1,7 +1,7 @@
 import { Form, useActionData } from "react-router-dom";
 import { client } from "@frontend/lib/trpc";
 import { Button } from "@frontend/components/ui/button/button";
-import { Error } from "@frontend/components/ui/form/error/error";
+import { FormError } from "@frontend/components/ui/form/error/error";
 import { Input } from "@frontend/components/ui/form/input/input";
 import { TextArea } from "@frontend/components/ui/form/textarea/textarea";
 import { handleError } from "@frontend/utils/error-handling";
@@ -85,7 +85,7 @@ export function CommentForm({ intent, onClose, postId }: CommentProps) {
         error={actionData?.errors?.content}
       />
       {actionData?.errors?.general && (
-        <Error message={actionData.errors.general} />
+        <FormError message={actionData.errors.general} />
       )}
       <Input type="hidden" name="postId" value={postId} />
       <div className={styles.actions}>

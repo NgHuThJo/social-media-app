@@ -3,6 +3,13 @@ import styles from "./image.module.css";
 
 type ImageProps = ComponentPropsWithRef<"img">;
 
-export function Image({ className = "default", src, alt }: ImageProps) {
-  return <img src={src} alt={alt} className={styles[className]} />;
+export function Image({
+  alt,
+  className = "default",
+  src,
+  ...restProps
+}: ImageProps) {
+  return (
+    <img alt={alt} className={styles[className]} src={src} {...restProps} />
+  );
 }

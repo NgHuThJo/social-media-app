@@ -1,0 +1,4 @@
+.container {
+  composes: flex-wrap from global;
+  gap: 1rem;
+}

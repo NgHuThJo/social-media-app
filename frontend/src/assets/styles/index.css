@@ -1,50 +1,52 @@
 /* custom properties */
 :root {
   /* box model */
-  --max-w-container: var(--macro--grid-content-max-w);
-  --min-w-root: 20rem;
-  --w-icon: 2rem;
-  --p-inline-container: 2rem;
   --flow-spacing: 1em;
+  --max-w-container: var(--macro-grid-content-max-w);
+  --max-w-dialog: 45rem;
+  --min-w-root: 20rem;
+  --p-inline-container: 2rem;
+  --w-icon: 2rem;
 
   /* grid */
   --auto-grid-column-w: 15rem;
-
-  --macro-grid-gap: 2rem;
-  --macro-grid-breakout-max-w: 90rem;
-  --macro-grid-content-max-w: 70rem;
   --macro-grid-breakout-column-w: calc(
     (var(--macro-grid-breakout-max-w) - var(--macro-grid-content-max-w)) / 2
   );
+  --macro-grid-breakout-max-w: 90rem;
+  --macro-grid-content-max-w: 70rem;
+  --macro-grid-gap: 2rem;
 
   /* typography */
   --ff-root: system-ui, sans-serif;
 
-  --fw-root: 400;
   --fw-button: 600;
+  --fw-form: 500;
   --fw-heading: 700;
   --fw-link: 500;
-  --fw-form: 500;
+  --fw-root: 400;
 
-  --fs-root: 0.9375rem;
-  --fs-label: 0.8125rem;
-  --fs-profile: 1.125rem;
   --fs-h1: 3rem;
   --fs-h2: 2rem;
   --fs-h3: 1.5rem;
   --fs-h4: 1.125rem;
+  --fs-label: 0.8125rem;
+  --fs-profile: 1.125rem;
+  --fs-root: 0.9375rem;
 
   /* colors */
-  --c-root: #71728c;
-  --c-logo: #fff;
-  --c-link: #000;
   --c-box-shadow: #d8e1ef;
   --c-error: #da3633;
+  --c-link: #000;
+  --c-link-active: #046d53;
+  --c-logo: #fff;
+  --c-root: #71728c;
 
   --bgc-brand: #2d5be3;
-  --bgc-root: #eff4fb;
-  --bgc-content: #fff;
   --bgc-button: #67c5ed;
+  --bgc-content: #fff;
+  --bgc-notification: #2c4e70;
+  --bgc-root: #eff4fb;
 
   /* transition */
   --transition-duration: 0.5s;

@@ -1,21 +1,24 @@
 import { ComponentPropsWithoutRef } from "react";
-import { Error } from "../error/error";
+import { FormError } from "../error/error";
+import { FormErrorMessage } from "@frontend/types";
 import styles from "./textarea.module.css";
 
-type TextAreaProps = ComponentPropsWithoutRef<"textarea"> & {
-  error?: string[];
-};
+type TextAreaProps = ComponentPropsWithoutRef<"textarea"> & FormErrorMessage;
 
 export function TextArea({
   className = "default",
-  name,
   error,
+  name,
   ...restProps
 }: TextAreaProps) {
   return (
     <div className={styles[className]}>
-      <textarea name={name} id={name} {...restProps}></textarea>
-      {error?.map((message) => <Error message={message} />)}
+      <textarea id={name} name={name} {...restProps}></textarea>
+      {typeof error === "string" ? (
+        <FormError message={error} />
+      ) : (
+        error?.map((message) => <FormError message={message} />)
+      )}
     </div>
   );
 }

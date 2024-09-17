@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { ContentLayout } from "@frontend/components/layouts/content/content";
 import { ProfileInfo } from "@frontend/features/profile/components/info/info";
-import { Spinner } from "@frontend/components/ui/spinner/spinner";
+import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
 import { client } from "@frontend/lib/trpc";
 import { handleError } from "@frontend/utils/error-handling";
 import { LoaderData } from "@frontend/types";
@@ -56,7 +56,7 @@ export function ProfileRoute() {
   return (
     <ContentLayout>
       <h2>Profile Info</h2>
-      <Suspense fallback={<Spinner />}>
+      <Suspense fallback={<LoadingSpinner />}>
         <Await resolve={loaderData.data}>
           {(profile) => <ProfileInfo data={profile} />}
         </Await>

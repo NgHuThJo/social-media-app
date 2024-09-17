@@ -1,6 +1,5 @@
-.layout {
+.container {
   composes: flow-spacing from global;
-
   place-self: center;
   padding: 2rem;
   background-color: var(--bgc-brand);

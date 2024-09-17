@@ -7,8 +7,8 @@ import { notification_icon } from "@frontend/assets/images";
 
 export function NotificationList() {
   const [notifications, setNotifications] = useState<string[]>([]);
-  const { addNotification } = useWebSocketContextApi();
   const notificationListRef = useRef<HTMLUListElement>(null);
+  const { addNotification } = useWebSocketContextApi();
 
   useEffect(() => {
     const cleanupFn = addNotification(setNotifications);
@@ -44,7 +44,7 @@ export function NotificationList() {
         <Image className="icon" src={notification_icon} />
         <span>{notifications.length}</span>
       </button>
-      <ul className={styles.layout} ref={notificationListRef}>
+      <ul className={styles.container} ref={notificationListRef}>
         {notifications.length ? (
           notifications.map((notification, index) => (
             <li className={styles.notification} key={index}>
@@ -55,7 +55,7 @@ export function NotificationList() {
             </li>
           ))
         ) : (
-          <p>No notifications.</p>
+          <li>No notifications.</li>
         )}
       </ul>
     </>

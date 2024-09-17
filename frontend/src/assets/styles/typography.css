@@ -48,3 +48,8 @@
 .h4 {
   font-size: var(--fs-h4);
 }
+
+/* Link rules */
+.active-link {
+  color: var(--c-link-active);
+}

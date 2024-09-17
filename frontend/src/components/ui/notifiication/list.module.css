@@ -1,10 +1,10 @@
-.layout {
+.container {
   display: grid;
   grid-template-columns: 1fr;
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: pink;
+  background-color: var(--bgc-notification);
   visibility: hidden;
   z-index: 1;
 

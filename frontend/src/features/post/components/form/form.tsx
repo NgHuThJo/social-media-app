@@ -1,6 +1,6 @@
 import { Form, useActionData } from "react-router-dom";
 import { Button } from "@frontend/components/ui/button/button";
-import { Error } from "@frontend/components/ui/form/error/error";
+import { FormError } from "@frontend/components/ui/form/error/error";
 import { Input } from "@frontend/components/ui/form/input/input";
 import { TextArea } from "@frontend/components/ui/form/textarea/textarea";
 import { client } from "@frontend/lib/trpc";
@@ -61,7 +61,7 @@ export function PostForm({ onClose }: PostProps) {
         error={actionData?.errors?.content}
       />
       {actionData?.errors?.general && (
-        <Error message={actionData.errors.general} />
+        <FormError message={actionData.errors.general} />
       )}
       <div className={styles.actions}>
         <Button type="submit" name="intent" value="post">

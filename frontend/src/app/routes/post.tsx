@@ -3,6 +3,7 @@ import {
   ActionFunctionArgs,
   Await,
   defer,
+  redirect,
   useLoaderData,
 } from "react-router-dom";
 import { useToggle } from "@frontend/hooks/useToggle";
@@ -20,7 +21,7 @@ import {
 } from "@frontend/features/shared/comment/form/form";
 import { handleError } from "@frontend/utils/error-handling";
 import { LoaderData } from "@frontend/types";
-import { Spinner } from "@frontend/components/ui/spinner/spinner";
+import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
 
 type PostLoaderData = LoaderData<typeof postLoader>;
 
@@ -47,6 +48,7 @@ export const postLoader = () => {
 };
 
 export const postAction = async ({ request, params }: ActionFunctionArgs) => {
+  const currentUrl = new URL(request.url);
   const formData = await request.formData();
   const intent = formData.get("intent");
   // Delete intent from FormData to prevent issues with Zod
@@ -54,17 +56,22 @@ export const postAction = async ({ request, params }: ActionFunctionArgs) => {
 
   switch (intent) {
     case "comment": {
-      return createComment(request, params, formData);
+      await createComment(request, params, formData);
+      break;
     }
     case "post": {
-      return createPost(request, params, formData);
+      await createPost(request, params, formData);
+      break;
     }
     case "postComment": {
-      return createPostComment(request, params, formData);
+      await createPostComment(request, params, formData);
+      break;
     }
     default:
       throw new Error("Unknown intent");
   }
+
+  return redirect(currentUrl.pathname + currentUrl.search);
 };
 
 export function PostRoute() {
@@ -74,7 +81,7 @@ export function PostRoute() {
   return (
     <ContentLayout>
       <h2>Posts</h2>
-      <Suspense fallback={<Spinner />}>
+      <Suspense fallback={<LoadingSpinner />}>
         <Await resolve={loaderData.data}>
           {(posts: PostData) => (
             <>

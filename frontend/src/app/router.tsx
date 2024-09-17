@@ -8,7 +8,7 @@ import { FeedRoute, feedAction, feedLoader } from "./routes/feed";
 import { FriendRoute, friendLoader } from "./routes/friend";
 import { LandingRoute } from "./routes/landing";
 import { LoginRoute } from "./routes/login";
-import { loginAction } from "@frontend/features/auth/components/login/login-form";
+import { loginAction } from "@frontend/features/auth/components/login/form";
 import { PostRoute, postLoader, postAction } from "./routes/post";
 import { ProfileRoute, profileLoader } from "./routes/profile";
 import { ProtectedRoute } from "./routes/protected";

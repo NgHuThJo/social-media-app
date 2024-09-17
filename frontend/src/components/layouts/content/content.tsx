@@ -1,9 +1,6 @@
-import { ComponentPropsWithoutRef } from "react";
+import { PropsWithChildren } from "react";
 import styles from "./content.module.css";
 
-export function ContentLayout({
-  children,
-  className = "default",
-}: ComponentPropsWithoutRef<"div">) {
-  return <div className={styles[className]}>{children}</div>;
+export function ContentLayout({ children }: PropsWithChildren) {
+  return <div className={styles.container}>{children}</div>;
 }

@@ -1,9 +1,9 @@
-import { Navigation } from "@frontend/components/ui/nav/navigation";
+import { Navigation } from "@frontend/components/ui/navigation/navigation";
 import styles from "./header.module.css";
 
 export function HeaderLayout() {
   return (
-    <header className={styles.layout}>
+    <header className={styles.container}>
       <Navigation />
     </header>
   );

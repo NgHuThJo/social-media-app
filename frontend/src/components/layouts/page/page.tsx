@@ -5,7 +5,7 @@ import styles from "./page.module.css";
 
 export function PageLayout({ children }: PropsWithChildren) {
   return (
-    <div className={styles.layout}>
+    <div className={styles.container}>
       <HeaderLayout />
       {children}
       <FooterLayout />

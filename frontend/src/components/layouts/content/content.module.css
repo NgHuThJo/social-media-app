@@ -1,4 +1,4 @@
-.default {
+.container {
   composes: flow-spacing from global;
   padding: 2rem;
   background-color: var(--bgc-brand);

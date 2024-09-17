@@ -1,10 +1,9 @@
-import { ComponentPropsWithoutRef } from "react";
 import styles from "./error.module.css";
 
-type ErrorProps = ComponentPropsWithoutRef<"p"> & {
+type ErrorProps = {
   message: string;
 };
 
-export function Error({ message }: ErrorProps) {
+export function FormError({ message }: ErrorProps) {
   return <p className={styles.error}>{message}</p>;
 }

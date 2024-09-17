@@ -5,7 +5,7 @@ type DialogProps = ComponentPropsWithRef<"dialog">;
 
 export const Dialog = forwardRef<HTMLDialogElement, DialogProps>(
   ({ children, className = "default", ...restProps }, ref) => (
-    <dialog className={styles[className]} {...restProps} ref={ref}>
+    <dialog className={styles[className]} ref={ref} {...restProps}>
       {children}
     </dialog>
   ),

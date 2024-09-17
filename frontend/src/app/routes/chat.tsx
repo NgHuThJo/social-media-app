@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Await, defer, useLoaderData } from "react-router-dom";
 import { ChatLayout } from "@frontend/features/chat/components/layout/layout";
-import { Spinner } from "@frontend/components/ui/spinner/spinner";
+import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
 import { client } from "@frontend/lib/trpc";
 import { handleError } from "@frontend/utils/error-handling";
 import { LoaderData } from "@frontend/types";
@@ -45,7 +45,7 @@ export function ChatRoute() {
   const loaderData = useLoaderData() as ChatLoaderData;
 
   return (
-    <Suspense fallback={<Spinner />}>
+    <Suspense fallback={<LoadingSpinner />}>
       <Await resolve={loaderData.data}>
         {([chatroomsData, onlineUsersData]) => (
           <ChatLayout

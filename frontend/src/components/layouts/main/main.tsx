@@ -1,10 +1,10 @@
 import { PropsWithChildren } from "react";
-import { NavigationList } from "@frontend/components/ui/list/navigation-list";
+import { NavigationList } from "@frontend/components/ui/navigation/list/list";
 import styles from "./main.module.css";
 
 export function MainLayout({ children }: PropsWithChildren) {
   return (
-    <main className={styles.layout}>
+    <main className={styles.container}>
       <NavigationList />
       {children}
     </main>

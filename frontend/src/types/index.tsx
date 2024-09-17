@@ -16,3 +16,7 @@ export type ActionDispatchFunction = (
 ) => DataFunctionReturnValue;
 
 export type Intent = "post" | "postComment" | "comment";
+
+export type FormErrorMessage = {
+  error?: string[] | string;
+};

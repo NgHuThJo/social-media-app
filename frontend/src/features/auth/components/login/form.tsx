@@ -1,18 +1,18 @@
 import {
   ActionFunction,
   Form,
-  Link,
+  NavLink,
   redirect,
   useActionData,
 } from "react-router-dom";
 import { AuthContextApiType } from "@frontend/providers/auth-context";
 import { Button } from "@frontend/components/ui/button/button";
-import { Error } from "@frontend/components/ui/form/error/error";
+import { FormError } from "@frontend/components/ui/form/error/error";
 import { Input } from "@frontend/components/ui/form/input/input";
 import { client } from "@frontend/lib/trpc";
 import { handleError } from "@frontend/utils/error-handling";
 import { authSchema, AuthSchemaError } from "@frontend/types/zod-schema";
-import styles from "./login-form.module.css";
+import styles from "./form.module.css";
 
 export const loginAction =
   (authContextApi: AuthContextApiType): ActionFunction =>
@@ -44,33 +44,41 @@ export function LoginForm() {
   const actionData = useActionData() as AuthSchemaError;
 
   return (
-    <div className={styles.layout}>
+    <div className={styles.container}>
       <h1>Login</h1>
-      <Form method="post" className={styles.form}>
+      <Form className={styles.form} method="post">
         <Input
-          type="email"
+          error={actionData?.errors?.email}
           name="email"
           placeholder="Email address"
-          error={actionData?.errors?.email}
+          type="email"
         />
         <Input
-          type="password"
+          error={actionData?.errors?.password}
           name="password"
           placeholder="Password"
-          error={actionData?.errors?.password}
+          type="password"
         />
         {actionData?.errors?.general && (
-          <Error message={actionData.errors.general} />
+          <FormError message={actionData.errors.general} />
         )}
         <div className={styles.actions}>
-          <Button type="submit" className="auth">
+          <Button className="auth" type="submit">
             Login
           </Button>
-          <Button type="button" className="auth">
+          <NavLink
+            to="/auth/register"
+            className={({ isActive }) => (isActive ? "active-link" : undefined)}
+          >
             Sign up
-          </Button>
+          </NavLink>
         </div>
-        <Link to="/">Back to home</Link>
+        <NavLink
+          to="/"
+          className={({ isActive }) => (isActive ? "active-link" : undefined)}
+        >
+          Back to home
+        </NavLink>
       </Form>
     </div>
   );

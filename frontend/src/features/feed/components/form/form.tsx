@@ -1,6 +1,6 @@
 import { Form, useActionData, useNavigation } from "react-router-dom";
 import { Button } from "@frontend/components/ui/button/button";
-import { Error } from "@frontend/components/ui/form/error/error";
+import { FormError } from "@frontend/components/ui/form/error/error";
 import { Input } from "@frontend/components/ui/form/input/input";
 import { TextArea } from "@frontend/components/ui/form/textarea/textarea";
 import { client } from "@frontend/lib/trpc";
@@ -11,7 +11,7 @@ import {
   FeedFormSchemaError,
 } from "@frontend/types/zod-schema";
 import styles from "./form.module.css";
-import { Spinner } from "@frontend/components/ui/spinner/spinner";
+import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
 
 type FeedFormProps = {
   onClose: () => void;
@@ -46,8 +46,6 @@ export const createFeed: ActionDispatchFunction = async (
       assetUrl: json.path,
     });
 
-    console.log(response);
-
     return response;
   } catch (error) {
     return handleError(error, "Creation of feed failed");
@@ -61,7 +59,7 @@ export function FeedForm({ onClose }: FeedFormProps) {
   return (
     <>
       {navigation.state === "submitting" ? (
-        <Spinner />
+        <LoadingSpinner />
       ) : (
         <Form
           method="post"
@@ -84,7 +82,7 @@ export function FeedForm({ onClose }: FeedFormProps) {
           />
           <Input type="file" name="file" label="Upload a file" />
           {actionData?.errors?.general && (
-            <Error message={actionData.errors.general} />
+            <FormError message={actionData.errors.general} />
           )}
           <div className={styles.actions}>
             <Button type="submit" name="intent" value="feed">

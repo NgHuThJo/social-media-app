@@ -2,5 +2,6 @@
 }
 
 .icon {
-  width: 2rem;
+  width: var(--w-icon);
+  aspect-ratio: 1;
 }

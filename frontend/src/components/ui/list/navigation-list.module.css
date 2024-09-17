@@ -1,7 +1,0 @@
-.container {
-  composes: flex-wrap from global;
-  gap: 1rem;
-  padding: 2rem;
-  margin-block: 3rem;
-  background-color: var(--bgc-content);
-}

@@ -8,7 +8,7 @@ export function getPersistedValue(key: string) {
 
     return JSON.parse(serializedValue);
   } catch (error) {
-    console.log((error as Error).message);
+    console.error((error as Error).message);
 
     return null;
   }

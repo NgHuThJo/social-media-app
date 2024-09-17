@@ -1,11 +1,12 @@
 import { ComponentPropsWithoutRef } from "react";
-import { Error } from "../error/error";
+import { FormError } from "../error/error";
+import { FormErrorMessage } from "@frontend/types";
 import styles from "./label.module.css";
 
-type LabelProps = ComponentPropsWithoutRef<"label"> & {
-  label?: string;
-  error?: string[];
-};
+type LabelProps = ComponentPropsWithoutRef<"label"> &
+  FormErrorMessage & {
+    label?: string;
+  };
 
 export function Label({
   children,
@@ -19,7 +20,11 @@ export function Label({
     <label className={styles[className]} htmlFor={htmlFor} {...restProps}>
       {label}
       {children}
-      {error?.map((message) => <Error message={message} />)}
+      {typeof error === "string" ? (
+        <FormError message={error} />
+      ) : (
+        error?.map((message) => <FormError message={message} />)
+      )}
     </label>
   );
 }

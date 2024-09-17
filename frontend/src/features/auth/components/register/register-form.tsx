@@ -23,7 +23,7 @@ export const registerAction: ActionFunction = async ({ request }) => {
   }
 
   try {
-    const response = await client.user.registerUser.mutate(validatedInput.data);
+    await client.user.registerUser.mutate(validatedInput.data);
   } catch (error) {
     return handleError(error, "Registration failed");
   }

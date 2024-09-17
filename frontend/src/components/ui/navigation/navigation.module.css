@@ -1,6 +1,5 @@
-.nav {
+.container {
   composes: flex-wrap from global;
-
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
@@ -8,18 +7,18 @@
   position: relative;
   color: var(--c-link);
   background-color: var(--bgc-brand);
-
-  h1 {
-    color: var(--c-logo);
-  }
-}
-
-.navlist {
-  composes: flex from global;
-  gap: 1rem;
 }
 
 .flex-row {
   display: flex;
   gap: 1rem;
+}
+
+.list {
+  display: flex;
+  gap: 1rem;
+}
+
+.logo {
+  color: var(--c-logo);
 }

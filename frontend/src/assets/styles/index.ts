@@ -1,6 +1,6 @@
 // Global styles
-import "./index.css";
+import "./animation.css";
 import "./box-model.css";
+import "./index.css";
 import "./layout.css";
 import "./typography.css";
-import "./animation.css";

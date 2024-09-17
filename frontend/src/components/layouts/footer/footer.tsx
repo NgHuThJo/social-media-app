@@ -2,7 +2,7 @@ import styles from "./footer.module.css";
 
 export function FooterLayout() {
   return (
-    <footer className={styles.layout}>
+    <footer className={styles.container}>
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis
         delectus molestias eius qui perspiciatis iusto quibusdam officiis velit

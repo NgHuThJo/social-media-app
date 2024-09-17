@@ -3,24 +3,24 @@
   opacity: 0.5;
   transition:
     visibility 0s linear 0s,
-    opacity 0.5s;
+    opacity var(--transition-duration);
 }
 
 .fade-out {
   visibility: hidden;
   opacity: 0;
   transition:
-    visibility 0s linear 0.5s,
-    opacity 0.5s;
+    visibility 0s linear var(--transition-duration),
+    opacity var(--transition-duration);
 }
 
 @keyframes slideIn {
-  0% {
+  from {
     visibility: hidden;
     transform: translateY(-100%);
     opacity: 0;
   }
-  100% {
+  to {
     visibility: visible;
     transform: translateY(0);
     opacity: 1;
@@ -28,16 +28,16 @@
 }
 
 .slide-in {
-  animation: slideIn 0.5s ease-in-out forwards;
+  animation: slideIn var(--transition-duration) ease-in-out forwards;
 }
 
 @keyframes slideOut {
-  0% {
+  from {
     visibility: visible;
     transform: translateY(0);
     opacity: 1;
   }
-  100% {
+  to {
     visibility: hidden;
     transform: translateY(-100%);
     opacity: 0;
@@ -45,5 +45,5 @@
 }
 
 .slide-out {
-  animation: slideOut 0.5s ease-in-out forwards;
+  animation: slideOut var(--transition-duration) ease-in-out forwards;
 }

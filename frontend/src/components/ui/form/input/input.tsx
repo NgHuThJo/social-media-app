@@ -1,35 +1,36 @@
 import { ComponentPropsWithRef } from "react";
 import { Label } from "../label/label";
+import { FormErrorMessage } from "@frontend/types";
 import styles from "./input.module.css";
 
-type InputProps = ComponentPropsWithRef<"input"> & {
-  inputClassName?: string;
-  labelClassName?: string;
-  label?: string;
-  error?: string[];
-};
+type InputProps = ComponentPropsWithRef<"input"> &
+  FormErrorMessage & {
+    inputClassName?: string;
+    label?: string;
+    labelClassName?: string;
+  };
 
 export function Input({
-  inputClassName = "default",
-  labelClassName,
-  label,
-  name,
   error,
+  inputClassName = "default",
+  label,
+  labelClassName,
+  name,
   type,
   ...restProps
 }: InputProps) {
   return (
     <Label
       className={labelClassName}
-      label={label}
-      htmlFor={name}
       error={error}
+      htmlFor={name}
+      label={label}
     >
       <input
-        type={type}
-        name={name}
-        id={name}
         className={styles[inputClassName]}
+        id={name}
+        name={name}
+        type={type}
         {...restProps}
       />
     </Label>

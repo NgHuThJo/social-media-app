@@ -3,7 +3,7 @@ import { ActionFunctionArgs, Form, useActionData } from "react-router-dom";
 import { z } from "zod";
 import { Button } from "@frontend/components/ui/button/button";
 import { Dialog } from "@frontend/components/ui/dialog/dialog";
-import { Error } from "@frontend/components/ui/form/error/error";
+import { FormError } from "@frontend/components/ui/form/error/error";
 import { Input } from "@frontend/components/ui/form/input/input";
 import { client } from "@frontend/lib/trpc";
 import {
@@ -75,7 +75,7 @@ export const ChatForm = forwardRef<HTMLDialogElement, ChatFormProps>(
             </Button>
           </div>
           {actionData?.errors?.general && (
-            <Error message={actionData.errors.general} />
+            <FormError message={actionData.errors.general} />
           )}
         </Form>
       </Dialog>
