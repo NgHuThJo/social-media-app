@@ -7,9 +7,9 @@ type Animation = {
 export type AnimationReturnType = ReturnType<typeof animate>;
 
 export function animate({ draw, duration, timing }: Animation) {
+  let isAnimationDone = false;
   let start: number | null = null;
   let requestId: number;
-  let isAnimationDone = false;
 
   const animationStep = (time: number) => {
     if (start === null) {
@@ -19,7 +19,7 @@ export function animate({ draw, duration, timing }: Animation) {
     let timeFraction = (time - start) / duration;
     timeFraction = Math.max(0, Math.min(1, timeFraction));
 
-    let progress = timing(timeFraction);
+    const progress = timing(timeFraction);
     draw(progress);
 
     if (timeFraction < 1) {
@@ -47,7 +47,7 @@ export function animate({ draw, duration, timing }: Animation) {
   };
 }
 
-// timing functions
+// Timing functions
 export function linear(timeFraction: number) {
   return timeFraction;
 }
@@ -81,8 +81,8 @@ export function makeEaseInOut(timing: (timeFraction: number) => number) {
   return (timeFraction: number) => {
     if (timeFraction < 0.5) {
       return timing(2 * timeFraction) / 2;
-    } else {
-      return (2 - timing(2 * (1 - timeFraction))) / 2;
     }
+
+    return (2 - timing(2 * (1 - timeFraction))) / 2;
   };
 }

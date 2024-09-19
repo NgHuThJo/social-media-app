@@ -10,7 +10,7 @@ import {
   nonEmptyStringSchema,
   numericIdSchema,
   SchemaError,
-} from "@frontend/types/zod-schema";
+} from "@frontend/types/zod";
 import styles from "./form.module.css";
 
 type ChatFormProps = {

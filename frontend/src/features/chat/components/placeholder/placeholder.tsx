@@ -21,7 +21,7 @@ export function ChatPlaceholder() {
   const requestAnimationFrameId = useRef<AnimationReturnType>();
 
   useEffect(() => {
-    const animationDelay = 3000;
+    const animationDuration = 1000;
     const timeoutDelay = 1000;
     const timeoutIds: number[] = [];
 
@@ -34,7 +34,7 @@ export function ChatPlaceholder() {
             textArray[currentTextIndex].slice(0, Math.ceil(currentTo)),
           );
         },
-        duration: animationDelay,
+        duration: animationDuration,
         timing: linear,
       });
 
@@ -51,7 +51,7 @@ export function ChatPlaceholder() {
                 textArray[currentTextIndex].slice(0, Math.ceil(currentTo)),
               );
             },
-            duration: animationDelay,
+            duration: animationDuration,
             timing: linear,
           });
 

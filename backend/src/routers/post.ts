@@ -6,7 +6,7 @@ import {
   nonEmptyStringSchema,
   numericIdSchema,
   urlSchema,
-} from "@backend/types/zod-schema";
+} from "@backend/types/zod";
 
 export const postRouter = router({
   getAllPosts: publicProcedure.query(async () => {

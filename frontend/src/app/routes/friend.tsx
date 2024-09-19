@@ -9,17 +9,11 @@ import { ContentLayout } from "@frontend/components/layouts/content/content";
 import { FriendList } from "@frontend/features/friend/components/list/list";
 import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
 import { client } from "@frontend/lib/trpc";
-import { handleError } from "@frontend/utils/error-handling";
+import { handleError } from "@frontend/utils/error-handler";
 import { LoaderData } from "@frontend/types";
-import { userIdSchema } from "@frontend/types/zod-schema";
+import { userIdSchema } from "@frontend/types/zod";
 
-type FriendLoaderData = {
-  data: LoaderData<typeof friendLoader>;
-};
-
-export type FriendData = Awaited<
-  ReturnType<typeof client.friend.getAllFriends.query>
->;
+type FriendLoaderData = LoaderData<typeof friendLoader>;
 
 export const friendLoader = ({ params }: LoaderFunctionArgs) => {
   const { userId } = params;

@@ -5,4 +5,7 @@
 }
 
 .list-item {
+  padding: 1.5rem;
+  font-weight: var(--fw-link);
+  background-color: var(--bgc-content);
 }

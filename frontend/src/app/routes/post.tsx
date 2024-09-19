@@ -19,15 +19,11 @@ import {
   createComment,
   createPostComment,
 } from "@frontend/features/shared/comment/form/form";
-import { handleError } from "@frontend/utils/error-handling";
+import { handleError } from "@frontend/utils/error-handler";
 import { LoaderData } from "@frontend/types";
 import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
 
 type PostLoaderData = LoaderData<typeof postLoader>;
-
-export type PostData = Awaited<
-  ReturnType<typeof client.post.getAllPosts.query>
->;
 
 export const postLoader = () => {
   try {
@@ -81,7 +77,7 @@ export function PostRoute() {
   return (
     <Suspense fallback={<LoadingSpinner />}>
       <Await resolve={loaderData.data}>
-        {(posts: PostData) => (
+        {(posts) => (
           <ContentLayout>
             <h2>Posts</h2>
             <PostList data={posts} />

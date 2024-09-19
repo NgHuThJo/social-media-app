@@ -4,9 +4,9 @@ import { Button } from "@frontend/components/ui/button/button";
 import { FormError } from "@frontend/components/ui/form/error/error";
 import { Input } from "@frontend/components/ui/form/input/input";
 import { TextArea } from "@frontend/components/ui/form/textarea/textarea";
-import { handleError } from "@frontend/utils/error-handling";
+import { handleError } from "@frontend/utils/error-handler";
 import { ActionDispatchFunction } from "@frontend/types";
-import { commentSchema, CommentSchemaError } from "@frontend/types/zod-schema";
+import { commentSchema, CommentSchemaError } from "@frontend/types/zod";
 import styles from "./form.module.css";
 
 type CommentProps = {

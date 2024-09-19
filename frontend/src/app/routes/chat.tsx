@@ -3,18 +3,10 @@ import { Await, defer, useLoaderData } from "react-router-dom";
 import { ChatLayout } from "@frontend/features/chat/components/layout/layout";
 import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
 import { client } from "@frontend/lib/trpc";
-import { handleError } from "@frontend/utils/error-handling";
+import { handleError } from "@frontend/utils/error-handler";
 import { LoaderData } from "@frontend/types";
 
 type ChatLoaderData = LoaderData<typeof chatLoader>;
-
-export type OnlineUsersData = Awaited<
-  ReturnType<typeof client.user.getListOfUsers.query>
->;
-
-export type ChatroomsData = Awaited<
-  ReturnType<typeof client.chat.getAllChatrooms.query>
->;
 
 export const chatLoader = async () => {
   const chatroomFn = async () => {

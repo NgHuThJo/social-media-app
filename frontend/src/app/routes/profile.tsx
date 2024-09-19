@@ -9,15 +9,11 @@ import { ContentLayout } from "@frontend/components/layouts/content/content";
 import { Profile } from "@frontend/features/profile/components/profile";
 import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
 import { client } from "@frontend/lib/trpc";
-import { handleError } from "@frontend/utils/error-handling";
+import { handleError } from "@frontend/utils/error-handler";
 import { LoaderData } from "@frontend/types";
-import { userIdSchema } from "@frontend/types/zod-schema";
+import { userIdSchema } from "@frontend/types/zod";
 
-type ProfileLoaderData = {
-  data: LoaderData<typeof profileLoader>;
-};
-
-export type ProfileData = Awaited<ReturnType<typeof client.user.getUser.query>>;
+type ProfileLoaderData = LoaderData<typeof profileLoader>;
 
 export const profileLoader = ({ params }: LoaderFunctionArgs) => {
   const { userId } = params;

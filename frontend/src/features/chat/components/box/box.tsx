@@ -6,7 +6,7 @@ import { useError } from "@frontend/hooks/useError";
 import { Button } from "@frontend/components/ui/button/button";
 import { client } from "@frontend/lib/trpc";
 import { formatRelativeTimeDate } from "@frontend/utils/intl";
-import { messageSchema, MessageSchemaError } from "@frontend/types/zod-schema";
+import { messageSchema, MessageSchemaError } from "@frontend/types/zod";
 import styles from "./box.module.css";
 
 export type RoomMessagesType = Awaited<

@@ -20,16 +20,10 @@ import {
 } from "@frontend/features/shared/comment/form/form";
 import { createFeed } from "@frontend/features/feed/components/form/form";
 import { LoaderData } from "@frontend/types";
-import { userIdSchema } from "@frontend/types/zod-schema";
-import { handleError } from "@frontend/utils/error-handling";
+import { userIdSchema } from "@frontend/types/zod";
+import { handleError } from "@frontend/utils/error-handler";
 
-type FeedLoaderData = {
-  data: LoaderData<typeof feedLoader>;
-};
-
-export type FeedData = Awaited<
-  ReturnType<typeof client.post.getAllFeeds.query>
->;
+type FeedLoaderData = LoaderData<typeof feedLoader>;
 
 export const feedLoader = ({ params }: LoaderFunctionArgs) => {
   console.count("feedLoader");
@@ -98,7 +92,7 @@ export function FeedRoute() {
   return (
     <Suspense fallback={<LoadingSpinner />}>
       <Await resolve={loaderData.data}>
-        {(feeds: FeedData) => (
+        {(feeds) => (
           <ContentLayout>
             <h2>Feeds</h2>
             <FeedList data={feeds} />

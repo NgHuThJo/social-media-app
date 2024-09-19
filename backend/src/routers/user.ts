@@ -7,7 +7,7 @@ import {
   nameSchema,
   numericIdSchema,
   passwordSchema,
-} from "@backend/types/zod-schema";
+} from "@backend/types/zod";
 
 export const userRouter = router({
   getUser: publicProcedure

@@ -1,7 +1,6 @@
 import {
   ActionFunction,
   Form,
-  NavLink,
   redirect,
   useActionData,
 } from "react-router-dom";
@@ -9,9 +8,10 @@ import { AuthContextApiType } from "@frontend/providers/auth-context";
 import { Button } from "@frontend/components/ui/button/button";
 import { FormError } from "@frontend/components/ui/form/error/error";
 import { Input } from "@frontend/components/ui/form/input/input";
+import { NavigationLink } from "@frontend/components/ui/navigation/link/link";
 import { client } from "@frontend/lib/trpc";
-import { handleError } from "@frontend/utils/error-handling";
-import { authSchema, AuthSchemaError } from "@frontend/types/zod-schema";
+import { handleError } from "@frontend/utils/error-handler";
+import { authSchema, AuthSchemaError } from "@frontend/types/zod";
 import styles from "./form.module.css";
 
 export const loginAction =
@@ -66,19 +66,9 @@ export function LoginForm() {
           <Button className="auth" type="submit">
             Login
           </Button>
-          <NavLink
-            to="/auth/register"
-            className={({ isActive }) => (isActive ? "active-link" : undefined)}
-          >
-            Sign up
-          </NavLink>
+          <NavigationLink to="/auth/register">Sign up</NavigationLink>
         </div>
-        <NavLink
-          to="/"
-          className={({ isActive }) => (isActive ? "active-link" : undefined)}
-        >
-          Back to home
-        </NavLink>
+        <NavigationLink to="/">Back to home</NavigationLink>
       </Form>
     </div>
   );

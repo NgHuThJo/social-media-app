@@ -1,12 +1,12 @@
 import { Feed } from "../feed/feed";
-import { FeedData } from "@frontend/app/routes/feed";
+import { FeedData } from "@frontend/types/api";
 import styles from "./list.module.css";
 
 type FeedListProps = {
   data: FeedData;
 };
 
-export type FeedItemData = NonNullable<FeedData>[number];
+export type FeedListItemData = NonNullable<FeedData>[number];
 
 export function FeedList({ data }: FeedListProps) {
   return (

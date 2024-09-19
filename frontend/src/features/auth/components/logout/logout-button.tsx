@@ -12,10 +12,10 @@ export function LogoutButton() {
   const webSocketContextApi = useWebSocketContextApi();
   const navigate = useNavigate();
 
-  const onLogout = () => {
-    webSocketContextApi.removeWebSocket(userId);
+  const handleLogout = () => {
     authContextApi?.setUserId("");
     localStorage.removeItem("userId");
+    webSocketContextApi.removeWebSocket(userId);
 
     navigate("/", {
       replace: true,
@@ -23,7 +23,7 @@ export function LogoutButton() {
   };
 
   return (
-    <Button type="submit" className="auth" onClick={onLogout}>
+    <Button type="submit" className="auth" onClick={handleLogout}>
       Logout
     </Button>
   );

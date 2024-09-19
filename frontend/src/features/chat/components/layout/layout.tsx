@@ -6,7 +6,7 @@ import { ChatForm } from "../form/form";
 import { ChatPlaceholder } from "../placeholder/placeholder";
 import { ChatroomList } from "../room-list/room-list";
 import { UserList } from "@frontend/features/user/components/list/list";
-import { ChatroomsData, OnlineUsersData } from "@frontend/app/routes/chat";
+import { ChatroomsData, OnlineUsersData } from "@frontend/types/api";
 import styles from "./layout.module.css";
 
 type ChatLayoutProps = {

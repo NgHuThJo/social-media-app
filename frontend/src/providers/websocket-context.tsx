@@ -9,7 +9,7 @@ import {
 } from "react";
 import { io, Socket } from "socket.io-client";
 import { useContextWrapper } from "@frontend/utils/context";
-import { ChatroomsData, OnlineUsersData } from "@frontend/app/routes/chat";
+import { ChatroomsData, OnlineUsersData } from "@frontend/types/api";
 import { RoomMessagesType } from "@frontend/features/chat/components/box/box";
 
 type WebSocketContextType = {

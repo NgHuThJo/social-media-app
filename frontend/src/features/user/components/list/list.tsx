@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import { OnlineUserType } from "@frontend/features/chat/components/layout/layout";
+import { OnlineUsersData } from "@frontend/types/api";
 import styles from "./list.module.css";
 
 type UserListProps = {
-  data: OnlineUserType;
+  data: OnlineUsersData;
 };
 
 export function UserList({ data }: UserListProps) {

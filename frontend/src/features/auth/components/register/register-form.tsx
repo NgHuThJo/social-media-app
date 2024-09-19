@@ -8,11 +8,11 @@ import {
 import { Button } from "@frontend/components/ui/button/button";
 import { Input } from "@frontend/components/ui/form/input/input";
 import { client } from "@frontend/lib/trpc";
-import { handleError } from "@frontend/utils/error-handling";
+import { handleError } from "@frontend/utils/error-handler";
 import {
   registrationSchema,
   RegistrationSchemaError,
-} from "@frontend/types/zod-schema";
+} from "@frontend/types/zod";
 
 export const registerAction: ActionFunction = async ({ request }) => {
   const formData = Object.fromEntries(await request.formData());

@@ -1,5 +1,5 @@
 import { ProfileDetail } from "./detail/detail";
-import { ProfileData } from "@frontend/app/routes/profile";
+import { ProfileData } from "@frontend/types/api";
 import styles from "./profile.module.css";
 
 type ProfileInfoProps = {

@@ -1,5 +1,4 @@
-import { FriendData } from "@frontend/app/routes/friend";
-import { FriendInfo } from "../info/info";
+import { FriendData } from "@frontend/types/api";
 import styles from "./list.module.css";
 
 type FriendListProps = {

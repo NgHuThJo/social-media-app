@@ -4,12 +4,9 @@ import { FormError } from "@frontend/components/ui/form/error/error";
 import { Input } from "@frontend/components/ui/form/input/input";
 import { TextArea } from "@frontend/components/ui/form/textarea/textarea";
 import { client } from "@frontend/lib/trpc";
-import { handleError } from "@frontend/utils/error-handling";
+import { handleError } from "@frontend/utils/error-handler";
 import { ActionDispatchFunction } from "@frontend/types";
-import {
-  feedFormSchema,
-  FeedFormSchemaError,
-} from "@frontend/types/zod-schema";
+import { feedFormSchema, FeedFormSchemaError } from "@frontend/types/zod";
 import styles from "./form.module.css";
 import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
 
