@@ -1,15 +1,15 @@
-import { ProfileDetail } from "../detail/detail";
+import { ProfileDetail } from "./detail/detail";
 import { ProfileData } from "@frontend/app/routes/profile";
-import styles from "./info.module.css";
+import styles from "./profile.module.css";
 
 type ProfileInfoProps = {
   data: ProfileData;
 };
 
-export function ProfileInfo({ data }: ProfileInfoProps) {
+export function Profile({ data }: ProfileInfoProps) {
   return data ? (
     <ul className={styles.list}>
-      <li className={styles.info}>
+      <li className={styles["list-item"]}>
         <ProfileDetail label="Name" value={data.name} />
         <ProfileDetail label="Email" value={data.email} />
       </li>

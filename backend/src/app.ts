@@ -1,5 +1,6 @@
 // Third party
 import http from "node:http";
+import path from "node:path";
 import { v2 as cloudinary } from "cloudinary";
 import cors from "cors";
 import express, { ErrorRequestHandler } from "express";
@@ -62,9 +63,19 @@ app.post("/upload", upload.single("file"), (req, res, _next) => {
     return res.status(400).json({ message: "No file uploaded" });
   }
 
-  const { path } = file;
+  const getPublicId = (imageURL: string) => {
+    const [, publicIdWithExtensionName] = imageURL.split("upload/");
+    const extensionName = path.extname(publicIdWithExtensionName);
+    const publicId = publicIdWithExtensionName.replace(extensionName, "");
+    return publicId;
+  };
 
-  res.status(200).json({ message: "File uploaded successfully", path });
+  const { path: imagePath }: { path: string } = file;
+  const publicId = getPublicId(imagePath);
+
+  res
+    .status(200)
+    .json({ message: "File uploaded successfully", path: imagePath, publicId });
 });
 
 app.use(

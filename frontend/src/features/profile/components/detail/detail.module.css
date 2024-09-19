@@ -1,6 +1,4 @@
 .detail {
-  background-color: var(--bgc-content);
-
   > span {
     font-weight: var(--fw-heading);
     font-size: var(--fs-profile);

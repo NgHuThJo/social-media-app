@@ -5,7 +5,9 @@ import styles from "./main.module.css";
 export function MainLayout({ children }: PropsWithChildren) {
   return (
     <main className={styles.container}>
-      <NavigationList />
+      <nav className={styles.nav}>
+        <NavigationList />
+      </nav>
       {children}
     </main>
   );

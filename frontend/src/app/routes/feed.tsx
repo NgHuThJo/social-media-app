@@ -96,21 +96,22 @@ export function FeedRoute() {
   const loaderData = useLoaderData() as FeedLoaderData;
 
   return (
-    <ContentLayout>
-      <h2>Feeds</h2>
-      <Suspense fallback={<LoadingSpinner />}>
-        <Await resolve={loaderData.data}>
-          {(feeds: FeedData) => (
-            <>
-              <FeedList data={feeds} />
+    <Suspense fallback={<LoadingSpinner />}>
+      <Await resolve={loaderData.data}>
+        {(feeds: FeedData) => (
+          <ContentLayout>
+            <h2>Feeds</h2>
+            <FeedList data={feeds} />
+            {isOpen ? (
+              <FeedForm onClose={close} />
+            ) : (
               <Button type="button" className="submit" onClick={open}>
                 Create Feed
               </Button>
-            </>
-          )}
-        </Await>
-      </Suspense>
-      {isOpen && <FeedForm onClose={close} />}
-    </ContentLayout>
+            )}
+          </ContentLayout>
+        )}
+      </Await>
+    </Suspense>
   );
 }

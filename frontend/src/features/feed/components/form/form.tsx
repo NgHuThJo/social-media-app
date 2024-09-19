@@ -44,6 +44,7 @@ export const createFeed: ActionDispatchFunction = async (
     const response = await client.post.createFeed.mutate({
       ...validatedData.data,
       assetUrl: json.path,
+      publicId: json.publicId,
     });
 
     return response;

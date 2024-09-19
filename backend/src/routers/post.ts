@@ -128,19 +128,21 @@ export const postRouter = router({
       z.object({
         assetUrl: urlSchema,
         content: nonEmptyStringSchema,
+        publicId: nonEmptyStringSchema,
         title: nonEmptyStringSchema,
         userId: numericIdSchema,
       }),
     )
     .mutation(async ({ input }) => {
-      const { assetUrl, content, title, userId } = input;
+      const { assetUrl, content, publicId, title, userId } = input;
 
       try {
         const newFeed = await postService.createFeed(
+          assetUrl,
           content,
+          publicId,
           title,
           userId,
-          assetUrl,
         );
 
         return newFeed;

@@ -79,21 +79,19 @@ export function PostRoute() {
   const { isOpen, open, close } = useToggle();
 
   return (
-    <ContentLayout>
-      <h2>Posts</h2>
-      <Suspense fallback={<LoadingSpinner />}>
-        <Await resolve={loaderData.data}>
-          {(posts: PostData) => (
-            <>
-              <PostList data={posts} />
-              <Button type="button" className="submit" onClick={open}>
-                Create post
-              </Button>
-            </>
-          )}
-        </Await>
-      </Suspense>
-      {isOpen && <PostForm onClose={close} />}
-    </ContentLayout>
+    <Suspense fallback={<LoadingSpinner />}>
+      <Await resolve={loaderData.data}>
+        {(posts: PostData) => (
+          <ContentLayout>
+            <h2>Posts</h2>
+            <PostList data={posts} />
+            <Button type="button" className="submit" onClick={open}>
+              Create post
+            </Button>
+            {isOpen && <PostForm onClose={close} />}
+          </ContentLayout>
+        )}
+      </Await>
+    </Suspense>
   );
 }

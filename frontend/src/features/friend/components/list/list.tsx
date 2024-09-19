@@ -9,7 +9,12 @@ type FriendListProps = {
 export function FriendList({ data }: FriendListProps) {
   return (
     <ul className={styles.list}>
-      {data?.map((friend) => <FriendInfo data={friend} key={friend.id} />)}
+      {data?.map((friend) => (
+        <li className={styles["list-item"]}>
+          <p>Name: {friend.name}</p>
+          <p>Email: {friend.email}</p>
+        </li>
+      ))}
     </ul>
   );
 }

@@ -1,16 +1,11 @@
 .default {
+  place-self: center;
   width: 3rem;
   aspect-ratio: 1;
   border: 8px solid lightblue;
   border-right-color: orange;
   border-radius: 50%;
   animation: spinnerDefault 1s infinite linear;
-}
-
-.container {
-  display: grid;
-  place-items: center;
-  height: 100svh;
 }
 
 @keyframes spinnerDefault {

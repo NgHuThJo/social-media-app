@@ -4,6 +4,7 @@ import { LogoutButton } from "@frontend/features/auth/components/logout/logout-b
 import { NavigationLink } from "./link/link";
 import { NavigationList } from "./list/list";
 import { NotificationList } from "../notifiication/list";
+import { UserDisplay } from "@frontend/features/user/components/display/display";
 import styles from "./navigation.module.css";
 
 export function Navigation() {
@@ -20,6 +21,7 @@ export function Navigation() {
           <NavigationLink to="/auth/login">Login</NavigationLink>
         ) : (
           <>
+            <UserDisplay />
             <LogoutButton />
             <NotificationList />
           </>

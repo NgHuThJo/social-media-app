@@ -1,3 +1,11 @@
 .container {
-  padding-inline: var(--p-inline-container);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: var(--gap-main);
+  padding: var(--p-inline-container);
+}
+
+.nav {
+  padding: var(--p-inline-container);
+  background-color: var(--bgc-content);
 }

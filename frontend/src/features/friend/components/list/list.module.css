@@ -1,4 +1,8 @@
 .list {
-  composes: grid from global;
+  display: grid;
   gap: 2rem;
+  font-weight: var(--fw-link);
+}
+
+.list-item {
 }

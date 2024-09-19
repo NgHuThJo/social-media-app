@@ -26,6 +26,18 @@ model User {
   receivedFriendRequests Friendship[]  @relation("receivedRequests")
   postLike               PostLike[]
   commentLike            CommentLike[]
+  follows                Follow[]      @relation("following")
+  followers              Follow[]      @relation("follower")
+}
+
+model Follow {
+  id          Int  @id @default(autoincrement())
+  followerId  Int
+  followingId Int
+  follower    User @relation("follower", fields: [followerId], references: [id])
+  following   User @relation("following", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId])
 }
 
 enum FriendshipStatus {
@@ -105,7 +117,7 @@ model Message {
 
 model Chatroom {
   id       Int       @id @default(autoincrement())
-  title    String
+  title    String    @db.VarChar(255)
   messages Message[]
 }
 
@@ -114,8 +126,7 @@ model Asset {
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    Int      @unique
   url       String
+  publicId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@index([postId])
 }

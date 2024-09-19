@@ -131,10 +131,11 @@ class PostService {
   }
 
   async createFeed(
+    assetUrl: string,
     content: string,
+    publicId: string,
     title: string,
     userId: number,
-    assetUrl: string,
   ) {
     const newFeed = await prisma.post.create({
       data: {
@@ -146,7 +147,7 @@ class PostService {
           },
         },
         asset: {
-          create: { url: assetUrl },
+          create: { url: assetUrl, publicId },
         },
       },
       include: {

@@ -6,7 +6,7 @@ import {
   useLoaderData,
 } from "react-router-dom";
 import { ContentLayout } from "@frontend/components/layouts/content/content";
-import { ProfileInfo } from "@frontend/features/profile/components/info/info";
+import { Profile } from "@frontend/features/profile/components/profile";
 import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
 import { client } from "@frontend/lib/trpc";
 import { handleError } from "@frontend/utils/error-handling";
@@ -54,13 +54,15 @@ export function ProfileRoute() {
   const loaderData = useLoaderData() as ProfileLoaderData;
 
   return (
-    <ContentLayout>
-      <h2>Profile Info</h2>
-      <Suspense fallback={<LoadingSpinner />}>
-        <Await resolve={loaderData.data}>
-          {(profile) => <ProfileInfo data={profile} />}
-        </Await>
-      </Suspense>
-    </ContentLayout>
+    <Suspense fallback={<LoadingSpinner />}>
+      <Await resolve={loaderData.data}>
+        {(profile) => (
+          <ContentLayout>
+            <h2>Profile Info</h2>
+            <Profile data={profile} />
+          </ContentLayout>
+        )}
+      </Await>
+    </Suspense>
   );
 }

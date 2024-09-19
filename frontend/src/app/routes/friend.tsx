@@ -56,13 +56,15 @@ export function FriendRoute() {
   const loaderData = useLoaderData() as FriendLoaderData;
 
   return (
-    <ContentLayout>
-      <h2>Friends</h2>
-      <Suspense fallback={<LoadingSpinner />}>
-        <Await resolve={loaderData.data}>
-          {(friends) => <FriendList data={friends} />}
-        </Await>
-      </Suspense>
-    </ContentLayout>
+    <Suspense fallback={<LoadingSpinner />}>
+      <Await resolve={loaderData.data}>
+        {(friends) => (
+          <ContentLayout>
+            <h2>Friends</h2>
+            <FriendList data={friends} />
+          </ContentLayout>
+        )}
+      </Await>
+    </Suspense>
   );
 }

@@ -2,3 +2,9 @@
   composes: macro-grid from global;
   grid-template-rows: auto 1fr auto;
 }
+
+.header {
+}
+
+.footer {
+}

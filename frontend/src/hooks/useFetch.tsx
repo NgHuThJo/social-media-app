@@ -9,12 +9,12 @@ export function useFetch() {
   const fetchData = async (
     fetchFn: (controller: AbortController) => Promise<void>,
   ) => {
+    setLoading(true);
+    setError(null);
+
     if (!abortControllerRef.current) {
       abortControllerRef.current = new AbortController();
     }
-
-    setLoading(true);
-    setError(null);
 
     try {
       await fetchFn(abortControllerRef.current);

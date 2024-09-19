@@ -7,9 +7,5 @@ export function LoadingSpinner({
   className = "default",
   ...restProps
 }: SpinnerProps) {
-  return (
-    <div className={styles.container}>
-      <div className={styles[className]} {...restProps}></div>
-    </div>
-  );
+  return <div className={styles[className]} {...restProps}></div>;
 }

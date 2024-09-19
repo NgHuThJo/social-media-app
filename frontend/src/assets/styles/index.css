@@ -4,12 +4,14 @@
   --flow-spacing: 1em;
   --max-w-container: var(--macro-grid-content-max-w);
   --max-w-dialog: 45rem;
+  --max-w-skeleton: 60rem;
   --min-w-root: 20rem;
   --p-inline-container: 2rem;
   --w-icon: 2rem;
 
   /* grid */
   --auto-grid-column-w: 15rem;
+  --gap-main: 2rem;
   --macro-grid-breakout-column-w: calc(
     (var(--macro-grid-breakout-max-w) - var(--macro-grid-content-max-w)) / 2
   );
@@ -38,7 +40,7 @@
   --c-box-shadow: #d8e1ef;
   --c-error: #da3633;
   --c-link: #000;
-  --c-link-active: #046d53;
+  --c-link-active: #a020f0;
   --c-logo: #fff;
   --c-root: #71728c;
 

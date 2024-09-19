@@ -1,5 +1,5 @@
 .container {
   composes: flow-spacing from global;
-  padding: 2rem;
-  background-color: var(--bgc-brand);
+  padding: var(--p-inline-container);
+  background-color: var(--bgc-content);
 }
