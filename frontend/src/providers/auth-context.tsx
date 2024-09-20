@@ -27,7 +27,7 @@ export const useAuthContextApi = () =>
 
 export function AuthContextProvider({ children }: PropsWithChildren) {
   const [userId, setUserId] = useState<string>(() => {
-    const parsedValue = getPersistedValue("userId");
+    const parsedValue: string = getPersistedValue("userId");
 
     return parsedValue ?? "";
   });

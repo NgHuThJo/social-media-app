@@ -1,0 +1,22 @@
+.container {
+  display: grid;
+  column-gap: 1rem;
+  grid-template-areas:
+    "avatar name name"
+    "avatar email email";
+}
+
+.avatar {
+  grid-area: avatar;
+  width: var(--w-icon);
+
+  > img {
+    border-radius: 50%;
+  }
+}
+.name {
+  grid-area: name;
+}
+.email {
+  grid-area: email;
+}

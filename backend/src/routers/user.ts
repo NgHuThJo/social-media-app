@@ -5,8 +5,10 @@ import { logError } from "@backend/utils/error-logger";
 import {
   emailSchema,
   nameSchema,
+  nonEmptyStringSchema,
   numericIdSchema,
   passwordSchema,
+  urlSchema,
 } from "@backend/types/zod";
 
 export const userRouter = router({
@@ -102,6 +104,32 @@ export const userRouter = router({
         const newUser = await userService.registerUser(email, name, password);
 
         return newUser;
+      } catch (error) {
+        logError(error);
+      }
+    }),
+
+  updateUser: publicProcedure
+    .input(
+      z.object({
+        assetUrl: urlSchema,
+        publicId: nonEmptyStringSchema,
+        userId: numericIdSchema,
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const { assetUrl, publicId, userId } = input;
+
+      try {
+        const updatedUser = await userService.updateUser(
+          assetUrl,
+          publicId,
+          userId,
+        );
+
+        console.log(updatedUser);
+
+        return updatedUser;
       } catch (error) {
         logError(error);
       }

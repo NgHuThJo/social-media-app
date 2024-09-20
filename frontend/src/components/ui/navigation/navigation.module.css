@@ -5,12 +5,14 @@
   gap: 1rem;
   padding: var(--p-inline-container);
   position: relative;
+  font-weight: var(--fw-link);
   color: var(--c-link);
   background-color: var(--bgc-brand);
 }
 
 .flex-row {
   display: flex;
+  align-items: center;
   gap: 1rem;
 }
 

@@ -1,3 +1,4 @@
+import { v2 as cloudinary } from "cloudinary";
 import { prisma } from "@backend/models";
 import { AppError } from "@backend/utils/app-error";
 
@@ -6,6 +7,9 @@ class UserService {
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
+      },
+      include: {
+        avatar: true,
       },
     });
 
@@ -23,17 +27,24 @@ class UserService {
           in: userIdList,
         },
       },
+      include: {
+        avatar: true,
+      },
     });
 
     return users;
   }
 
   async getAllUsers() {
-    const users = await prisma.user.findMany();
+    const users = await prisma.user.findMany({
+      include: {
+        avatar: true,
+      },
+    });
 
-    if (!users) {
-      throw new AppError("NOT_FOUND", "No users found");
-    }
+    // if (!users) {
+    //   throw new AppError("NOT_FOUND", "No users found");
+    // }
 
     return users;
   }
@@ -45,11 +56,14 @@ class UserService {
           id: userId,
         },
       },
+      include: {
+        avatar: true,
+      },
     });
 
-    if (!otherUsers) {
-      throw new AppError("NOT_FOUND", "No other users found");
-    }
+    // if (!otherUsers) {
+    //   throw new AppError("NOT_FOUND", "No other users found");
+    // }
 
     return otherUsers;
   }
@@ -78,6 +92,38 @@ class UserService {
         password,
       },
     });
+  }
+
+  async updateUser(assetUrl: string, publicId: string, userId: number) {
+    const oldAvatar = await prisma.avatar.findUnique({
+      where: {
+        userId,
+      },
+    });
+
+    if (oldAvatar) {
+      await cloudinary.uploader.destroy(oldAvatar.publicId);
+
+      await prisma.avatar.delete({
+        where: {
+          userId,
+        },
+      });
+    }
+
+    const newAvatar = await prisma.avatar.create({
+      data: {
+        user: {
+          connect: {
+            id: userId,
+          },
+        },
+        url: assetUrl,
+        publicId,
+      },
+    });
+
+    return newAvatar;
   }
 }
 

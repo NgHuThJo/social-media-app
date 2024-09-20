@@ -1,5 +1,4 @@
 .container {
   composes: flow-spacing from global;
-  padding: var(--p-inline-container);
-  background-color: var(--bgc-content);
+  /* padding: var(--p-inline-container); */
 }

@@ -89,3 +89,10 @@ export const feedFormSchema = z.object({
 });
 
 export type FeedFormSchemaError = SchemaError<typeof feedFormSchema>;
+
+export const settingsFormSchema = z.object({
+  file: fileSchema,
+  userId: numericIdSchema,
+});
+
+export type SettingsFormSchemaError = SchemaError<typeof settingsFormSchema>;

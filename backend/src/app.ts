@@ -35,8 +35,8 @@ const storage = new CloudinaryStorage({
     folder: "uploads",
     transformation: [
       {
-        width: 480,
-        height: 480,
+        width: 720,
+        height: 720,
         crop: "fit",
       },
     ],
@@ -72,6 +72,8 @@ app.post("/upload", upload.single("file"), (req, res, _next) => {
 
   const { path: imagePath }: { path: string } = file;
   const publicId = getPublicId(imagePath);
+
+  console.log(imagePath);
 
   res
     .status(200)

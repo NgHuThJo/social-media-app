@@ -13,8 +13,8 @@ export function LogoutButton() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    authContextApi?.setUserId("");
     localStorage.removeItem("userId");
+    authContextApi?.setUserId("");
     webSocketContextApi.removeWebSocket(userId);
 
     navigate("/", {

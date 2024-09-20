@@ -25,7 +25,7 @@ export const chatLoader = async () => {
     return defer({ data });
   } catch (error) {
     throw new Response(
-      JSON.stringify(handleError(error, "Could not fetch feed data")),
+      JSON.stringify(handleError(error, "Could not fetch chat data")),
       {
         status: 500,
         statusText: "Internal Server Error",

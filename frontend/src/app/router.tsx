@@ -14,6 +14,8 @@ import { ProfileRoute, profileLoader } from "./routes/profile";
 import { ProtectedRoute } from "./routes/protected";
 import { RegisterRoute } from "./routes/register";
 import { registerAction } from "@frontend/features/auth/components/register/register-form";
+import { SettingsRoute } from "./routes/settings";
+import { settingsAction } from "@frontend/features/settings/components/settings";
 
 export function Router() {
   const authContextApi = useAuthContextApi();
@@ -68,6 +70,11 @@ export function Router() {
               element: <ChatRoute />,
               loader: chatLoader,
               action: chatAction,
+            },
+            {
+              path: "settings",
+              element: <SettingsRoute />,
+              action: settingsAction,
             },
           ],
         },

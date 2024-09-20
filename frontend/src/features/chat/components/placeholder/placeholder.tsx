@@ -9,7 +9,8 @@ import styles from "./placeholder.module.css";
 const textArray = [
   "Welcome to the chatroom!",
   "How are you doing?",
-  "I'm doing great!",
+  "I hope you have a good day!",
+  "How are you?",
 ];
 const from = 0;
 
