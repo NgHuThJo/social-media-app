@@ -1,7 +1,15 @@
 .default {
-  composes: flex from global;
+  display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
+}
+
+.file-selector {
+  composes: default;
+
+  input[type="file"]::file-selector-button {
+    background-color: var(--bgc-button);
+  }
 }
 
 .chatroom {

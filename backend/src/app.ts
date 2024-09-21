@@ -64,7 +64,7 @@ app.post("/upload", upload.single("file"), (req, res, _next) => {
   }
 
   const getPublicId = (imageURL: string) => {
-    const [, publicIdWithExtensionName] = imageURL.split("upload/");
+    const [, publicIdWithExtensionName] = imageURL.split("uploads/");
     const extensionName = path.extname(publicIdWithExtensionName);
     const publicId = publicIdWithExtensionName.replace(extensionName, "");
     return publicId;
@@ -73,7 +73,7 @@ app.post("/upload", upload.single("file"), (req, res, _next) => {
   const { path: imagePath }: { path: string } = file;
   const publicId = getPublicId(imagePath);
 
-  console.log(imagePath);
+  console.log(publicId);
 
   res
     .status(200)

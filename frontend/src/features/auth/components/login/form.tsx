@@ -30,9 +30,8 @@ export const loginAction =
       const response = await client.auth.loginUser.mutate(validatedInput.data);
 
       if (response) {
-        const stringifiedUserId = String(response.id);
-        authContextApi?.setUserId(stringifiedUserId);
-        localStorage.setItem("userId", JSON.stringify(stringifiedUserId));
+        authContextApi?.setUserData(response);
+        localStorage.setItem("user", JSON.stringify(response));
 
         return redirect(`/${response.id}/profile`);
       }

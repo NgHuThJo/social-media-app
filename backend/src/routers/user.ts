@@ -127,8 +127,6 @@ export const userRouter = router({
           userId,
         );
 
-        console.log(updatedUser);
-
         return updatedUser;
       } catch (error) {
         logError(error);

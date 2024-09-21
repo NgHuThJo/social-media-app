@@ -7,6 +7,9 @@ class AuthService {
       where: {
         email,
       },
+      include: {
+        avatar: true,
+      },
       omit: {
         password: false,
       },

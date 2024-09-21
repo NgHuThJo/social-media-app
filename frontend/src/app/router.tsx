@@ -13,7 +13,7 @@ import { PostRoute, postLoader, postAction } from "./routes/post";
 import { ProfileRoute, profileLoader } from "./routes/profile";
 import { ProtectedRoute } from "./routes/protected";
 import { RegisterRoute } from "./routes/register";
-import { registerAction } from "@frontend/features/auth/components/register/register-form";
+import { registerAction } from "@frontend/features/auth/components/register/form";
 import { SettingsRoute } from "./routes/settings";
 import { settingsAction } from "@frontend/features/settings/components/settings";
 
@@ -74,7 +74,7 @@ export function Router() {
             {
               path: "settings",
               element: <SettingsRoute />,
-              action: settingsAction,
+              action: settingsAction(authContextApi),
             },
           ],
         },

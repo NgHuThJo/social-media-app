@@ -82,6 +82,7 @@ input {
 }
 
 a {
+  display: inline-block;
   font-weight: var(--fw-link);
   text-decoration: none;
 

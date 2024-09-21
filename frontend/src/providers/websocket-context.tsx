@@ -35,7 +35,7 @@ type WebSocketContextApiType = {
     currentRoomId: number | undefined,
     newRoomId: number,
   ) => void;
-  removeWebSocket: (userId: string) => void;
+  removeWebSocket: (userId: string | undefined) => void;
 } | null;
 
 const WebSocketContext = createContext<WebSocketContextType>(null);
@@ -91,7 +91,7 @@ export function WebSocketContextProvider({ children }: PropsWithChildren) {
       });
     };
 
-    const removeWebSocket = (userId: string) => {
+    const removeWebSocket = (userId: string | undefined) => {
       const convertedId = Number(userId);
 
       socket.current?.emit("logout", { userId: convertedId });

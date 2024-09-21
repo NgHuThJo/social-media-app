@@ -4,8 +4,9 @@ import { useAuthContext } from "@frontend/providers/auth-context";
 import { useWebSocketContextApi } from "@frontend/providers/websocket-context";
 
 export function ProtectedRoute() {
-  const { userId } = useAuthContext();
+  const { user } = useAuthContext();
   const { createWebSocket } = useWebSocketContextApi();
+  const userId = user?.id.toLocaleString();
 
   useEffect(() => {
     if (!userId) {

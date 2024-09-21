@@ -102,7 +102,7 @@ class UserService {
     });
 
     if (oldAvatar) {
-      await cloudinary.uploader.destroy(oldAvatar.publicId);
+      await cloudinary.uploader.destroy("uploads/" + oldAvatar.publicId);
 
       await prisma.avatar.delete({
         where: {
@@ -123,7 +123,20 @@ class UserService {
       },
     });
 
-    return newAvatar;
+    const user = prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      include: {
+        avatar: true,
+      },
+    });
+
+    if (!user) {
+      throw new AppError("NOT_FOUND", `No user with id ${userId} found`);
+    }
+
+    return user;
   }
 }
 

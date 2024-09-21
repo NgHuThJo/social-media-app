@@ -1,6 +1,9 @@
-import { useAuthContext } from "@frontend/providers/auth-context";
 import { NavigationLink } from "../link/link";
 import styles from "./list.module.css";
+
+type NavigationListProps = {
+  userId: string;
+};
 
 const navigationMap = new Map([
   ["About", "profile"],
@@ -10,9 +13,7 @@ const navigationMap = new Map([
   ["Chat", "chat"],
 ]);
 
-export function NavigationList() {
-  const { userId } = useAuthContext();
-
+export function NavigationList({ userId }: NavigationListProps) {
   return (
     <ul className={styles.container}>
       {[...navigationMap].map(([key, value]) => (

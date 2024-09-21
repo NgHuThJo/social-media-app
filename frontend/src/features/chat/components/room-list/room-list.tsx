@@ -1,5 +1,5 @@
 import { useAuthContext } from "@frontend/providers/auth-context";
-import { ChatroomsData } from "@frontend/app/routes/chat";
+import { ChatroomsData } from "@frontend/types/api";
 import styles from "./room-list.module.css";
 
 type ChatroomListProps = {
@@ -17,7 +17,8 @@ export function ChatroomList({
   currentRoomId,
   handleSelectRoom,
 }: ChatroomListProps) {
-  const { userId } = useAuthContext();
+  const { user } = useAuthContext();
+  const userId = user?.id.toLocaleString()!;
 
   return (
     <div className={styles.list}>

@@ -7,15 +7,16 @@ import { useWebSocketContextApi } from "@frontend/providers/websocket-context";
 import { Button } from "@frontend/components/ui/button/button";
 
 export function LogoutButton() {
-  const { userId } = useAuthContext();
-  const authContextApi = useAuthContextApi();
-  const webSocketContextApi = useWebSocketContextApi();
+  const { user } = useAuthContext();
+  const { setUserData } = useAuthContextApi();
+  const { removeWebSocket } = useWebSocketContextApi();
   const navigate = useNavigate();
+  const userId = user?.id.toLocaleString();
 
   const handleLogout = () => {
-    localStorage.removeItem("userId");
-    authContextApi?.setUserId("");
-    webSocketContextApi.removeWebSocket(userId);
+    removeWebSocket(userId);
+    localStorage.removeItem("user");
+    setUserData(undefined);
 
     navigate("/", {
       replace: true,

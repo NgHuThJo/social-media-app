@@ -7,10 +7,6 @@
 
 .form {
   composes: flow-spacing from global;
-
-  a {
-    display: inline-block;
-  }
 }
 
 .actions {
