@@ -9,7 +9,7 @@ export function FriendList({ data }: FriendListProps) {
   return (
     <ul className={styles.list}>
       {data?.map((friend) => (
-        <li className={styles["list-item"]}>
+        <li className={styles["list-item"]} key={friend.id}>
           <p>Name: {friend.name}</p>
           <p>Email: {friend.email}</p>
         </li>
