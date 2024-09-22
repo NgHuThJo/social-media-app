@@ -9,6 +9,7 @@ import { Button } from "@frontend/components/ui/button/button";
 import { Input } from "@frontend/components/ui/form/input/input";
 import { client } from "@frontend/lib/trpc";
 import { handleError } from "@frontend/utils/error-handler";
+import { validateInput } from "@frontend/utils/input-validation";
 import {
   registrationSchema,
   RegistrationSchemaError,
@@ -16,14 +17,14 @@ import {
 
 export const registerAction: ActionFunction = async ({ request }) => {
   const formData = Object.fromEntries(await request.formData());
-  const validatedInput = registrationSchema.safeParse(formData);
+  const { data, errors, isValid } = validateInput(registrationSchema, formData);
 
-  if (!validatedInput.success) {
-    return { errors: validatedInput.error.flatten().fieldErrors };
+  if (!isValid) {
+    return { errors };
   }
 
   try {
-    await client.user.registerUser.mutate(validatedInput.data);
+    await client.user.registerUser.mutate(data);
   } catch (error) {
     return handleError(error, "Registration failed");
   }

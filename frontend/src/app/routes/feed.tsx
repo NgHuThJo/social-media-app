@@ -19,29 +19,29 @@ import {
   createPostComment,
 } from "@frontend/features/shared/comment/form/form";
 import { createFeed } from "@frontend/features/feed/components/form/form";
+import { handleError } from "@frontend/utils/error-handler";
+import { validateInput } from "@frontend/utils/input-validation";
 import { LoaderData } from "@frontend/types";
 import { userIdSchema } from "@frontend/types/zod";
-import { handleError } from "@frontend/utils/error-handler";
 
 type FeedLoaderData = LoaderData<typeof feedLoader>;
 
 export const feedLoader = ({ params }: LoaderFunctionArgs) => {
-  console.count("feedLoader");
   const { userId } = params;
   const payload = {
     userId,
   };
-  const validatedData = userIdSchema.safeParse(payload);
+  const { data, errors, isValid } = validateInput(userIdSchema, payload);
 
-  if (!validatedData.success) {
-    throw new Response(
-      JSON.stringify({ errors: validatedData.error.flatten().fieldErrors }),
-      { status: 400, statusText: "Invalid userId" },
-    );
+  if (!isValid) {
+    throw new Response(JSON.stringify({ errors }), {
+      status: 400,
+      statusText: "Invalid userId",
+    });
   }
 
   try {
-    const response = client.post.getAllFeeds.query(validatedData.data);
+    const response = client.post.getAllFeeds.query(data);
     // When using defer, pass response as unawaited promise
     return defer({
       data: response,

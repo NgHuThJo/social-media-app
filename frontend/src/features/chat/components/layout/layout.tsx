@@ -1,5 +1,6 @@
-import { MouseEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useWebSocketContextApi } from "@frontend/providers/websocket-context";
+import { useDialog } from "@frontend/hooks/useDialog";
 import { Button } from "@frontend/components/ui/button/button";
 import { ChatBox } from "@frontend/features/chat/components/box/box";
 import { ChatForm } from "../form/form";
@@ -18,17 +19,16 @@ export function ChatLayout({
   chatroomsData,
   onlineUsersData,
 }: ChatLayoutProps) {
-  const [onlineUsers, setOnlineUsers] =
-    useState<OnlineUsersData>(onlineUsersData);
   const [chatrooms, setChatrooms] = useState<ChatroomsData>(chatroomsData);
   const [currentRoomId, setCurrentRoomId] = useState<number>();
+  const [onlineUsers, setOnlineUsers] =
+    useState<OnlineUsersData>(onlineUsersData);
+  const { dialogRef, openDialog, closeDialog, handleDialogBackgroundClick } =
+    useDialog();
   const { createChatroom, getOnlineUsers, joinChatroom } =
     useWebSocketContextApi();
-  const dialogRef = useRef<HTMLDialogElement>(null);
-  const layoutRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    layoutRef.current?.classList.add("slide-in");
     const getOnlineUsersCleanupFn = getOnlineUsers(setOnlineUsers);
     const createChatroomCleanupFn = createChatroom(setChatrooms);
 
@@ -37,20 +37,6 @@ export function ChatLayout({
       createChatroomCleanupFn();
     };
   }, []);
-
-  const openDialog = () => {
-    dialogRef.current?.showModal();
-  };
-
-  const closeDialog = () => {
-    dialogRef.current?.close();
-  };
-
-  const handleDialogClick = (event: MouseEvent<HTMLDialogElement>) => {
-    if (event.target === event.currentTarget) {
-      dialogRef.current?.close();
-    }
-  };
 
   const selectChatroom = (
     userId: string,
@@ -62,7 +48,7 @@ export function ChatLayout({
   };
 
   return (
-    <div className={styles.layout} ref={layoutRef}>
+    <div className={styles.layout}>
       <aside>
         <section>
           <h2>Online users</h2>
@@ -81,8 +67,8 @@ export function ChatLayout({
             Create new chatroom
           </Button>
           <ChatForm
-            onClose={closeDialog}
-            handleDialogClick={handleDialogClick}
+            closeDialog={closeDialog}
+            handleDialogBackgroundClick={handleDialogBackgroundClick}
             ref={dialogRef}
           />
         </section>

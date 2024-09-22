@@ -5,6 +5,7 @@ import { Input } from "@frontend/components/ui/form/input/input";
 import { TextArea } from "@frontend/components/ui/form/textarea/textarea";
 import { client } from "@frontend/lib/trpc";
 import { handleError } from "@frontend/utils/error-handler";
+import { validateInput } from "@frontend/utils/input-validation";
 import { ActionDispatchFunction } from "@frontend/types";
 import { postSchema, PostSchemaError } from "@frontend/types/zod";
 import styles from "./form.module.css";
@@ -24,16 +25,16 @@ export const createPost: ActionDispatchFunction = async (
     ...convertedFormData,
     userId,
   };
-  const validatedInput = postSchema.safeParse(payload);
+  const { data, errors, isValid } = validateInput(postSchema, payload);
 
-  if (!validatedInput.success) {
+  if (!isValid) {
     return {
-      errors: validatedInput.error.flatten().fieldErrors,
+      errors,
     };
   }
 
   try {
-    const response = await client.post.createPost.mutate(validatedInput.data);
+    const response = await client.post.createPost.mutate(data);
 
     return null;
   } catch (error) {

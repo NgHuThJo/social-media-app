@@ -1,11 +1,12 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useWebSocketContextApi } from "@frontend/providers/websocket-context";
-import { useToggle } from "@frontend/hooks/useToggle";
 import { useError } from "@frontend/hooks/useError";
 import { Button } from "@frontend/components/ui/button/button";
+import { EmojiButtonGrid } from "@frontend/components/ui/button/emoji/grid";
 import { client } from "@frontend/lib/trpc";
 import { formatRelativeTimeDate } from "@frontend/utils/intl";
+import { validateInput } from "@frontend/utils/input-validation";
 import { messageSchema, MessageSchemaError } from "@frontend/types/zod";
 import styles from "./box.module.css";
 
@@ -17,12 +18,13 @@ type ChatBoxProps = {
   currentRoomId: number;
 };
 
+const emojiList = ["😂", "😭", "😉", "😍", "😊"];
+
 export function ChatBox({ currentRoomId }: ChatBoxProps) {
   const [messages, setMessages] = useState<RoomMessagesType>();
   const messageInputRef = useRef<HTMLInputElement>(null);
   const { createMessage } = useWebSocketContextApi();
   const { errors, addError, resetError } = useError<MessageSchemaError>();
-  const { isOpen: isEmojiOpen, toggle: toggleEmoji } = useToggle();
   const { userId } = useParams();
 
   useEffect(() => {
@@ -52,21 +54,17 @@ export function ChatBox({ currentRoomId }: ChatBoxProps) {
       userId,
       roomId: String(currentRoomId),
     };
-    const validatedData = messageSchema.safeParse(payload);
+    const { data, errors, isValid } = validateInput(messageSchema, payload);
     event.currentTarget.reset();
 
-    if (!validatedData.success) {
-      addError({
-        errors: validatedData.error.flatten().fieldErrors,
-      });
+    if (!isValid) {
+      addError({ errors });
 
       return;
     }
 
     try {
-      const response = await client.message.createMessage.mutate(
-        validatedData.data,
-      );
+      const response = await client.message.createMessage.mutate(data);
 
       setMessages(response);
       resetError();
@@ -75,7 +73,7 @@ export function ChatBox({ currentRoomId }: ChatBoxProps) {
     }
   };
 
-  const addEmoji = (emoji: string) => {
+  const writeEmoji = (emoji: string) => {
     if (messageInputRef.current) {
       messageInputRef.current.value += emoji;
     }
@@ -93,20 +91,12 @@ export function ChatBox({ currentRoomId }: ChatBoxProps) {
             </p>
           ))}
         </div>
-        <div
-          className={`${styles.emoji} ${isEmojiOpen ? "fade-in" : "fade-out"}`}
-        >
-          <button onClick={() => addEmoji("😂")}>😂</button>
-          <button onClick={() => addEmoji("😭")}>😭</button>
-          <button onClick={() => addEmoji("😉")}>😉</button>
-          <button onClick={() => addEmoji("😍")}>😍</button>
-          <button onClick={() => addEmoji("😊")}>😊</button>
-        </div>
+        <EmojiButtonGrid
+          emojis={emojiList}
+          writeEmoji={writeEmoji}
+        ></EmojiButtonGrid>
       </div>
       <form method="post" className={styles.form} onSubmit={handleSubmit}>
-        <Button type="button" onClick={toggleEmoji}>
-          😊
-        </Button>
         <input
           type="text"
           name="content"

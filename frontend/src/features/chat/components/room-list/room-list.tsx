@@ -1,6 +1,7 @@
 import { useAuthContext } from "@frontend/providers/auth-context";
 import { ChatroomsData } from "@frontend/types/api";
 import styles from "./room-list.module.css";
+import { Navigate } from "react-router-dom";
 
 type ChatroomListProps = {
   data: ChatroomsData;
@@ -18,7 +19,11 @@ export function ChatroomList({
   handleSelectRoom,
 }: ChatroomListProps) {
   const { user } = useAuthContext();
-  const userId = user?.id.toLocaleString()!;
+
+  if (!user) {
+    return <Navigate to="/auth/login" />;
+  }
+  const userId = user?.id.toLocaleString();
 
   return (
     <div className={styles.list}>

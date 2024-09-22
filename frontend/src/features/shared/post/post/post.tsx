@@ -1,15 +1,15 @@
-import { PostLoaderData } from "@frontend/app/routes/post";
 import { useToggle } from "@frontend/hooks/useToggle";
 import { Button } from "@frontend/components/ui/button/button";
 import { CommentForm } from "../../comment/form/form";
 import { CommentList } from "../../comment/list/list";
 import { formatRelativeTimeDate } from "@frontend/utils/intl";
+import { PostData } from "@frontend/types/api";
 import styles from "./post.module.css";
 
-type PostData = NonNullable<PostLoaderData["data"]>[number];
+type PostItemData = NonNullable<PostData>[number];
 
 type PostProps = {
-  data: PostData;
+  data: PostItemData;
 };
 
 export function Post({ data }: PostProps) {

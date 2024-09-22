@@ -24,8 +24,8 @@ model User {
   messages               Message[]
   sentFriendRequests     Friendship[]  @relation("sentRequests")
   receivedFriendRequests Friendship[]  @relation("receivedRequests")
-  postLike               PostLike[]
-  commentLike            CommentLike[]
+  postLikes              PostLike[]
+  commentLikes           CommentLike[]
   follows                Follow[]      @relation("following")
   followers              Follow[]      @relation("follower")
   avatar                 Avatar?

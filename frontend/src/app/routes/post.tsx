@@ -7,21 +7,21 @@ import {
   useLoaderData,
 } from "react-router-dom";
 import { useToggle } from "@frontend/hooks/useToggle";
-import { client } from "@frontend/lib/trpc";
 import { Button } from "@frontend/components/ui/button/button";
 import { ContentLayout } from "@frontend/components/layouts/content/content";
+import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
 import {
   PostForm,
   createPost,
 } from "@frontend/features/post/components/form/form";
 import { PostList } from "@frontend/features/post/components/list/list";
+import { client } from "@frontend/lib/trpc";
 import {
   createComment,
   createPostComment,
 } from "@frontend/features/shared/comment/form/form";
 import { handleError } from "@frontend/utils/error-handler";
 import { LoaderData } from "@frontend/types";
-import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
 
 type PostLoaderData = LoaderData<typeof postLoader>;
 

@@ -1,5 +1,5 @@
 .layout {
-  composes: grid from global;
+  display: grid;
   grid-template-rows: 1fr auto;
   background-color: var(--bgc-content);
 }
@@ -14,18 +14,4 @@
 
 .chatbox {
   composes: grid-stack from global;
-}
-
-.emoji {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  justify-self: start;
-  align-self: end;
-  gap: 0.25rem;
-  background-color: red;
-
-  > * {
-    background-color: blue;
-    padding: 0.5rem;
-  }
 }

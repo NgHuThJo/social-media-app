@@ -10,6 +10,7 @@ import { Profile } from "@frontend/features/profile/components/profile";
 import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
 import { client } from "@frontend/lib/trpc";
 import { handleError } from "@frontend/utils/error-handler";
+import { validateInput } from "@frontend/utils/input-validation";
 import { LoaderData } from "@frontend/types";
 import { userIdSchema } from "@frontend/types/zod";
 
@@ -20,17 +21,17 @@ export const profileLoader = ({ params }: LoaderFunctionArgs) => {
   const payload = {
     userId,
   };
-  const validatedData = userIdSchema.safeParse(payload);
+  const { data, errors, isValid } = validateInput(userIdSchema, payload);
 
-  if (!validatedData.success) {
-    throw new Response(
-      JSON.stringify({ errors: validatedData.error.flatten().fieldErrors }),
-      { status: 400, statusText: "Invalid userId" },
-    );
+  if (!isValid) {
+    throw new Response(JSON.stringify({ errors }), {
+      status: 400,
+      statusText: "Invalid userId",
+    });
   }
 
   try {
-    const response = client.user.getUser.query(validatedData.data);
+    const response = client.user.getUser.query(data);
     // When using defer, pass response as unawaited promise
     return defer({
       data: response,

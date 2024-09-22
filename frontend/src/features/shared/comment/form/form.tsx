@@ -5,6 +5,7 @@ import { FormError } from "@frontend/components/ui/form/error/error";
 import { Input } from "@frontend/components/ui/form/input/input";
 import { TextArea } from "@frontend/components/ui/form/textarea/textarea";
 import { handleError } from "@frontend/utils/error-handler";
+import { validateInput } from "@frontend/utils/input-validation";
 import { ActionDispatchFunction } from "@frontend/types";
 import { commentSchema, CommentSchemaError } from "@frontend/types/zod";
 import styles from "./form.module.css";
@@ -26,19 +27,18 @@ export const createPostComment: ActionDispatchFunction = async (
     ...convertedFormData,
     userId,
   };
-  const validatedInput = commentSchema.safeParse(payload);
+  const { data, errors, isValid } = validateInput(commentSchema, payload);
 
-  if (!validatedInput.success) {
+  if (!isValid) {
     return {
-      errors: validatedInput.error.flatten().fieldErrors,
+      errors,
     };
   }
 
   try {
-    const response = await client.post.createPostComment.mutate(
-      validatedInput.data,
-    );
-    return response;
+    const response = await client.post.createPostComment.mutate(data);
+
+    return null;
   } catch (error) {
     return handleError(error, "Creation of comment failed");
   }
@@ -55,19 +55,18 @@ export const createComment: ActionDispatchFunction = async (
     ...convertedFormData,
     userId,
   };
-  const validatedInput = commentSchema.safeParse(payload);
+  const { data, errors, isValid } = validateInput(commentSchema, payload);
 
-  if (!validatedInput.success) {
+  if (!isValid) {
     return {
-      errors: validatedInput.error.flatten().fieldErrors,
+      errors,
     };
   }
 
   try {
-    const response = await client.post.createCommentReply.mutate(
-      validatedInput.data,
-    );
-    return response;
+    const response = await client.post.createCommentReply.mutate(data);
+
+    return null;
   } catch (error) {
     return handleError(error, "Creation of comment failed");
   }

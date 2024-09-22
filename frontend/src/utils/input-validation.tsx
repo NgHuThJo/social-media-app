@@ -1,20 +1,20 @@
-import { ZodSchema } from "zod";
+import { z } from "zod";
 
-export function validateInput(schema: ZodSchema, data: unknown) {
+export function validateInput<T extends z.ZodSchema>(schema: T, data: unknown) {
   const validatedData = schema.safeParse(data);
 
   if (!validatedData.success) {
     return {
       inValid: false,
-      data: null,
-      errors: validatedData.error.flatten().fieldErrors,
+      data: undefined,
+      errors: validatedData.error.flatten<z.infer<T>>().fieldErrors,
     };
   }
 
   return {
-    isValid: false,
+    isValid: true,
     data: validatedData.data,
-    errors: null,
+    errors: undefined,
   };
 }
 

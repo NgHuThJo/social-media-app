@@ -5,6 +5,7 @@ import { ContentLayout } from "@frontend/components/layouts/content/content";
 import { Input } from "@frontend/components/ui/form/input/input";
 import { client } from "@frontend/lib/trpc";
 import { handleError } from "@frontend/utils/error-handler";
+import { validateInput } from "@frontend/utils/input-validation";
 import {
   settingsFormSchema,
   SettingsFormSchemaError,
@@ -20,11 +21,14 @@ export const settingsAction =
       ...Object.fromEntries(formData),
       userId,
     };
-    const validatedData = settingsFormSchema.safeParse(payload);
+    const { data, errors, isValid } = validateInput(
+      settingsFormSchema,
+      payload,
+    );
 
-    if (!validatedData.success) {
+    if (!isValid) {
       return {
-        errors: validatedData.error.flatten().fieldErrors,
+        errors,
       };
     }
 
@@ -38,7 +42,7 @@ export const settingsAction =
       );
       const json = await fileUpload.json();
       const response = await client.user.updateUser.mutate({
-        ...validatedData.data,
+        ...data,
         assetUrl: json.path,
         publicId: json.publicId,
       });

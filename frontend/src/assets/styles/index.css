@@ -47,11 +47,13 @@
   --bgc-brand: #2d5be3;
   --bgc-button: #67c5ed;
   --bgc-content: #fff;
+  --bgc-emoji-grid: #d93900;
   --bgc-notification: #2c4e70;
   --bgc-root: #eff4fb;
 
   /* transition */
   --transition-duration: 0.5s;
+  --fade-transition-duration: 1.5s;
 }
 
 /* reset */

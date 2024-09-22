@@ -1,63 +1,48 @@
 import { MouseEvent, forwardRef } from "react";
 import { ActionFunctionArgs, Form, useActionData } from "react-router-dom";
-import { z } from "zod";
 import { Button } from "@frontend/components/ui/button/button";
 import { Dialog } from "@frontend/components/ui/dialog/dialog";
 import { FormError } from "@frontend/components/ui/form/error/error";
 import { Input } from "@frontend/components/ui/form/input/input";
 import { client } from "@frontend/lib/trpc";
-import {
-  nonEmptyStringSchema,
-  numericIdSchema,
-  SchemaError,
-} from "@frontend/types/zod";
+import { handleError } from "@frontend/utils/error-handler";
+import { validateInput } from "@frontend/utils/input-validation";
+import { chatFormSchema, ChatFormSchemaError } from "@frontend/types/zod";
 import styles from "./form.module.css";
 
 type ChatFormProps = {
-  handleDialogClick: (event: MouseEvent<HTMLDialogElement>) => void;
-  onClose: () => void;
+  handleDialogBackgroundClick: (event: MouseEvent<HTMLDialogElement>) => void;
+  closeDialog: () => void;
 };
-
-type ChatActionSchemaError = SchemaError<typeof chatActionSchema>;
-
-const chatActionSchema = z.object({
-  title: nonEmptyStringSchema,
-  userId: numericIdSchema,
-});
 
 export const chatAction = async ({ request, params }: ActionFunctionArgs) => {
   const formData = Object.fromEntries(await request.formData());
-  const { id } = params;
-  const convertedId = Number(id);
-  const inputData = {
+  const { userId } = params;
+  const payload = {
     ...formData,
-    id: convertedId,
+    userId,
   };
-  const validatedData = chatActionSchema.safeParse(inputData);
+  const { data, errors, isValid } = validateInput(chatFormSchema, payload);
 
-  if (!validatedData.success) {
-    return {
-      errors: validatedData.error.flatten().fieldErrors,
-    };
+  if (!isValid) {
+    return { errors };
   }
 
   try {
-    const response = await client.chat.createChatroom.mutate(
-      validatedData.data,
-    );
+    const response = await client.chat.createChatroom.mutate(data);
 
     return response;
   } catch (error) {
-    console.error(error);
+    return handleError(error, "Could not create new chatroom");
   }
 };
 
 export const ChatForm = forwardRef<HTMLDialogElement, ChatFormProps>(
-  ({ handleDialogClick, onClose }, ref) => {
-    const actionData = useActionData() as ChatActionSchemaError;
+  ({ handleDialogBackgroundClick, closeDialog }, ref) => {
+    const actionData = useActionData() as ChatFormSchemaError;
 
     return (
-      <Dialog ref={ref} onClick={handleDialogClick}>
+      <Dialog ref={ref} onClick={handleDialogBackgroundClick}>
         <Form method="post" className={styles.form}>
           <Input
             name="title"
@@ -70,7 +55,7 @@ export const ChatForm = forwardRef<HTMLDialogElement, ChatFormProps>(
             <Button type="submit" className="submit">
               Create chatroom
             </Button>
-            <Button type="button" className="reset" onClick={onClose}>
+            <Button type="button" className="reset" onClick={closeDialog}>
               Close dialog
             </Button>
           </div>

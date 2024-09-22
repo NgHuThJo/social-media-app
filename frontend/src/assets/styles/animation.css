@@ -1,17 +1,17 @@
 .fade-in {
   visibility: visible;
-  opacity: 0.5;
+  opacity: 1;
   transition:
     visibility 0s linear 0s,
-    opacity var(--transition-duration);
+    opacity var(--fade-transition-duration);
 }
 
 .fade-out {
   visibility: hidden;
   opacity: 0;
   transition:
-    visibility 0s linear var(--transition-duration),
-    opacity var(--transition-duration);
+    visibility 0s linear var(--fade-transition-duration),
+    opacity var(--fade-transition-duration);
 }
 
 @keyframes slideIn {

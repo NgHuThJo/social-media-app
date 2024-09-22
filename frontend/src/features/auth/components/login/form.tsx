@@ -11,6 +11,7 @@ import { Input } from "@frontend/components/ui/form/input/input";
 import { NavigationLink } from "@frontend/components/ui/navigation/link/link";
 import { client } from "@frontend/lib/trpc";
 import { handleError } from "@frontend/utils/error-handler";
+import { validateInput } from "@frontend/utils/input-validation";
 import { authSchema, AuthSchemaError } from "@frontend/types/zod";
 import styles from "./form.module.css";
 
@@ -18,16 +19,16 @@ export const loginAction =
   (authContextApi: AuthContextApiType): ActionFunction =>
   async ({ request }) => {
     const formData = Object.fromEntries(await request.formData());
-    const validatedInput = authSchema.safeParse(formData);
+    const { data, errors, isValid } = validateInput(authSchema, formData);
 
-    if (!validatedInput.success) {
+    if (!isValid) {
       return {
-        errors: validatedInput.error.flatten().fieldErrors,
+        errors,
       };
     }
 
     try {
-      const response = await client.auth.loginUser.mutate(validatedInput.data);
+      const response = await client.auth.loginUser.mutate(data);
 
       if (response) {
         authContextApi?.setUserData(response);
