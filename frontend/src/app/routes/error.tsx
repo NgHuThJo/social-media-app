@@ -1,30 +1,24 @@
 import { useEffect, useState } from "react";
+import { TRPCClientError } from "@trpc/client";
 import { Link, useRouteError } from "react-router-dom";
 
 export function ErrorRoute() {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const error = useRouteError();
 
-  useEffect(() => {
-    if (error instanceof Response) {
-      error.text().then((text) => {
-        try {
-          const json = JSON.parse(text);
-          setErrorMessage(json.errors);
-        } catch (error) {
-          setErrorMessage(text);
-        }
-      });
-    }
-  }, [error]);
-
   return (
-    <div>
-      {error instanceof Response ? (
+    <div
+      style={{
+        display: "grid",
+        gap: "1rem",
+        placeSelf: "center",
+        fontWeight: "var(--fw-heading)",
+        textAlign: "center",
+      }}
+    >
+      {error instanceof TRPCClientError ? (
         <>
-          <p>{error.status}</p>
-          <p>{error.statusText}</p>
-          <pre>{errorMessage}</pre>
+          <p>{error.name}</p>
+          <pre>{error.message}</pre>
         </>
       ) : (
         <h1>Something went wrong.</h1>

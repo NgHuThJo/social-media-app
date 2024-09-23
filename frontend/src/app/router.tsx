@@ -9,6 +9,7 @@ import { FriendRoute, friendLoader } from "./routes/friend";
 import { LandingRoute } from "./routes/landing";
 import { LoginRoute } from "./routes/login";
 import { loginAction } from "@frontend/features/auth/components/login/form";
+import { NotFoundRoute } from "./routes/not-found";
 import { PostRoute, postLoader, postAction } from "./routes/post";
 import { ProfileRoute, profileLoader } from "./routes/profile";
 import { ProtectedRoute } from "./routes/protected";
@@ -22,63 +23,71 @@ export function Router() {
 
   const routesConfig = [
     {
-      path: "/",
-      element: <LandingRoute />,
       errorElement: <ErrorRoute />,
-    },
-    {
-      path: "/auth/register",
-      element: <RegisterRoute />,
-      action: registerAction,
-    },
-    {
-      path: "/auth/login",
-      element: <LoginRoute />,
-      action: loginAction(authContextApi),
-    },
-    {
-      element: <ProtectedRoute />,
       children: [
         {
-          path: ":userId",
-          element: <AppRoot />,
+          path: "/",
+          element: <LandingRoute />,
+        },
+        {
+          path: "/auth/register",
+          element: <RegisterRoute />,
+          action: registerAction,
+        },
+        {
+          path: "/auth/login",
+          element: <LoginRoute />,
+          action: loginAction(authContextApi),
+        },
+        {
+          element: <ProtectedRoute />,
           children: [
             {
-              path: "profile",
-              element: <ProfileRoute />,
-              loader: profileLoader,
-            },
-            {
-              path: "friends",
-              element: <FriendRoute />,
-              loader: friendLoader,
-            },
-            {
-              path: "posts",
-              element: <PostRoute />,
-              loader: postLoader,
-              action: postAction,
-            },
-            {
-              path: "feeds",
-              element: <FeedRoute />,
-              loader: feedLoader,
-              action: feedAction,
-            },
-            {
-              path: "chat",
-              element: <ChatRoute />,
-              loader: chatLoader,
-              action: chatAction,
-            },
-            {
-              path: "settings",
-              element: <SettingsRoute />,
-              action: settingsAction(authContextApi),
+              path: ":userId",
+              element: <AppRoot />,
+              children: [
+                {
+                  path: "profile",
+                  element: <ProfileRoute />,
+                  loader: profileLoader,
+                },
+                {
+                  path: "friends",
+                  element: <FriendRoute />,
+                  loader: friendLoader,
+                },
+                {
+                  path: "posts",
+                  element: <PostRoute />,
+                  loader: postLoader,
+                  action: postAction,
+                },
+                {
+                  path: "feeds",
+                  element: <FeedRoute />,
+                  loader: feedLoader,
+                  action: feedAction,
+                },
+                {
+                  path: "chat",
+                  element: <ChatRoute />,
+                  loader: chatLoader,
+                  action: chatAction,
+                },
+                {
+                  path: "settings",
+                  element: <SettingsRoute />,
+                  action: settingsAction(authContextApi),
+                },
+              ],
             },
           ],
         },
       ],
+    },
+    {
+      path: "*",
+      element: <NotFoundRoute />,
     },
   ];
 
