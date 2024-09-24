@@ -1,19 +1,34 @@
 import { z } from "zod";
 
-export function validateInput<T extends z.ZodSchema>(schema: T, data: unknown) {
-  const validatedData = schema.safeParse(data);
+type ValidationSuccess<T extends z.ZodSchema> = {
+  isValid: true;
+  data: z.infer<T>;
+  errors: undefined;
+};
 
-  if (!validatedData.success) {
+type ValidationFailure<T extends z.ZodSchema> = {
+  isValid: false;
+  data: undefined;
+  errors: z.inferFlattenedErrors<T>["fieldErrors"];
+};
+
+export function validateInput<T extends z.ZodSchema>(
+  schema: T,
+  data: unknown,
+): ValidationSuccess<T> | ValidationFailure<T> {
+  const result = schema.safeParse(data);
+
+  if (!result.success) {
     return {
-      inValid: false,
+      isValid: false,
       data: undefined,
-      errors: validatedData.error.flatten<z.infer<T>>().fieldErrors,
+      errors: result.error.flatten().fieldErrors,
     };
   }
 
   return {
     isValid: true,
-    data: validatedData.data,
+    data: result.data as z.infer<T>,
     errors: undefined,
   };
 }

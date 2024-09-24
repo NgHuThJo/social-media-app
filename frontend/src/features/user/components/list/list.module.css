@@ -1,11 +1,16 @@
-.sidebar {
-  background-color: orange;
-}
-
 .layout {
-  composes: grid from global;
+  display: grid;
+  background-color: var(--bgc-chat-sidebar-grid-item);
+
+  > :last-child {
+    border-bottom: 1px solid var(--c-root);
+  }
 }
 
 .item {
-  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--p-chat-sidebar-grid-item);
+  border-top: 1px solid var(--c-root);
 }

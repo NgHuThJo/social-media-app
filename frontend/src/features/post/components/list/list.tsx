@@ -9,8 +9,8 @@ type PostListProps = {
 };
 
 export function PostList({ data }: PostListProps) {
-  const listElementRef = useRef<HTMLUListElement>(null);
-  const { observeElement } = useIntersectionObserver((entries) => {
+  const parentNodeRef = useRef<HTMLUListElement>(null);
+  const { observeChildNodes } = useIntersectionObserver((entries) => {
     for (const entry of entries) {
       if (entry.isIntersecting) {
         entry.target.classList.add("fade-in");
@@ -21,17 +21,13 @@ export function PostList({ data }: PostListProps) {
   });
 
   useEffect(() => {
-    const listItemNodes = listElementRef.current?.children;
-
-    if (listItemNodes) {
-      for (const childNode of listItemNodes) {
-        observeElement(childNode);
-      }
+    if (parentNodeRef.current) {
+      observeChildNodes(parentNodeRef.current);
     }
-  }, []);
+  }, [observeChildNodes]);
 
   return (
-    <ul className={styles.list} ref={listElementRef}>
+    <ul className={styles.list} ref={parentNodeRef}>
       {data?.map((post) => <Post data={post} key={post.id} />)}
     </ul>
   );

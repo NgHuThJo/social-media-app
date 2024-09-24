@@ -5,7 +5,7 @@ import { useWebSocketContextApi } from "@frontend/providers/websocket-context";
 
 export function ProtectedRoute() {
   const { user } = useAuthContext();
-  const { createWebSocket } = useWebSocketContextApi();
+  const { connect } = useWebSocketContextApi();
   const userId = user?.id.toLocaleString();
 
   useEffect(() => {
@@ -13,9 +13,7 @@ export function ProtectedRoute() {
       return;
     }
 
-    const cleanUpFn = createWebSocket(userId);
-
-    return cleanUpFn;
+    connect(userId);
   }, []);
 
   return userId ? <Outlet /> : <Navigate to="/auth/login" replace />;

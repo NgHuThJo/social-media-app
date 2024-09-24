@@ -8,14 +8,12 @@ type UserListProps = {
 
 export function UserList({ data }: UserListProps) {
   return (
-    <aside className={styles.sidebar}>
-      <ul className={styles.layout}>
-        {data?.map((user) => (
-          <li key={user.id} className={styles.item}>
-            <Link to="/">{user.name}</Link>
-          </li>
-        ))}
-      </ul>
-    </aside>
+    <div className={styles.layout}>
+      {data?.map((user) => (
+        <Link to="/" key={user.id} className={styles.item}>
+          {user.name}
+        </Link>
+      ))}
+    </div>
   );
 }

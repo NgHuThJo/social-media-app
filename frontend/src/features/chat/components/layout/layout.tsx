@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useWebSocketContextApi } from "@frontend/providers/websocket-context";
 import { useDialog } from "@frontend/hooks/useDialog";
 import { Button } from "@frontend/components/ui/button/button";
-import { ChatBox } from "@frontend/features/chat/components/box/box";
+import { Chatroom } from "@frontend/features/chat/components/room/room";
 import { ChatForm } from "../form/form";
 import { ChatPlaceholder } from "../placeholder/placeholder";
 import { ChatroomList } from "../room-list/room-list";
@@ -25,16 +25,25 @@ export function ChatLayout({
     useState<OnlineUsersData>(onlineUsersData);
   const { dialogRef, openDialog, closeDialog, handleDialogBackgroundClick } =
     useDialog();
-  const { createChatroom, getOnlineUsers, joinChatroom } =
-    useWebSocketContextApi();
+  const { emit, subscribe } = useWebSocketContextApi();
 
   useEffect(() => {
-    const getOnlineUsersCleanupFn = getOnlineUsers(setOnlineUsers);
-    const createChatroomCleanupFn = createChatroom(setChatrooms);
+    const unsubscribeGetOnlineUsers = subscribe(
+      "getOnlineUsers",
+      (data: OnlineUsersData) => {
+        setOnlineUsers(data);
+      },
+    );
+    const unsubscribeCreateChatroom = subscribe(
+      "createChatroom",
+      (data: ChatroomsData) => {
+        setChatrooms(data);
+      },
+    );
 
     return () => {
-      getOnlineUsersCleanupFn();
-      createChatroomCleanupFn();
+      unsubscribeGetOnlineUsers();
+      unsubscribeCreateChatroom();
     };
   }, []);
 
@@ -44,37 +53,51 @@ export function ChatLayout({
     newRoomId: number,
   ) => {
     setCurrentRoomId(newRoomId);
-    joinChatroom(userId, currentRoomId, newRoomId);
+    emit("joinChatroom", { userId, currentRoomId, newRoomId });
+  };
+
+  const leaveChatroom = () => {
+    setCurrentRoomId(undefined);
+    leaveChatroom();
   };
 
   return (
     <div className={styles.layout}>
-      <aside>
-        <section>
-          <h2>Online users</h2>
-          {onlineUsers && <UserList data={onlineUsers} />}
-          <h2>Chatrooms</h2>
-          {chatrooms && (
-            <ChatroomList
-              data={chatrooms}
-              currentRoomId={currentRoomId}
-              handleSelectRoom={selectChatroom}
-            />
-          )}
+      <aside className={styles.sidebar}>
+        <section className={styles["list-layout"]}>
+          <div className={styles.list}>
+            <h2>Online users</h2>
+            {onlineUsers && <UserList data={onlineUsers} />}
+          </div>
+          <div className={styles.list}>
+            <h2>Chatrooms</h2>
+            {chatrooms && (
+              <ChatroomList
+                data={chatrooms}
+                currentRoomId={currentRoomId}
+                handleSelectRoom={selectChatroom}
+              />
+            )}
+          </div>
         </section>
-        <section>
+        <section className={styles.actions}>
           <Button type="button" onClick={openDialog}>
             Create new chatroom
           </Button>
-          <ChatForm
-            closeDialog={closeDialog}
-            handleDialogBackgroundClick={handleDialogBackgroundClick}
-            ref={dialogRef}
-          />
+          {currentRoomId && (
+            <Button type="button" onClick={leaveChatroom}>
+              Leave chatroom
+            </Button>
+          )}
         </section>
       </aside>
+      <ChatForm
+        closeDialog={closeDialog}
+        handleDialogBackgroundClick={handleDialogBackgroundClick}
+        ref={dialogRef}
+      />
       {currentRoomId ? (
-        <ChatBox currentRoomId={currentRoomId} />
+        <Chatroom currentRoomId={currentRoomId} />
       ) : (
         <ChatPlaceholder />
       )}

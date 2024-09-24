@@ -8,12 +8,14 @@ import { notification_icon } from "@frontend/assets/images";
 export function NotificationList() {
   const [notifications, setNotifications] = useState<string[]>([]);
   const notificationListRef = useRef<HTMLUListElement>(null);
-  const { addNotification } = useWebSocketContextApi();
+  const { subscribe } = useWebSocketContextApi();
 
   useEffect(() => {
-    const cleanupFn = addNotification(setNotifications);
+    const unsubscribe = subscribe("notification", (data: string) => {
+      setNotifications((prev) => [...prev, data]);
+    });
 
-    return cleanupFn;
+    return unsubscribe;
   }, []);
 
   const toggleNotification = () => {
@@ -21,12 +23,12 @@ export function NotificationList() {
       return;
     }
 
-    if (notificationListRef.current.classList.contains("slide-in")) {
-      notificationListRef.current.classList.remove("slide-in");
-      notificationListRef.current.classList.add("slide-out");
-    } else {
+    const isSlideIn = notificationListRef.current.classList.toggle("slide-in");
+
+    if (isSlideIn) {
       notificationListRef.current.classList.remove("slide-out");
-      notificationListRef.current.classList.add("slide-in");
+    } else {
+      notificationListRef.current.classList.add("slide-out");
     }
   };
 

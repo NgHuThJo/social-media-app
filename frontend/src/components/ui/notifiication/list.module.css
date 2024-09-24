@@ -25,6 +25,6 @@
   > span {
     justify-self: end;
     align-self: end;
-    color: var(--bgc-button);
+    color: var(--bgc-content);
   }
 }

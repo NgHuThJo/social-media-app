@@ -7,6 +7,7 @@
   --max-w-skeleton: 60rem;
   --min-w-root: 20rem;
   --p-inline-container: 2rem;
+  --p-chat-sidebar-grid-item: 0.5rem;
   --w-icon: 2rem;
 
   /* grid */
@@ -27,6 +28,7 @@
   --fw-heading: 700;
   --fw-link: 500;
   --fw-root: 400;
+  --fw-user-info: 800;
 
   --fs-h1: 3rem;
   --fs-h2: 2rem;
@@ -45,15 +47,17 @@
   --c-root: #71728c;
 
   --bgc-brand: #2d5be3;
-  --bgc-button: #67c5ed;
+  --bgc-button: #343f46;
   --bgc-content: #fff;
-  --bgc-emoji-grid: #d93900;
+  --bgc-emoji-grid: #2c4e70;
   --bgc-notification: #2c4e70;
   --bgc-root: #eff4fb;
+  --bgc-chat-sidebar-grid-item: #4e5d6b;
+  --bgc-active-chat: #38230b;
 
   /* transition */
   --transition-duration: 0.5s;
-  --fade-transition-duration: 1.5s;
+  --fade-transition-duration: 1s;
 }
 
 /* reset */

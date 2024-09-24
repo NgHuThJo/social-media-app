@@ -5,6 +5,9 @@ export const numericIdSchema = z
   .string()
   .trim()
   .regex(/^\d+$/, "Id can't be converted to number");
+export const stringifiedNumericIdSchema = z
+  .number()
+  .transform((value) => String(value));
 export const nonEmptyStringSchema = z
   .string()
   .trim()
@@ -35,8 +38,8 @@ type GeneralError = {
   general?: string;
 };
 
-export type SchemaError<T extends z.ZodTypeAny> = {
-  errors?: z.typeToFlattenedError<z.infer<T>>["fieldErrors"] & GeneralError;
+export type SchemaError<T extends z.ZodSchema> = {
+  errors?: z.inferFlattenedErrors<T>["fieldErrors"] & GeneralError;
 };
 
 // Base schemas
@@ -64,7 +67,7 @@ export type CommentSchemaError = SchemaError<typeof commentSchema>;
 
 export const messageSchema = userIdSchema.extend({
   content: nonEmptyStringSchema,
-  roomId: numericIdSchema,
+  roomId: stringifiedNumericIdSchema,
 });
 export type MessageSchemaError = SchemaError<typeof messageSchema>;
 

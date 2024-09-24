@@ -1,16 +1,19 @@
 .list {
   display: grid;
   grid-template-columns: 1fr;
-  background-color: pink;
+  background-color: var(--bgc-chat-sidebar-grid-item);
+
+  > :last-child {
+    border-bottom: 1px solid var(--c-root);
+  }
 }
 
 .list-item {
   display: block;
-  padding: 1rem;
-  text-align: left;
+  padding: var(--p-chat-sidebar-grid-item);
+  border-top: 1px solid var(--c-root);
 }
 
-.list-item-active {
-  composes: list-item;
-  background-color: blue;
+.active {
+  background-color: var(--bgc-active-chat);
 }

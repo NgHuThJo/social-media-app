@@ -1,41 +1,40 @@
-import { useRef, useState } from "react";
-import { TRPCClientError } from "@trpc/client";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { z } from "zod";
+import { handleError } from "@frontend/utils/error-handler";
+import { SchemaError } from "@frontend/types/zod";
 
-export function useFetch() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+export function useFetch<T extends z.ZodTypeAny>() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<SchemaError<T> | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const fetchData = async (
-    fetchFn: (controller: AbortController) => Promise<void>,
+    fetchFn: (
+      controller: AbortController,
+      setError: Dispatch<SetStateAction<SchemaError<T> | null>>,
+    ) => Promise<void>,
   ) => {
-    setLoading(true);
+    setIsLoading(true);
     setError(null);
 
-    if (!abortControllerRef.current) {
-      abortControllerRef.current = new AbortController();
-    }
+    abortControllerRef.current = new AbortController();
 
     try {
-      await fetchFn(abortControllerRef.current);
+      await fetchFn(abortControllerRef.current, setError);
     } catch (error) {
       if (abortControllerRef.current.signal.aborted) {
-        console.log((error as Error).message);
-        return;
-      }
-
-      if (error instanceof TRPCClientError || error instanceof Error) {
-        console.error(error.message);
-        setError(error);
+        console.log("Fetch aborted:", (error as Error).message);
       } else {
-        const errorMessage = "Unknown error";
-        console.error(errorMessage);
-        setError(new Error(errorMessage));
+        setError(handleError(error));
       }
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  return { loading, error, abortControllerRef, fetchData };
+  useEffect(() => {
+    return () => abortControllerRef.current?.abort();
+  }, []);
+
+  return { isLoading, error, abortControllerRef, fetchData };
 }

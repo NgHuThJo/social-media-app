@@ -48,7 +48,7 @@ export const ChatForm = forwardRef<HTMLDialogElement, ChatFormProps>(
             name="title"
             label="Name of the chatroom"
             placeholder="Chatroom name..."
-            error={actionData?.errors?.title}
+            error={actionData?.errors?.title && actionData.errors.title}
             labelClassName="chatroom"
           />
           <div className={styles.actions}>

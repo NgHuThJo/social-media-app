@@ -1,6 +1,41 @@
 .layout {
-  composes: grid from global;
+  display: grid;
   grid-template-columns: auto 1fr;
-  padding: 2rem;
-  background-color: purple;
+  background-color: var(--bgc-content);
+}
+
+.sidebar {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding-block: 2rem;
+  text-align: center;
+  background-color: var(--bgc-notification);
+}
+
+.actions {
+  display: grid;
+
+  > * {
+    border-top: 1px solid var(--c-root);
+  }
+
+  > :last-child {
+    border-bottom: 1px solid var(--c-root);
+  }
+}
+
+.list {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 1rem;
+
+  > h2 {
+    padding-inline: 2rem;
+  }
+}
+
+.list-layout {
+  display: grid;
+  align-items: start;
+  gap: 1rem;
 }

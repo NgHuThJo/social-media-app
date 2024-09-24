@@ -8,7 +8,7 @@ export function useIntersectionObserver(
   const observedElements = useRef<Set<Element>>(new Set());
 
   const observeElement = (element: Element) => {
-    if (element && !observedElements.current.has(element)) {
+    if (!observedElements.current.has(element)) {
       observerRef.current?.observe(element);
       observedElements.current.add(element);
     }
@@ -17,6 +17,11 @@ export function useIntersectionObserver(
     if (observedElements.current.has(element)) {
       observerRef.current?.unobserve(element);
       observedElements.current.delete(element);
+    }
+  };
+  const observeChildNodes = (element: Element) => {
+    for (const childNode of element.children) {
+      observeElement(childNode);
     }
   };
 
@@ -33,5 +38,5 @@ export function useIntersectionObserver(
     };
   }, [callback, options]);
 
-  return { observerRef, observeElement, unobserveElement };
+  return { observerRef, observeElement, unobserveElement, observeChildNodes };
 }

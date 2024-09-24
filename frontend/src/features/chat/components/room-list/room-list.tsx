@@ -30,11 +30,10 @@ export function ChatroomList({
       {data?.map((chatroom) => (
         <button
           key={chatroom.id}
-          className={
-            currentRoomId !== chatroom.id
-              ? styles["list-item"]
-              : styles["list-item-active"]
-          }
+          className={[
+            styles["list-item"],
+            currentRoomId === chatroom.id ? styles.active : "",
+          ].join(" ")}
           onClick={() => {
             handleSelectRoom(userId, currentRoomId, chatroom.id);
           }}

@@ -1,0 +1,28 @@
+.layout {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  background-color: var(--bgc-content);
+}
+
+.form {
+  display: flex;
+  position: relative;
+
+  > input {
+    flex-grow: 1;
+  }
+}
+
+.chatbox {
+  display: grid;
+  align-content: start;
+  padding: 1rem;
+
+  > p {
+    font-weight: var(--fw-button);
+  }
+
+  span {
+    font-weight: var(--fw-user-info);
+  }
+}
