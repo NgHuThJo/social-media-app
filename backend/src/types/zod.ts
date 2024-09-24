@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+export const numericStringSchema = z
+  .string()
+  .trim()
+  .regex(/^\d+$/, "String is not numeric");
 export const emailSchema = z
   .string()
   .trim()
@@ -13,20 +17,20 @@ export const nameSchema = z
   .string()
   .trim()
   .min(4, "Name must have at least 4 characters");
-export const numericIdSchema = z
+export const stringToNumberSchema = z
   .string()
   .trim()
   .transform((value) => {
-    const convertedUserId = Number(value);
+    const convertedValue = Number(value);
 
-    if (isNaN(convertedUserId)) {
-      throw new Error(`${convertedUserId} can't be converted to number`);
+    if (isNaN(convertedValue)) {
+      throw new Error(`${convertedValue} can't be converted to number`);
     }
-    if (convertedUserId < 1) {
-      throw new Error(`${convertedUserId} must be positive number`);
+    if (convertedValue < 1) {
+      throw new Error(`${convertedValue} must be positive number`);
     }
 
-    return convertedUserId;
+    return convertedValue;
   });
 export const passwordSchema = z
   .string()

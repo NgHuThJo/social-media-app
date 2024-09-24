@@ -4,7 +4,7 @@ import { postService } from "@backend/services/post";
 import { logError } from "@backend/utils/error-logger";
 import {
   nonEmptyStringSchema,
-  numericIdSchema,
+  stringToNumberSchema,
   urlSchema,
 } from "@backend/types/zod";
 
@@ -22,7 +22,7 @@ export const postRouter = router({
   createPost: publicProcedure
     .input(
       z.object({
-        userId: numericIdSchema,
+        userId: stringToNumberSchema,
         title: nonEmptyStringSchema,
         content: nonEmptyStringSchema,
       }),
@@ -42,7 +42,7 @@ export const postRouter = router({
   getParentComments: publicProcedure
     .input(
       z.object({
-        postId: numericIdSchema,
+        postId: stringToNumberSchema,
       }),
     )
     .query(async ({ input }) => {
@@ -60,7 +60,7 @@ export const postRouter = router({
   getChildComments: publicProcedure
     .input(
       z.object({
-        commentId: numericIdSchema,
+        commentId: stringToNumberSchema,
       }),
     )
     .query(async ({ input }) => {
@@ -79,8 +79,8 @@ export const postRouter = router({
     .input(
       z.object({
         content: nonEmptyStringSchema,
-        postId: numericIdSchema,
-        userId: numericIdSchema,
+        postId: stringToNumberSchema,
+        userId: stringToNumberSchema,
       }),
     )
     .mutation(async ({ input }) => {
@@ -102,9 +102,9 @@ export const postRouter = router({
   createCommentReply: publicProcedure
     .input(
       z.object({
-        postId: numericIdSchema,
+        postId: stringToNumberSchema,
         content: nonEmptyStringSchema,
-        userId: numericIdSchema,
+        userId: stringToNumberSchema,
       }),
     )
     .mutation(async ({ input }) => {
@@ -130,7 +130,7 @@ export const postRouter = router({
         content: nonEmptyStringSchema,
         publicId: nonEmptyStringSchema,
         title: nonEmptyStringSchema,
-        userId: numericIdSchema,
+        userId: stringToNumberSchema,
       }),
     )
     .mutation(async ({ input }) => {
@@ -154,7 +154,7 @@ export const postRouter = router({
   getAllFeeds: publicProcedure
     .input(
       z.object({
-        userId: numericIdSchema,
+        userId: stringToNumberSchema,
       }),
     )
     .query(async ({ input }) => {

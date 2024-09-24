@@ -17,7 +17,7 @@ import { validateInput } from "@frontend/utils/input-validation";
 import {
   messageSchema,
   MessageSchemaError,
-  stringifiedNumericIdSchema,
+  numberToStringSchema,
   SchemaError,
 } from "@frontend/types/zod";
 import styles from "./room.module.css";
@@ -35,7 +35,7 @@ export function Chatroom({ currentRoomId }: ChatroomProps) {
   const messageInputRef = useRef<HTMLInputElement>(null);
   const { subscribe } = useWebSocketContextApi();
   const { isLoading, error, fetchData } =
-    useFetch<typeof stringifiedNumericIdSchema>();
+    useFetch<typeof numberToStringSchema>();
   const {
     isLoading: eventIsLoading,
     error: eventError,
@@ -55,11 +55,11 @@ export function Chatroom({ currentRoomId }: ChatroomProps) {
     const fetchMessages = async (
       abortController: AbortController,
       setError: Dispatch<
-        SetStateAction<SchemaError<typeof stringifiedNumericIdSchema> | null>
+        SetStateAction<SchemaError<typeof numberToStringSchema> | null>
       >,
     ) => {
       const { data, errors, isValid } = validateInput(
-        stringifiedNumericIdSchema,
+        numberToStringSchema,
         currentRoomId,
       );
 
@@ -85,9 +85,7 @@ export function Chatroom({ currentRoomId }: ChatroomProps) {
 
     const fetchCreatedMessage = async (
       abortController: AbortController,
-      setError: Dispatch<
-        SetStateAction<SchemaError<typeof messageSchema> | null>
-      >,
+      setError: Dispatch<SetStateAction<MessageSchemaError | null>>,
     ) => {
       const formData = new FormData(event.currentTarget);
       const payload = {

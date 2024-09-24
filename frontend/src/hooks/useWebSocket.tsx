@@ -6,7 +6,7 @@ export function useWebSocket() {
 
   const connect = (userId: string) => {
     if (socket.current) {
-      console.log("Socket is still active");
+      console.log("WebSocket is still connected");
       return;
     }
 
@@ -14,27 +14,25 @@ export function useWebSocket() {
       reconnectionAttempts: 3,
     });
 
-    const convertedId = Number(userId);
-
     socket.current.on("connect", () => {
       console.log("Connected to WebSocket server");
+      socket.current?.emit("login", userId);
     });
     socket.current.on("disconnect", () => {
       cleanUpListeners();
-      console.log("Disconnected from WebSocket server");
     });
-    socket.current.emit("login", { userId: convertedId });
-    socket.current.on("login", (data) => {
+    socket.current.on("connect_error", (error) => {
+      console.error("Connection error:", error.message);
+    });
+    socket.current.on("login", (data: string) => {
       console.log(data);
     });
-    socket.current.on("logout", (data) => {
+    socket.current.on("logout", (data: string) => {
       console.log(data);
     });
   };
   const disconnect = (userId: string) => {
-    const convertedId = Number(userId);
-
-    socket.current?.emit("logout", { userId: convertedId });
+    socket.current?.emit("logout", userId);
     socket.current?.disconnect();
     socket.current = undefined;
   };
@@ -51,7 +49,7 @@ export function useWebSocket() {
 
   const cleanUpListeners = () => {
     socket.current?.removeAllListeners();
-    console.log("Websocket disconnected, cleaned up listeners");
+    console.log("WebSocket disconnected, cleaned up listeners");
   };
 
   return { connect, disconnect, emit, on, off };

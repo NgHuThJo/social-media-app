@@ -1,7 +1,9 @@
 import { Server as HttpServer } from "node:http";
 import { Server as SocketIOServer, Socket } from "socket.io";
+import { z } from "zod";
 import { userService } from "./user";
 import logger from "@shared/utils/logger";
+import { numericStringSchema, stringToNumberSchema } from "@backend/types/zod";
 
 export type SocketServiceType = typeof SocketService;
 
@@ -21,64 +23,76 @@ export class SocketService {
     this.#setupListeners();
   }
 
-  get io() {
-    return this.#io;
-  }
-
-  get onlineUsers() {
-    return this.#onlineUsers;
-  }
-
-  getOnlineUserList() {
-    return Array.from(this.onlineUsers.keys());
-  }
-
   #setupListeners() {
     this.#io.on("connect", (socket) => {
       logger.debug("A user connected");
 
-      socket.on("login", async (data) => {
-        this.addUser(data.userId, socket);
-
-        const onlineUserIds = this.getOnlineUserList();
-        const onlineUsers = await userService.getListOfUsers(onlineUserIds);
-        socket.broadcast.emit(
-          "notification",
-          `UserId ${data.userId} logged in`,
-        );
-        socket.broadcast.emit("getOnlineUsers", onlineUsers);
-        this.#io.emit("login", `UserId ${data.userId} logged in`);
-      });
-
-      socket.on("logout", async (data) => {
-        this.removeUser(data.userId);
-
-        const onlineUserIds = this.getOnlineUserList();
-        const onlineUsers = await userService.getListOfUsers(onlineUserIds);
-        socket.broadcast.emit(
-          "notification",
-          `UserId ${data.userId} logged out`,
-        );
-        socket.broadcast.emit("getOnlineUsers", onlineUsers);
-        this.#io.emit("logout", `UserId ${data.userId} logged out`);
-      });
-
-      socket.once("disconnect", () => {
+      socket.on("disconnect", () => {
         logger.debug("A user disconnected");
       });
 
-      socket.on("joinChatroom", (data) => {
-        const { userId, currentRoomId, newRoomId } = data;
-
-        this.leaveRoom(userId, currentRoomId);
-        this.joinRoom(userId, newRoomId);
-        socket
-          .to(newRoomId)
-          .emit(
+      socket.on("login", async (data: string) => {
+        try {
+          const parsedData = stringToNumberSchema.parse(data);
+          this.addUser(parsedData, socket);
+          const onlineUserIds = this.getOnlineUserList();
+          const onlineUsers = await userService.getListOfUsers(onlineUserIds);
+          this.#io.emit("login", `UserId ${parsedData} logged in`);
+          socket.broadcast.emit(
             "notification",
-            `User "${userId} has joined room "${newRoomId}"`,
+            `UserId ${parsedData} logged in`,
           );
+          socket.broadcast.emit("getOnlineUsers", onlineUsers);
+        } catch (error) {
+          logger.debug(error);
+        }
       });
+
+      socket.on("logout", async (data: string) => {
+        try {
+          const parsedData = stringToNumberSchema.parse(data);
+          const onlineUserIds = this.getOnlineUserList();
+          const onlineUsers = await userService.getListOfUsers(onlineUserIds);
+          this.#io.emit("logout", `UserId ${parsedData} logged out`);
+          socket.broadcast.emit(
+            "notification",
+            `UserId ${parsedData} logged out`,
+          );
+          socket.broadcast.emit("getOnlineUsers", onlineUsers);
+        } catch (error) {
+          logger.debug(error);
+        }
+      });
+
+      socket.on(
+        "joinChatroom",
+        (data: {
+          userId: string;
+          currentRoomId: string;
+          newRoomId: string;
+        }) => {
+          try {
+            const { userId, currentRoomId, newRoomId } = z
+              .object({
+                userId: stringToNumberSchema,
+                currentRoomId: numericStringSchema,
+                newRoomId: numericStringSchema,
+              })
+              .parse(data);
+
+            this.leaveRoom(userId, currentRoomId);
+            this.joinRoom(userId, newRoomId);
+            socket
+              .to(newRoomId)
+              .emit(
+                "notification",
+                `User "${userId} has joined room "${newRoomId}"`,
+              );
+          } catch (error) {
+            logger.debug(error);
+          }
+        },
+      );
     });
   }
 
@@ -90,21 +104,35 @@ export class SocketService {
     this.#onlineUsers.delete(userId);
   }
 
-  joinRoom(userId: number, roomId: number) {
-    const convertedRoomId = String(roomId);
-    this.#onlineUsers.get(userId)?.join(convertedRoomId);
+  getOnlineUserList() {
+    return Array.from(this.#onlineUsers.keys());
   }
 
-  leaveRoom(userId: number, roomId: number) {
-    const convertedRoomId = String(roomId);
-    this.#onlineUsers.get(userId)?.leave(convertedRoomId);
+  joinRoom(userId: number, roomId: string) {
+    this.#onlineUsers.get(userId)?.join(roomId);
   }
 
-  broadcast(event: string, data: any, userId: number) {
+  leaveRoom(userId: number, roomId: string) {
+    this.#onlineUsers.get(userId)?.leave(roomId);
+  }
+
+  broadcast<T>(event: string, data: T, userId: number) {
     this.#onlineUsers.get(userId)?.broadcast.emit(event, data);
   }
 
-  emitToAll(event: string, data: any) {
+  emit<T>(event: string, data: T, userId: number) {
+    this.#onlineUsers.get(userId)?.emit(event, data);
+  }
+
+  emitToAll<T>(event: string, data: T) {
     this.#io.emit(event, data);
+  }
+
+  broadcastInRoom<T>(event: string, data: T, userId: number, roomId: string) {
+    this.#onlineUsers.get(userId)?.to(roomId).emit(event, data);
+  }
+
+  emitInRoom<T>(event: string, data: T, roomId: string) {
+    this.#io.in(roomId).emit(event, data);
   }
 }

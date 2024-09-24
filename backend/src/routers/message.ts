@@ -2,15 +2,15 @@ import { z } from "zod";
 import { messageService } from "@backend/services/message";
 import { logError } from "@backend/utils/error-logger";
 import { publicProcedure, router } from "./trpc";
-import { nonEmptyStringSchema, numericIdSchema } from "@backend/types/zod";
+import { nonEmptyStringSchema, stringToNumberSchema } from "@backend/types/zod";
 
 export const messageRouter = router({
   createMessage: publicProcedure
     .input(
       z.object({
         content: nonEmptyStringSchema,
-        userId: numericIdSchema,
-        roomId: numericIdSchema,
+        userId: stringToNumberSchema,
+        roomId: stringToNumberSchema,
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -20,9 +20,11 @@ export const messageRouter = router({
       try {
         await messageService.createMessage(content, userId, roomId);
         const allRoomMessages = await messageService.getAllRoomMessages(roomId);
-        socketService.io
-          .in(String(roomId))
-          .emit("chatMessage", allRoomMessages);
+        socketService.emitInRoom(
+          "chatMessage",
+          allRoomMessages,
+          String(roomId),
+        );
 
         return allRoomMessages;
       } catch (error) {
@@ -33,7 +35,7 @@ export const messageRouter = router({
   getAllRoomMessages: publicProcedure
     .input(
       z.object({
-        roomId: numericIdSchema,
+        roomId: stringToNumberSchema,
       }),
     )
     .query(async ({ input }) => {

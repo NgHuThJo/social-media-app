@@ -6,7 +6,7 @@ import {
   emailSchema,
   nameSchema,
   nonEmptyStringSchema,
-  numericIdSchema,
+  stringToNumberSchema,
   passwordSchema,
   urlSchema,
 } from "@backend/types/zod";
@@ -15,7 +15,7 @@ export const userRouter = router({
   getUser: publicProcedure
     .input(
       z.object({
-        userId: numericIdSchema,
+        userId: stringToNumberSchema,
       }),
     )
     .query(async ({ input }) => {
@@ -61,7 +61,7 @@ export const userRouter = router({
   getAllOtherUsers: publicProcedure
     .input(
       z.object({
-        userId: numericIdSchema,
+        userId: stringToNumberSchema,
       }),
     )
     .query(async ({ input }) => {
@@ -114,7 +114,7 @@ export const userRouter = router({
       z.object({
         assetUrl: urlSchema,
         publicId: nonEmptyStringSchema,
-        userId: numericIdSchema,
+        userId: stringToNumberSchema,
       }),
     )
     .mutation(async ({ input }) => {

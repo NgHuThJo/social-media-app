@@ -1,11 +1,11 @@
 import { z } from "zod";
 
 // Utility schemas
-export const numericIdSchema = z
+export const numericStringSchema = z
   .string()
   .trim()
-  .regex(/^\d+$/, "Id can't be converted to number");
-export const stringifiedNumericIdSchema = z
+  .regex(/^\d+$/, "String is not number");
+export const numberToStringSchema = z
   .number()
   .transform((value) => String(value));
 export const nonEmptyStringSchema = z
@@ -44,7 +44,7 @@ export type SchemaError<T extends z.ZodSchema> = {
 
 // Base schemas
 export const userIdSchema = z.object({
-  userId: numericIdSchema,
+  userId: numericStringSchema,
 });
 
 export const authSchema = z.object({
@@ -61,13 +61,13 @@ export type RegistrationSchemaError = SchemaError<typeof registrationSchema>;
 
 export const commentSchema = userIdSchema.extend({
   content: nonEmptyStringSchema,
-  postId: numericIdSchema,
+  postId: numericStringSchema,
 });
 export type CommentSchemaError = SchemaError<typeof commentSchema>;
 
 export const messageSchema = userIdSchema.extend({
   content: nonEmptyStringSchema,
-  roomId: stringifiedNumericIdSchema,
+  roomId: numberToStringSchema,
 });
 export type MessageSchemaError = SchemaError<typeof messageSchema>;
 
