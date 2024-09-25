@@ -1,12 +1,13 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
 export function useWebSocket() {
+  const [isSocketReady, setIsSocketReady] = useState(false);
   const socket = useRef<Socket>();
 
   const connect = (userId: string) => {
-    if (socket.current) {
-      console.log("WebSocket is still connected");
+    if (socket.current?.connected) {
+      console.log("Socket already connected, skipping re-connection");
       return;
     }
 
@@ -14,22 +15,39 @@ export function useWebSocket() {
       reconnectionAttempts: 3,
     });
 
-    socket.current.on("connect", () => {
+    const handleConnect = () => {
       console.log("Connected to WebSocket server");
       socket.current?.emit("login", userId);
-    });
-    socket.current.on("disconnect", () => {
+      setIsSocketReady(true);
+    };
+    const handleDisconnect = () => {
+      console.log("Disconnected from WebSocket server");
       cleanUpListeners();
-    });
-    socket.current.on("connect_error", (error) => {
+      setIsSocketReady(false);
+    };
+    const handleConnectError = (error: Error) => {
       console.error("Connection error:", error.message);
-    });
-    socket.current.on("login", (data: string) => {
+    };
+    const handleLogin = (data: string) => {
       console.log(data);
-    });
-    socket.current.on("logout", (data: string) => {
+    };
+    const handleLogout = (data: string) => {
       console.log(data);
-    });
+    };
+
+    socket.current.on("connect", handleConnect);
+    socket.current.on("disconnect", handleDisconnect);
+    socket.current.on("connect_error", handleConnectError);
+    socket.current.on("login", handleLogin);
+    socket.current.on("logout", handleLogout);
+
+    return () => {
+      socket.current?.off("connect", handleConnect);
+      socket.current?.off("disconnect", handleDisconnect);
+      socket.current?.off("connect_error", handleConnectError);
+      socket.current?.off("login", handleLogin);
+      socket.current?.off("logout", handleLogout);
+    };
   };
   const disconnect = (userId: string) => {
     socket.current?.emit("logout", userId);
@@ -49,8 +67,8 @@ export function useWebSocket() {
 
   const cleanUpListeners = () => {
     socket.current?.removeAllListeners();
-    console.log("WebSocket disconnected, cleaned up listeners");
+    console.log("Cleaned up all WebSocket event listeners");
   };
 
-  return { connect, disconnect, emit, on, off };
+  return { isSocketReady, connect, disconnect, emit, on, off };
 }

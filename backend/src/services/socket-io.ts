@@ -28,6 +28,13 @@ export class SocketService {
       logger.debug("A user connected");
 
       socket.on("disconnect", () => {
+        for (const [key, value] of this.#onlineUsers) {
+          if (value === socket) {
+            this.removeUser(key);
+            break;
+          }
+        }
+
         logger.debug("A user disconnected");
       });
 
@@ -38,11 +45,11 @@ export class SocketService {
           const onlineUserIds = this.getOnlineUserList();
           const onlineUsers = await userService.getListOfUsers(onlineUserIds);
           this.#io.emit("login", `UserId ${parsedData} logged in`);
+          this.#io.emit("getOnlineUsers", onlineUsers);
           socket.broadcast.emit(
             "notification",
             `UserId ${parsedData} logged in`,
           );
-          socket.broadcast.emit("getOnlineUsers", onlineUsers);
         } catch (error) {
           logger.debug(error);
         }
@@ -51,6 +58,7 @@ export class SocketService {
       socket.on("logout", async (data: string) => {
         try {
           const parsedData = stringToNumberSchema.parse(data);
+          this.removeUser(parsedData);
           const onlineUserIds = this.getOnlineUserList();
           const onlineUsers = await userService.getListOfUsers(onlineUserIds);
           this.#io.emit("logout", `UserId ${parsedData} logged out`);
@@ -68,29 +76,51 @@ export class SocketService {
         "joinChatroom",
         (data: {
           userId: string;
-          currentRoomId: string;
+          currentRoomId: string | undefined;
           newRoomId: string;
         }) => {
           try {
             const { userId, currentRoomId, newRoomId } = z
               .object({
                 userId: stringToNumberSchema,
-                currentRoomId: numericStringSchema,
+                currentRoomId: numericStringSchema.optional(),
                 newRoomId: numericStringSchema,
               })
               .parse(data);
 
-            this.leaveRoom(userId, currentRoomId);
+            if (currentRoomId) {
+              this.leaveRoom(userId, currentRoomId);
+            }
             this.joinRoom(userId, newRoomId);
             socket
               .to(newRoomId)
               .emit(
                 "notification",
-                `User "${userId} has joined room "${newRoomId}"`,
+                `User "${userId}" has joined room "${newRoomId}"`,
               );
           } catch (error) {
             logger.debug(error);
           }
+        },
+      );
+
+      socket.on(
+        "leaveRoom",
+        async (data: { userId: string; currentRoomId: string }) => {
+          const { userId, currentRoomId } = z
+            .object({
+              userId: stringToNumberSchema,
+              currentRoomId: numericStringSchema,
+            })
+            .parse(data);
+
+          socket
+            .to(currentRoomId)
+            .emit(
+              "notification",
+              `User "${userId}" has left room "${currentRoomId}"`,
+            );
+          this.leaveRoom(userId, currentRoomId);
         },
       );
     });
@@ -133,6 +163,7 @@ export class SocketService {
   }
 
   emitInRoom<T>(event: string, data: T, roomId: string) {
+    console.log("Room emit", event, data);
     this.#io.in(roomId).emit(event, data);
   }
 }

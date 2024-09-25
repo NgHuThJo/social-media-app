@@ -12,6 +12,7 @@ export function NotificationList() {
 
   useEffect(() => {
     const unsubscribe = subscribe("notification", (data: string) => {
+      console.log("user notification", data);
       setNotifications((prev) => [...prev, data]);
     });
 

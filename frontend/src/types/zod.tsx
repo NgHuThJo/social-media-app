@@ -39,7 +39,7 @@ type GeneralError = {
 };
 
 export type SchemaError<T extends z.ZodSchema> = {
-  errors?: z.inferFlattenedErrors<T>["fieldErrors"] & GeneralError;
+  errors?: GeneralError & z.inferFlattenedErrors<T>["fieldErrors"];
 };
 
 // Base schemas

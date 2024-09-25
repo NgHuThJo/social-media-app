@@ -20,9 +20,10 @@ export const messageRouter = router({
       try {
         await messageService.createMessage(content, userId, roomId);
         const allRoomMessages = await messageService.getAllRoomMessages(roomId);
-        socketService.emitInRoom(
+        socketService.broadcastInRoom(
           "chatMessage",
           allRoomMessages,
+          userId,
           String(roomId),
         );
 

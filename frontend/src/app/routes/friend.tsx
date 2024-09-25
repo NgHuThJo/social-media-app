@@ -23,8 +23,6 @@ export const friendLoader = ({ params }: LoaderFunctionArgs) => {
   };
   const { data, errors, isValid } = validateInput(userIdSchema, payload);
 
-  console.log(data, errors, isValid, payload);
-
   if (!isValid) {
     throw new Response(JSON.stringify({ errors }), {
       status: 400,

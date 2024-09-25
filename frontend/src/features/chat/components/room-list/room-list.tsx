@@ -7,7 +7,6 @@ type ChatroomListProps = {
   data: ChatroomsData;
   currentRoomId: number | undefined;
   handleSelectRoom: (
-    userId: string,
     currentRoomId: number | undefined,
     newRoomId: number,
   ) => void;
@@ -18,13 +17,6 @@ export function ChatroomList({
   currentRoomId,
   handleSelectRoom,
 }: ChatroomListProps) {
-  const { user } = useAuthContext();
-
-  if (!user) {
-    return <Navigate to="/auth/login" />;
-  }
-  const userId = user?.id.toLocaleString();
-
   return (
     <div className={styles.list}>
       {data?.map((chatroom) => (
@@ -35,7 +27,7 @@ export function ChatroomList({
             currentRoomId === chatroom.id ? styles.active : "",
           ].join(" ")}
           onClick={() => {
-            handleSelectRoom(userId, currentRoomId, chatroom.id);
+            handleSelectRoom(currentRoomId, chatroom.id);
           }}
         >
           <p>

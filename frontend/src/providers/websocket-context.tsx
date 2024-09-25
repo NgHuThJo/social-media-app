@@ -2,23 +2,28 @@ import { createContext, PropsWithChildren, useMemo } from "react";
 import { useContextWrapper } from "@frontend/utils/context";
 import { useWebSocket } from "@frontend/hooks/useWebSocket";
 
+type WebSocketContextType = {
+  isSocketReady: boolean;
+} | null;
+
 type WebSocketContextApiType = {
-  connect: (userId: string) => void;
+  connect: (userId: string) => (() => void) | undefined;
   disconnect: (userId: string) => void;
   emit: <T>(event: string, data: T) => void;
   subscribe: <T>(event: string, callback: (data: T) => void) => () => void;
 } | null;
 
+const WebSocketContext = createContext<WebSocketContextType>(null);
 const WebSocketContextApi = createContext<WebSocketContextApiType>(null);
 
+export const useWebSocketContext = () =>
+  useContextWrapper(WebSocketContext, "WebSocketContext is null");
 export const useWebSocketContextApi = () =>
-  useContextWrapper<WebSocketContextApiType>(
-    WebSocketContextApi,
-    "WebSocketContextApi is null",
-  );
+  useContextWrapper(WebSocketContextApi, "WebSocketContextApi is null");
 
 export function WebSocketContextProvider({ children }: PropsWithChildren) {
   const {
+    isSocketReady,
     connect: connectWebSocket,
     disconnect: disconnectWebSocket,
     emit: emitWebSocketEvent,
@@ -26,9 +31,11 @@ export function WebSocketContextProvider({ children }: PropsWithChildren) {
     off,
   } = useWebSocket();
 
+  const contextValue = useMemo(() => ({ isSocketReady }), [isSocketReady]);
+
   const api = useMemo(() => {
     const connect = (userId: string) => {
-      connectWebSocket(userId);
+      return connectWebSocket(userId);
     };
     const disconnect = (userId: string) => {
       disconnectWebSocket(userId);
@@ -47,7 +54,9 @@ export function WebSocketContextProvider({ children }: PropsWithChildren) {
 
   return (
     <WebSocketContextApi.Provider value={api}>
-      {children}
+      <WebSocketContext.Provider value={contextValue}>
+        {children}
+      </WebSocketContext.Provider>
     </WebSocketContextApi.Provider>
   );
 }

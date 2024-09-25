@@ -45,6 +45,7 @@ export function Chatroom({ currentRoomId }: ChatroomProps) {
 
   useEffect(() => {
     const unsubscribe = subscribe("chatMessage", (data: RoomMessagesType) => {
+      console.log("Received message", data);
       setMessages(data);
     });
 

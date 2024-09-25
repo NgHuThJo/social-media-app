@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
+import { useAuthContext } from "@frontend/providers/auth-context";
 import { useWebSocketContextApi } from "@frontend/providers/websocket-context";
 import { useDialog } from "@frontend/hooks/useDialog";
 import { Button } from "@frontend/components/ui/button/button";
@@ -25,7 +27,13 @@ export function ChatLayout({
     useState<OnlineUsersData>(onlineUsersData);
   const { dialogRef, openDialog, closeDialog, handleDialogBackgroundClick } =
     useDialog();
+  const { user } = useAuthContext();
   const { emit, subscribe } = useWebSocketContextApi();
+  const userId = user?.id.toLocaleString();
+
+  if (!user) {
+    return <Navigate to={"/auth/login"} />;
+  }
 
   useEffect(() => {
     const unsubscribeGetOnlineUsers = subscribe(
@@ -48,17 +56,23 @@ export function ChatLayout({
   }, []);
 
   const selectChatroom = (
-    userId: string,
     currentRoomId: number | undefined,
     newRoomId: number,
   ) => {
     setCurrentRoomId(newRoomId);
-    emit("joinChatroom", { userId, currentRoomId, newRoomId });
+    emit("joinChatroom", {
+      userId,
+      currentRoomId: currentRoomId ? String(currentRoomId) : currentRoomId,
+      newRoomId: String(newRoomId),
+    });
   };
 
   const leaveChatroom = () => {
     setCurrentRoomId(undefined);
-    leaveChatroom();
+    emit("leaveRoom", {
+      userId,
+      currentRoomId: currentRoomId ? String(currentRoomId) : currentRoomId,
+    });
   };
 
   return (
