@@ -8,7 +8,8 @@ import {
 } from "react";
 import { useParams } from "react-router-dom";
 import { useWebSocketContextApi } from "@frontend/providers/websocket-context";
-import { useFetch } from "@frontend/hooks/useFetch";
+import { useFetch } from "@frontend/hooks/use-fetch";
+import { useScrollIntoView } from "@frontend/hooks/use-scroll-into-view";
 import { Button } from "@frontend/components/ui/button/button";
 import { EmojiButtonGrid } from "@frontend/components/ui/button/emoji/grid";
 import { client } from "@frontend/lib/trpc";
@@ -33,6 +34,11 @@ type ChatroomProps = {
 export function Chatroom({ currentRoomId }: ChatroomProps) {
   const [messages, setMessages] = useState<RoomMessagesType>();
   const messageInputRef = useRef<HTMLInputElement>(null);
+  const { scrollRef, scrollIntoView } = useScrollIntoView<HTMLParagraphElement>(
+    {
+      behavior: "smooth",
+    },
+  );
   const { subscribe } = useWebSocketContextApi();
   const { isLoading, error, fetchData } =
     useFetch<typeof numberToStringSchema>();
@@ -45,7 +51,6 @@ export function Chatroom({ currentRoomId }: ChatroomProps) {
 
   useEffect(() => {
     const unsubscribe = subscribe("chatMessage", (data: RoomMessagesType) => {
-      console.log("Received message", data);
       setMessages(data);
     });
 
@@ -53,61 +58,66 @@ export function Chatroom({ currentRoomId }: ChatroomProps) {
   }, []);
 
   useEffect(() => {
-    const fetchMessages = async (
-      abortController: AbortController,
-      setError: Dispatch<
-        SetStateAction<SchemaError<typeof numberToStringSchema> | null>
-      >,
-    ) => {
-      const { data, errors, isValid } = validateInput(
-        numberToStringSchema,
-        currentRoomId,
-      );
+    scrollIntoView();
+  }, [messages]);
 
-      if (!isValid) {
-        return setError({ errors });
-      }
+  useEffect(() => {
+    fetchData(
+      async (
+        abortController: AbortController,
+        setError: Dispatch<
+          SetStateAction<SchemaError<typeof numberToStringSchema> | null>
+        >,
+      ) => {
+        const { data, errors, isValid } = validateInput(
+          numberToStringSchema,
+          currentRoomId,
+        );
 
-      const response = await client.message.getAllRoomMessages.query(
-        {
-          roomId: data,
-        },
-        { signal: abortController.signal },
-      );
+        if (!isValid) {
+          return setError({ errors });
+        }
 
-      setMessages(response);
-    };
+        const response = await client.message.getAllRoomMessages.query(
+          {
+            roomId: data,
+          },
+          { signal: abortController.signal },
+        );
 
-    fetchData(fetchMessages);
+        setMessages(response);
+      },
+    );
   }, [currentRoomId]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const fetchCreatedMessage = async (
-      abortController: AbortController,
-      setError: Dispatch<SetStateAction<MessageSchemaError | null>>,
-    ) => {
-      const formData = new FormData(event.currentTarget);
-      const payload = {
-        ...Object.fromEntries(formData),
-        userId,
-        roomId: currentRoomId,
-      };
-      const { data, errors, isValid } = validateInput(messageSchema, payload);
+    eventFetchData(
+      async (
+        abortController: AbortController,
+        setError: Dispatch<SetStateAction<MessageSchemaError | null>>,
+      ) => {
+        const formData = new FormData(event.currentTarget);
+        const payload = {
+          ...Object.fromEntries(formData),
+          userId,
+          roomId: currentRoomId,
+        };
+        const { data, errors, isValid } = validateInput(messageSchema, payload);
 
-      if (!isValid) {
-        return setError({ errors });
-      }
+        if (!isValid) {
+          return setError({ errors });
+        }
 
-      const response = await client.message.createMessage.mutate(data, {
-        signal: abortController.signal,
-      });
+        const response = await client.message.createMessage.mutate(data, {
+          signal: abortController.signal,
+        });
 
-      setMessages(response);
-    };
+        setMessages(response);
+      },
+    );
 
-    eventFetchData(fetchCreatedMessage);
     event.currentTarget.reset();
   };
 
@@ -120,8 +130,11 @@ export function Chatroom({ currentRoomId }: ChatroomProps) {
   return (
     <div className={styles.layout}>
       <div className={styles.chatbox}>
-        {messages?.map((message) => (
-          <p key={message.id}>
+        {messages?.map((message, index) => (
+          <p
+            key={message.id}
+            ref={index === messages.length - 1 ? scrollRef : null}
+          >
             <span>
               {message.author.name} (
               {formatRelativeTimeDate(new Date(message.createdAt), "en")})

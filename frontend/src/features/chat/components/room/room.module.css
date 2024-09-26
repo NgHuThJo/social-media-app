@@ -16,7 +16,9 @@
 .chatbox {
   display: grid;
   align-content: start;
+  max-height: var(--max-h-chatbox);
   padding: 1rem;
+  overflow-y: auto;
 
   > p {
     font-weight: var(--fw-button);

@@ -1,12 +1,14 @@
 .container {
   display: grid;
   grid-template-columns: 1fr;
+  max-height: var(--max-h-notification-box);
   position: absolute;
   top: 100%;
   right: 0;
   background-color: var(--bgc-notification);
   visibility: hidden;
   z-index: 1;
+  overflow: auto;
 
   > * {
     padding: 1rem;

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuthContext } from "@frontend/providers/auth-context";
 import { useWebSocketContextApi } from "@frontend/providers/websocket-context";
-import { useDialog } from "@frontend/hooks/useDialog";
+import { useDialog } from "@frontend/hooks/use-dialog";
 import { Button } from "@frontend/components/ui/button/button";
 import { Chatroom } from "@frontend/features/chat/components/room/room";
 import { ChatForm } from "../form/form";

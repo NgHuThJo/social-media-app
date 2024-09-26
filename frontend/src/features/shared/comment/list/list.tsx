@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useFetch } from "@frontend/hooks/useFetch";
+import { useFetch } from "@frontend/hooks/use-fetch";
 import { Comment } from "../comment/comment";
 import { client } from "@frontend/lib/trpc";
 import styles from "./list.module.css";
@@ -15,7 +15,7 @@ type PostCommentProps = {
 
 export function CommentList({ parentId, isPostId }: PostCommentProps) {
   const [comments, setComments] = useState<CommentListData>();
-  const { loading, error, abortControllerRef, fetchData } = useFetch();
+  const { isLoading, error, fetchData } = useFetch();
 
   useEffect(() => {
     const fetchFn: (controller: AbortController) => Promise<void> = async (
@@ -39,15 +39,9 @@ export function CommentList({ parentId, isPostId }: PostCommentProps) {
     };
 
     fetchData(fetchFn);
-
-    return () => {
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-    };
   }, [parentId, isPostId]);
 
-  if (loading) {
+  if (isLoading) {
     return <div>Loading comments...</div>;
   }
 

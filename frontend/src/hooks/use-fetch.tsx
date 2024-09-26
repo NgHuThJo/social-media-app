@@ -17,6 +17,7 @@ export function useFetch<T extends z.ZodTypeAny>() {
     setIsLoading(true);
     setError(null);
 
+    abortControllerRef.current?.abort();
     abortControllerRef.current = new AbortController();
 
     try {
@@ -36,5 +37,5 @@ export function useFetch<T extends z.ZodTypeAny>() {
     return () => abortControllerRef.current?.abort();
   }, []);
 
-  return { isLoading, error, abortControllerRef, fetchData };
+  return { isLoading, error, fetchData };
 }

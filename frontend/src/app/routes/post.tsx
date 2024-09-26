@@ -6,7 +6,7 @@ import {
   redirect,
   useLoaderData,
 } from "react-router-dom";
-import { useToggle } from "@frontend/hooks/useToggle";
+import { useToggle } from "@frontend/hooks/use-toggle";
 import { Button } from "@frontend/components/ui/button/button";
 import { ContentLayout } from "@frontend/components/layouts/content/content";
 import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";

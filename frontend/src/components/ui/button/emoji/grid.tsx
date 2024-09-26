@@ -1,4 +1,4 @@
-import { useToggle } from "@frontend/hooks/useToggle";
+import { useToggle } from "@frontend/hooks/use-toggle";
 import styles from "./grid.module.css";
 import { Button } from "../button";
 

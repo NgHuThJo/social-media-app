@@ -37,6 +37,10 @@ export function NotificationList() {
     setNotifications((prev) => prev.filter((_item, index) => index !== id));
   };
 
+  const markAllAsRead = () => {
+    setNotifications([]);
+  };
+
   return (
     <>
       <button
@@ -60,6 +64,9 @@ export function NotificationList() {
         ) : (
           <li>No notifications.</li>
         )}
+        {notifications.length ? (
+          <Button onClick={markAllAsRead}>Mark all as read</Button>
+        ) : null}
       </ul>
     </>
   );

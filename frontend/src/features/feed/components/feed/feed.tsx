@@ -1,4 +1,4 @@
-import { useToggle } from "@frontend/hooks/useToggle";
+import { useToggle } from "@frontend/hooks/use-toggle";
 import { Button } from "@frontend/components/ui/button/button";
 import { CommentForm } from "@frontend/features/shared/comment/form/form";
 import { CommentList } from "@frontend/features/shared/comment/list/list";

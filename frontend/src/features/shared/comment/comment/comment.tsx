@@ -1,4 +1,4 @@
-import { useToggle } from "@frontend/hooks/useToggle";
+import { useToggle } from "@frontend/hooks/use-toggle";
 import { Button } from "@frontend/components/ui/button/button";
 import { CommentList } from "../list/list";
 import { formatRelativeTimeDate } from "@frontend/utils/intl";
