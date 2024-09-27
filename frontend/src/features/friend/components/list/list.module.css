@@ -5,7 +5,29 @@
 }
 
 .list-item {
+  display: grid;
+  justify-content: start;
+  align-items: center;
+  column-gap: 2rem;
+  grid-template-areas: "avatar name" "avatar email";
   padding: 1.5rem;
   font-weight: var(--fw-link);
+  color: green;
   background-color: var(--bgc-content);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.avatar {
+  grid-area: avatar;
+  width: 3rem;
+  border-radius: 50%;
+}
+
+.name {
+  grid-area: name;
+}
+
+.email {
+  grid-area: email;
 }

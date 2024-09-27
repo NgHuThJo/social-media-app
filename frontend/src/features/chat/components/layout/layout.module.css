@@ -7,7 +7,7 @@
 .sidebar {
   display: grid;
   grid-template-rows: 1fr auto;
-  padding-block: 2rem;
+  padding-block-start: 2rem;
   text-align: center;
   background-color: var(--bgc-notification);
 }
@@ -37,5 +37,6 @@
 .list-layout {
   display: grid;
   align-items: start;
+
   gap: 1rem;
 }

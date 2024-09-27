@@ -1,4 +1,4 @@
-import { Form, useActionData } from "react-router-dom";
+import { Form, redirect, useActionData } from "react-router-dom";
 import { client } from "@frontend/lib/trpc";
 import { Button } from "@frontend/components/ui/button/button";
 import { FormError } from "@frontend/components/ui/form/error/error";
@@ -13,7 +13,7 @@ import styles from "./form.module.css";
 type CommentProps = {
   intent: string;
   onClose: () => void;
-  postId: number;
+  parentId: number;
 };
 
 export const createPostComment: ActionDispatchFunction = async (
@@ -21,6 +21,7 @@ export const createPostComment: ActionDispatchFunction = async (
   params,
   formData,
 ) => {
+  const currentUrl = new URL(request.url);
   const convertedFormData = Object.fromEntries(formData);
   const { userId } = params;
   const payload = {
@@ -38,7 +39,7 @@ export const createPostComment: ActionDispatchFunction = async (
   try {
     const response = await client.post.createPostComment.mutate(data);
 
-    return null;
+    return redirect(currentUrl.pathname + currentUrl.search);
   } catch (error) {
     return handleError(error, "Creation of comment failed");
   }
@@ -49,6 +50,7 @@ export const createComment: ActionDispatchFunction = async (
   params,
   formData,
 ) => {
+  const currentUrl = new URL(request.url);
   const convertedFormData = Object.fromEntries(formData);
   const { userId } = params;
   const payload = {
@@ -66,13 +68,13 @@ export const createComment: ActionDispatchFunction = async (
   try {
     const response = await client.post.createCommentReply.mutate(data);
 
-    return null;
+    return redirect(currentUrl.pathname + currentUrl.search);
   } catch (error) {
     return handleError(error, "Creation of comment failed");
   }
 };
 
-export function CommentForm({ intent, onClose, postId }: CommentProps) {
+export function CommentForm({ intent, onClose, parentId }: CommentProps) {
   const actionData = useActionData() as CommentSchemaError;
 
   return (
@@ -81,12 +83,12 @@ export function CommentForm({ intent, onClose, postId }: CommentProps) {
         name="content"
         rows={5}
         placeholder="Your reply..."
-        error={actionData?.errors?.content}
+        error={actionData?.errors?.fieldErrors?.content}
       />
       {actionData?.errors?.general && (
         <FormError message={actionData.errors.general} />
       )}
-      <Input type="hidden" name="postId" value={postId} />
+      <Input type="hidden" name="postId" value={parentId} />
       <div className={styles.actions}>
         <Button type="submit" name="intent" value={intent}>
           Submit post

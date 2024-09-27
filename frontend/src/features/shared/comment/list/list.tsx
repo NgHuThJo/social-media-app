@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { z } from "zod";
 import { useFetch } from "@frontend/hooks/use-fetch";
 import { Comment } from "../comment/comment";
 import { client } from "@frontend/lib/trpc";
+import { validateInput } from "@frontend/utils/input-validation";
+import { numberToStringSchema } from "@frontend/types/zod";
 import styles from "./list.module.css";
 
 export type CommentListData = Awaited<
@@ -10,47 +14,55 @@ export type CommentListData = Awaited<
 
 type PostCommentProps = {
   parentId: number;
-  isPostId: boolean;
+  commentType: "post" | "comment";
 };
 
-export function CommentList({ parentId, isPostId }: PostCommentProps) {
+export function CommentList({ parentId, commentType }: PostCommentProps) {
   const [comments, setComments] = useState<CommentListData>();
   const { isLoading, error, fetchData } = useFetch();
+  const location = useLocation();
 
   useEffect(() => {
-    const fetchFn: (controller: AbortController) => Promise<void> = async (
-      controller,
-    ) => {
-      const response = isPostId
-        ? await client.post.getParentComments.query(
-            { postId: String(parentId) },
-            {
-              signal: controller.signal,
-            },
-          )
-        : await client.post.getChildComments.query(
-            { commentId: String(parentId) },
-            {
-              signal: controller.signal,
-            },
-          );
+    fetchData(async (controller, setError) => {
+      const { data, errors, isValid } = validateInput(
+        z.object({ parentId: numberToStringSchema }),
+        { parentId },
+      );
+
+      if (!isValid) {
+        return setError({ errors });
+      }
+
+      const response =
+        commentType === "post"
+          ? await client.post.getParentComments.query(
+              { postId: data.parentId },
+              {
+                signal: controller.signal,
+              },
+            )
+          : await client.post.getChildComments.query(
+              { commentId: data.parentId },
+              {
+                signal: controller.signal,
+              },
+            );
 
       setComments(response);
-    };
-
-    fetchData(fetchFn);
-  }, [parentId, isPostId]);
+    });
+  }, [parentId, commentType, location]);
 
   if (isLoading) {
     return <div>Loading comments...</div>;
   }
 
-  if (error) {
-    return <div>Error</div>;
-  }
+  // if (error) {
+  //   console.log(error);
+  //   return <div>There was an error.</div>;
+  // }
 
   if (!comments || comments.length === 0) {
-    return <div>No comments available</div>;
+    return <div>No comments available.</div>;
   }
   return (
     <ul className={styles.list}>

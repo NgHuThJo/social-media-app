@@ -56,6 +56,9 @@ class PostService {
           },
         },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     // if (!parentComments.length) {
@@ -78,6 +81,9 @@ class PostService {
             likes: true,
           },
         },
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
 

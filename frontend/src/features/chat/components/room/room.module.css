@@ -6,7 +6,9 @@
 
 .form {
   display: flex;
+  padding: 1.5rem;
   position: relative;
+  background-color: var(--bgc-notification);
 
   > input {
     flex-grow: 1;

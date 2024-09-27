@@ -62,61 +62,49 @@ export function Chatroom({ currentRoomId }: ChatroomProps) {
   }, [messages]);
 
   useEffect(() => {
-    fetchData(
-      async (
-        abortController: AbortController,
-        setError: Dispatch<
-          SetStateAction<SchemaError<typeof numberToStringSchema> | null>
-        >,
-      ) => {
-        const { data, errors, isValid } = validateInput(
-          numberToStringSchema,
-          currentRoomId,
-        );
+    fetchData(async (abortController, setError) => {
+      const { data, errors, isValid } = validateInput(
+        numberToStringSchema,
+        currentRoomId,
+      );
 
-        if (!isValid) {
-          return setError({ errors });
-        }
+      if (!isValid) {
+        return setError({ errors });
+      }
 
-        const response = await client.message.getAllRoomMessages.query(
-          {
-            roomId: data,
-          },
-          { signal: abortController.signal },
-        );
+      const response = await client.message.getAllRoomMessages.query(
+        {
+          roomId: data,
+        },
+        { signal: abortController.signal },
+      );
 
-        setMessages(response);
-      },
-    );
+      setMessages(response);
+    });
   }, [currentRoomId]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    eventFetchData(
-      async (
-        abortController: AbortController,
-        setError: Dispatch<SetStateAction<MessageSchemaError | null>>,
-      ) => {
-        const formData = new FormData(event.currentTarget);
-        const payload = {
-          ...Object.fromEntries(formData),
-          userId,
-          roomId: currentRoomId,
-        };
-        const { data, errors, isValid } = validateInput(messageSchema, payload);
+    eventFetchData(async (abortController, setError) => {
+      const formData = new FormData(event.currentTarget);
+      const payload = {
+        ...Object.fromEntries(formData),
+        userId,
+        roomId: currentRoomId,
+      };
+      const { data, errors, isValid } = validateInput(messageSchema, payload);
 
-        if (!isValid) {
-          return setError({ errors });
-        }
+      if (!isValid) {
+        return setError({ errors });
+      }
 
-        const response = await client.message.createMessage.mutate(data, {
-          signal: abortController.signal,
-        });
+      const response = await client.message.createMessage.mutate(data, {
+        signal: abortController.signal,
+      });
 
-        setMessages(response);
-      },
-    );
+      setMessages(response);
+    });
 
     event.currentTarget.reset();
   };

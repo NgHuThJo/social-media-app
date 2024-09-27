@@ -9,17 +9,25 @@ class FriendService {
         OR: [{ requesterId: userId }, { addresseeId: userId }],
       },
       include: {
-        requester: true,
-        addressee: true,
+        requester: {
+          include: {
+            avatar: true,
+          },
+        },
+        addressee: {
+          include: {
+            avatar: true,
+          },
+        },
       },
     });
 
-    if (!friendships.length) {
-      throw new AppError(
-        "NOT_FOUND",
-        `No friends with userId "${userId}" associated`,
-      );
-    }
+    // if (!friendships.length) {
+    //   throw new AppError(
+    //     "NOT_FOUND",
+    //     `No friends with userId "${userId}" associated`,
+    //   );
+    // }
 
     const friends = friendships.map((friendship) =>
       friendship.requesterId === userId

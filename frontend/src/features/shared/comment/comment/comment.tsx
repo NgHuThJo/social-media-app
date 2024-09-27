@@ -36,10 +36,10 @@ export function Comment({ data, intent }: CommentProps) {
         </Button>
       </div>
       {isFormOpen && (
-        <CommentForm postId={data.id} intent={intent} onClose={closeForm} />
+        <CommentForm parentId={data.id} intent={intent} onClose={closeForm} />
       )}
       {data._count.replies > 0 && isCommentOpen && (
-        <CommentList parentId={data.id} isPostId={false} />
+        <CommentList parentId={data.id} commentType="comment" />
       )}
     </li>
   );

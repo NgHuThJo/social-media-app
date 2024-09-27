@@ -11,7 +11,6 @@ export function UserDisplay() {
   if (!user) {
     return <Navigate to="/auth/login" />;
   }
-
   const userId = user.id.toLocaleString();
 
   const handleClick = () => {

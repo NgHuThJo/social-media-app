@@ -1,7 +1,5 @@
-import { useAuthContext } from "@frontend/providers/auth-context";
 import { ChatroomsData } from "@frontend/types/api";
 import styles from "./room-list.module.css";
-import { Navigate } from "react-router-dom";
 
 type ChatroomListProps = {
   data: ChatroomsData;

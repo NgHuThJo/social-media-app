@@ -42,11 +42,11 @@ export function Post({ data }: PostProps) {
             <CommentForm
               intent="postComment"
               onClose={closeForm}
-              postId={data.id}
+              parentId={data.id}
             />
           )}
           {data._count.comments > 0 && isCommentOpen && (
-            <CommentList parentId={data.id} isPostId={true} />
+            <CommentList parentId={data.id} commentType="post" />
           )}
         </li>
       )}

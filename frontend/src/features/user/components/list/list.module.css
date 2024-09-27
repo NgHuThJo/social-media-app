@@ -1,5 +1,6 @@
 .layout {
   display: grid;
+  max-height: var(--max-h-chat-sidebar-list);
   background-color: var(--bgc-chat-sidebar-grid-item);
 
   > :last-child {

@@ -6,8 +6,9 @@
   --max-w-dialog: 45rem;
   --max-w-skeleton: 60rem;
   --min-w-root: 20rem;
-  --max-h-chatbox: 39rem;
+  --max-h-chatbox: 35rem;
   --max-h-notification-box: 40rem;
+  --max-h-chat-sidebar-list: 20rem;
   --p-inline-container: 2rem;
   --p-chat-sidebar-grid-item: 0.5rem;
   --w-icon: 2rem;

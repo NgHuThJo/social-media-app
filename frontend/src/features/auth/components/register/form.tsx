@@ -42,19 +42,19 @@ export function RegisterForm() {
           type="text"
           name="name"
           placeholder="Name"
-          error={actionData?.errors?.name}
+          error={actionData?.errors?.fieldErrors?.name}
         />
         <Input
           type="email"
           name="email"
           placeholder="Email address"
-          error={actionData?.errors?.email}
+          error={actionData?.errors?.fieldErrors?.email}
         />
         <Input
           type="password"
           name="password"
           placeholder="Password"
-          error={actionData?.errors?.password}
+          error={actionData?.errors?.fieldErrors?.password}
         />
         <Button type="submit" className="auth">
           Register

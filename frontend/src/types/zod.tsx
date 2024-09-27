@@ -34,12 +34,11 @@ export const fileSchema = z.object({
 });
 
 // Schemas and error types for React Router actions and event handlers
-type GeneralError = {
-  general?: string;
-};
-
 export type SchemaError<T extends z.ZodSchema> = {
-  errors?: GeneralError & z.inferFlattenedErrors<T>["fieldErrors"];
+  errors?: {
+    general?: string;
+    fieldErrors?: z.inferFlattenedErrors<T>["fieldErrors"];
+  };
 };
 
 // Base schemas

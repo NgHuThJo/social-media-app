@@ -3,7 +3,7 @@ import { z } from "zod";
 import { handleError } from "@frontend/utils/error-handler";
 import { SchemaError } from "@frontend/types/zod";
 
-export function useFetch<T extends z.ZodTypeAny>() {
+export function useFetch<T extends z.ZodSchema>() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<SchemaError<T> | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);

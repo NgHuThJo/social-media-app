@@ -1,4 +1,4 @@
-import { Form, useActionData } from "react-router-dom";
+import { Form, redirect, useActionData } from "react-router-dom";
 import { Button } from "@frontend/components/ui/button/button";
 import { FormError } from "@frontend/components/ui/form/error/error";
 import { Input } from "@frontend/components/ui/form/input/input";
@@ -19,6 +19,7 @@ export const createPost: ActionDispatchFunction = async (
   params,
   formData,
 ) => {
+  const currentUrl = new URL(request.url);
   const convertedFormData = Object.fromEntries(formData);
   const { userId } = params;
   const payload = {
@@ -36,7 +37,7 @@ export const createPost: ActionDispatchFunction = async (
   try {
     const response = await client.post.createPost.mutate(data);
 
-    return null;
+    return redirect(currentUrl.pathname + currentUrl.search);
   } catch (error) {
     return handleError(error, "Creation of post failed");
   }
@@ -52,14 +53,14 @@ export function PostForm({ onClose }: PostProps) {
         label="Post"
         name="title"
         placeholder="Your post title..."
-        error={actionData?.errors?.title}
+        error={actionData?.errors?.fieldErrors?.title}
       />
       <TextArea
         name="content"
         cols={20}
         rows={5}
         placeholder="Your post..."
-        error={actionData?.errors?.content}
+        error={actionData?.errors?.fieldErrors?.content}
       />
       {actionData?.errors?.general && (
         <FormError message={actionData.errors.general} />

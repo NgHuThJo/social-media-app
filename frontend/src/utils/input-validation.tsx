@@ -9,7 +9,9 @@ type ValidationSuccess<T extends z.ZodSchema> = {
 type ValidationFailure<T extends z.ZodSchema> = {
   isValid: false;
   data: undefined;
-  errors: z.inferFlattenedErrors<T>["fieldErrors"];
+  errors: {
+    fieldErrors: z.inferFlattenedErrors<T>["fieldErrors"];
+  };
 };
 
 export function validateInput<T extends z.ZodSchema>(
@@ -22,7 +24,9 @@ export function validateInput<T extends z.ZodSchema>(
     return {
       isValid: false,
       data: undefined,
-      errors: result.error.flatten().fieldErrors,
+      errors: {
+        fieldErrors: result.error.flatten().fieldErrors,
+      },
     };
   }
 
