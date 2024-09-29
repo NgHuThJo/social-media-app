@@ -22,28 +22,13 @@ class PostService {
       },
     });
 
-    const followedUsersIdList = await prisma.user.findMany({
-      where: {
-        follows: {
-          some: {
-            followerId: userId,
-          },
-        },
-      },
-      select: {
-        id: true,
-      },
-    });
-    const followedUsers = new Set(followedUsersIdList.map((user) => user.id));
-
     const likedPosts = new Map(
       posts.map((post) => [post.id, post.likes.map((like) => like.userId)]),
     );
 
     const enhancedPosts = posts.map((post) => ({
       ...post,
-      isFollowed: followedUsers.has(post.authorId),
-      isLiked: likedPosts?.get(post.id)?.some((id) => id === userId),
+      isLiked: likedPosts.get(post.id)?.some((id) => id === userId) ?? false,
     }));
 
     return enhancedPosts;
@@ -156,7 +141,7 @@ class PostService {
     });
   }
 
-  async getParentComments(postId: number) {
+  async getParentComments(userId: number, postId: number) {
     const parentComments = await prisma.comment.findMany({
       where: {
         parentPostId: postId,
@@ -166,7 +151,11 @@ class PostService {
         _count: {
           select: {
             replies: true,
-            likes: true,
+          },
+        },
+        likes: {
+          select: {
+            userId: true,
           },
         },
       },
@@ -175,14 +164,22 @@ class PostService {
       },
     });
 
-    // if (!parentComments.length) {
-    //   throw new AppError("NOT_FOUND", "No parent comments found");
-    // }
+    const likedPosts = new Map(
+      parentComments.map((comment) => [
+        comment.id,
+        comment.likes.map((like) => like.userId),
+      ]),
+    );
 
-    return parentComments;
+    const enhancedComments = parentComments.map((comment) => ({
+      ...comment,
+      isLiked: likedPosts.get(comment.id)?.some((id) => id === userId) ?? false,
+    }));
+
+    return enhancedComments;
   }
 
-  async getChildComments(commentId: number) {
+  async getChildComments(userId: number, commentId: number) {
     const childComments = await prisma.comment.findMany({
       where: {
         parentCommentId: commentId,
@@ -192,7 +189,11 @@ class PostService {
         _count: {
           select: {
             replies: true,
-            likes: true,
+          },
+        },
+        likes: {
+          select: {
+            userId: true,
           },
         },
       },
@@ -201,11 +202,19 @@ class PostService {
       },
     });
 
-    // if (!childComments.length) {
-    //   throw new AppError("NOT_FOUND", "No child comments found");
-    // }
+    const likedPosts = new Map(
+      childComments.map((comment) => [
+        comment.id,
+        comment.likes.map((like) => like.userId),
+      ]),
+    );
 
-    return childComments;
+    const enhancedComments = childComments.map((comment) => ({
+      ...comment,
+      isLiked: likedPosts.get(comment.id)?.some((id) => id === userId) ?? false,
+    }));
+
+    return enhancedComments;
   }
 
   async createPostComment(content: string, postId: number, userId: number) {
@@ -285,7 +294,7 @@ class PostService {
         AND: [
           {
             asset: {
-              is: {},
+              isNot: {},
             },
           },
           {
@@ -324,8 +333,12 @@ class PostService {
         asset: true,
         _count: {
           select: {
-            likes: true,
             comments: true,
+          },
+        },
+        likes: {
+          select: {
+            userId: true,
           },
         },
       },
@@ -334,11 +347,16 @@ class PostService {
       },
     });
 
-    // if (!feeds.length) {
-    //   throw new AppError("NOT_FOUND", "No feeds found");
-    // }
+    const likedPosts = new Map(
+      feeds.map((feed) => [feed.id, feed.likes.map((like) => like.userId)]),
+    );
 
-    return feeds;
+    const enhancedFeeds = feeds.map((feed) => ({
+      ...feed,
+      isLiked: likedPosts.get(feed.id)?.some((id) => id === userId) ?? false,
+    }));
+
+    return enhancedFeeds;
   }
 }
 

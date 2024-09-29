@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { string, z } from "zod";
 import { publicProcedure, router } from "./trpc";
 import { postService } from "@backend/services/post";
 import { logError } from "@backend/utils/error-logger";
@@ -50,14 +50,18 @@ export const postRouter = router({
   getParentComments: publicProcedure
     .input(
       z.object({
+        userId: stringToNumberSchema,
         postId: stringToNumberSchema,
       }),
     )
     .query(async ({ input }) => {
-      const { postId } = input;
+      const { postId, userId } = input;
 
       try {
-        const parentComments = await postService.getParentComments(postId);
+        const parentComments = await postService.getParentComments(
+          userId,
+          postId,
+        );
 
         return parentComments;
       } catch (error) {
@@ -68,14 +72,18 @@ export const postRouter = router({
   getChildComments: publicProcedure
     .input(
       z.object({
+        userId: stringToNumberSchema,
         commentId: stringToNumberSchema,
       }),
     )
     .query(async ({ input }) => {
-      const { commentId } = input;
+      const { commentId, userId } = input;
 
       try {
-        const childComments = await postService.getChildComments(commentId);
+        const childComments = await postService.getChildComments(
+          userId,
+          commentId,
+        );
 
         return childComments;
       } catch (error) {
@@ -202,8 +210,8 @@ export const postRouter = router({
     .query(async ({ input }) => {
       const { commentId, userId } = input;
 
-      const totalLikes = await postService.toggleCommentLike(commentId, userId);
+      const isLiked = await postService.toggleCommentLike(commentId, userId);
 
-      return totalLikes;
+      return isLiked;
     }),
 });

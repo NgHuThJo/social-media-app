@@ -8,3 +8,7 @@
     font-size: var(--fs-h3);
   }
 }
+
+.active {
+  background-color: var(--bgc-like);
+}

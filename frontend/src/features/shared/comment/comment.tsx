@@ -35,7 +35,11 @@ export function Comment({ data, intent }: CommentProps) {
         <Button type="button" onClick={openForm}>
           Reply
         </Button>
-        <CommentLike commentId={data.id} likes={data._count.likes} />
+        <CommentLike
+          commentId={data.id}
+          likes={data.likes.length}
+          isLiked={data.isLiked}
+        />
       </div>
       {isFormOpen && (
         <CommentForm parentId={data.id} intent={intent} onClose={closeForm} />

@@ -10,5 +10,5 @@
 }
 
 .active {
-  background-color: blue;
+  background-color: var(--bgc-like);
 }

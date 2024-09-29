@@ -1,10 +1,7 @@
-import { Navigate } from "react-router-dom";
-import { useAuthContext } from "@frontend/providers/auth-context";
 import { useToggle } from "@frontend/hooks/use-toggle";
 import { Button } from "@frontend/components/ui/button/button";
 import { CommentForm } from "@frontend/features/shared/comment/form/form";
 import { CommentList } from "@frontend/features/shared/comment/list/list";
-import { Follow } from "@frontend/features/shared/follow/follow";
 import { Image } from "@frontend/components/ui/image/image";
 import { PostLike } from "@frontend/features/shared/post/like/like";
 import { formatRelativeTimeDate } from "@frontend/utils/intl";
@@ -18,12 +15,6 @@ type FeedProps = {
 export function Feed({ data }: FeedProps) {
   const { isOpen: isCommentOpen, toggle: toggleComment } = useToggle();
   const { isOpen: isFormOpen, open: openForm, close: closeForm } = useToggle();
-  const { user } = useAuthContext();
-
-  if (!user) {
-    return <Navigate to="/auth/login" />;
-  }
-  const userId = user.id.toLocaleString();
 
   return (
     <li key={data.id} className={styles["list-item"]}>
@@ -43,10 +34,11 @@ export function Feed({ data }: FeedProps) {
         <Button type="button" onClick={openForm}>
           Reply
         </Button>
-        <PostLike postId={data.id} likes={data._count.likes} />
-        {Number(userId) !== data.authorId && (
-          <Follow followingId={data.authorId} />
-        )}
+        <PostLike
+          postId={data.id}
+          likes={data.likes.length}
+          isLiked={data.isLiked}
+        />
       </div>
       {isFormOpen && (
         <CommentForm

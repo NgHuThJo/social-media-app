@@ -11,6 +11,7 @@ import styles from "./like.module.css";
 import { thumbs_up_icon } from "@frontend/assets/images";
 
 type CommentLikeProps = {
+  isLiked: boolean;
   likes: number;
   commentId: number;
 };
@@ -20,8 +21,9 @@ const postLikeSchema = z.object({
   userId: numericStringSchema,
 });
 
-export function CommentLike({ commentId, likes }: CommentLikeProps) {
-  const [likeCount, setLikeCount] = useState<number>(likes);
+export function CommentLike({ commentId, likes, isLiked }: CommentLikeProps) {
+  const [isCommentLiked, setIsCommentLiked] = useState(isLiked);
+  const [likeCount, setLikeCount] = useState(likes);
   const { user } = useAuthContext();
   const { isLoading, error, fetchData } = useFetch<typeof postLikeSchema>();
 
@@ -46,12 +48,17 @@ export function CommentLike({ commentId, likes }: CommentLikeProps) {
         signal: controller.signal,
       });
 
-      setLikeCount(response);
+      setLikeCount((prev) => (response ? prev + 1 : prev - 1));
+      setIsCommentLiked(response);
     });
   };
 
   return (
-    <button type="button" className={styles.button} onClick={likePost}>
+    <button
+      type="button"
+      className={[styles.button, isCommentLiked ? styles.active : ""].join(" ")}
+      onClick={likePost}
+    >
       <Image src={thumbs_up_icon} />
       <span>{likeCount}</span>
     </button>

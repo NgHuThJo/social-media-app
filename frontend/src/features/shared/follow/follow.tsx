@@ -1,11 +1,13 @@
 import { useState } from "react";
+import { z } from "zod";
 import { useFetch } from "@frontend/hooks/use-fetch";
 import { client } from "@frontend/lib/trpc";
 import { validateInput } from "@frontend/utils/input-validation";
 import { numericStringSchema, numberToStringSchema } from "@frontend/types/zod";
-import { z } from "zod";
+import styles from "./follow.module.css";
 
 type FollowProps = {
+  isFollowed: boolean;
   userId: string;
   followingId: number;
 };
@@ -15,8 +17,8 @@ const followSchema = z.object({
   userId: numericStringSchema,
 });
 
-export function Follow({ followingId, userId }: FollowProps) {
-  const [isFollowing, setIsFollowing] = useState();
+export function Follow({ followingId, userId, isFollowed }: FollowProps) {
+  const [isFollowing, setIsFollowing] = useState(isFollowed);
   const { isLoading, error, fetchData } = useFetch<typeof followSchema>();
 
   const followUser = () => {
@@ -41,8 +43,12 @@ export function Follow({ followingId, userId }: FollowProps) {
   };
 
   return (
-    <button type="button" onClick={followUser}>
-      Follow
+    <button
+      type="button"
+      onClick={followUser}
+      className={isFollowing ? styles.active : ""}
+    >
+      {isFollowing ? "Unfollow" : "Follow"}
     </button>
   );
 }

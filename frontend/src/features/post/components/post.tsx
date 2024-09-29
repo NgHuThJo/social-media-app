@@ -17,8 +17,6 @@ export function Post({ data }: PostProps) {
   const { isOpen: isCommentOpen, toggle: toggleComment } = useToggle();
   const { isOpen: isFormOpen, open: openForm, close: closeForm } = useToggle();
 
-  console.log(data);
-
   return (
     <>
       {data && (
