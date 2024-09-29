@@ -68,11 +68,11 @@ export function Settings() {
           name="file"
           label="Select new avatar"
           labelClassName="file-selector"
-          error={actionData?.errors?.file}
+          error={actionData?.errors?.fieldErrors?.file}
         />
         <Button type="submit">Save changes</Button>
+        <Link to="/">Back to home</Link>
       </Form>
-      <Link to="/">Back to home</Link>
     </ContentLayout>
   );
 }

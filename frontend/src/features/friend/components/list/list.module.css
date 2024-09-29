@@ -16,11 +16,14 @@
   background-color: var(--bgc-content);
   background-repeat: no-repeat;
   background-size: cover;
+  visibility: 0;
+  opacity: 0;
 }
 
 .avatar {
   grid-area: avatar;
   width: 3rem;
+  aspect-ratio: 1;
   border-radius: 50%;
 }
 

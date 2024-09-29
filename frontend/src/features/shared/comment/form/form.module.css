@@ -11,7 +11,7 @@
 
 .actions {
   composes: flex-wrap from global;
-  gap: 2rem;
+  gap: 1rem;
 
   > button {
     padding: 1rem;

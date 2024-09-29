@@ -1,18 +1,33 @@
 .list {
-  composes: grid from global;
-  gap: 2rem;
+  display: grid;
+  align-items: center;
+  grid-template-areas: "avatar info" "avatar info";
+  grid-template-columns: auto 1fr;
+  grid-auto-rows: minmax(0, 10rem);
+  column-gap: 2rem;
+  padding: 2rem;
+  color: red;
+  background-color: var(--bgc-content);
 }
 
 .list-item {
+  grid-area: info;
   font-weight: var(--fw-button);
   font-size: var(--fs-profile);
-  background-color: var(--bgc-content);
 
   > * {
     padding: 1rem;
   }
 
-  > :not(:last-child) {
-    border-bottom: 1px solid var(--c-box-shadow);
+  > span {
+    font-weight: var(--fw-heading);
+    font-size: var(--fs-profile);
   }
+}
+
+.avatar {
+  grid-area: avatar;
+  width: 5rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
 }

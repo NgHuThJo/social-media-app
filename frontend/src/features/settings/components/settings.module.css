@@ -1,2 +1,11 @@
 .form {
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+  padding: 2rem;
+  background-color: var(--bgc-content);
+
+  > label {
+    flex-direction: column;
+  }
 }

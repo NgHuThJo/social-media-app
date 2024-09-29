@@ -1,0 +1,16 @@
+.form {
+  display: grid;
+  gap: 2rem;
+  padding: 2rem;
+  background-color: var(--bgc-notification);
+
+  input,
+  textarea {
+    width: 100%;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+}

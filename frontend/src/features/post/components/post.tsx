@@ -1,7 +1,8 @@
 import { useToggle } from "@frontend/hooks/use-toggle";
 import { Button } from "@frontend/components/ui/button/button";
-import { CommentForm } from "../../comment/form/form";
-import { CommentList } from "../../comment/list/list";
+import { CommentForm } from "@frontend/features/shared/comment/form/form";
+import { CommentList } from "../../shared/comment/list/list";
+import { PostLike } from "@frontend/features/shared/post/like/like";
 import { formatRelativeTimeDate } from "@frontend/utils/intl";
 import { PostData } from "@frontend/types/api";
 import styles from "./post.module.css";
@@ -15,6 +16,8 @@ type PostProps = {
 export function Post({ data }: PostProps) {
   const { isOpen: isCommentOpen, toggle: toggleComment } = useToggle();
   const { isOpen: isFormOpen, open: openForm, close: closeForm } = useToggle();
+
+  console.log(data);
 
   return (
     <>
@@ -37,6 +40,11 @@ export function Post({ data }: PostProps) {
             <Button type="button" onClick={openForm}>
               Reply
             </Button>
+            <PostLike
+              postId={data.id}
+              likes={data.likes.length}
+              isLiked={data.isLiked}
+            />
           </div>
           {isFormOpen && (
             <CommentForm

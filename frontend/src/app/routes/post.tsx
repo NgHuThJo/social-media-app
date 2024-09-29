@@ -3,6 +3,7 @@ import {
   ActionFunctionArgs,
   Await,
   defer,
+  LoaderFunctionArgs,
   redirect,
   useLoaderData,
 } from "react-router-dom";
@@ -21,13 +22,28 @@ import {
   createPostComment,
 } from "@frontend/features/shared/comment/form/form";
 import { handleError } from "@frontend/utils/error-handler";
+import { validateInput } from "@frontend/utils/input-validation";
 import { LoaderData } from "@frontend/types";
+import { userIdSchema } from "@frontend/types/zod";
 
 type PostLoaderData = LoaderData<typeof postLoader>;
 
-export const postLoader = () => {
+export const postLoader = ({ params }: LoaderFunctionArgs) => {
+  const { userId } = params;
+  const payload = {
+    userId,
+  };
+  const { data, errors, isValid } = validateInput(userIdSchema, payload);
+
+  if (!isValid) {
+    throw new Response(JSON.stringify({ errors }), {
+      status: 400,
+      statusText: "Invalid userId",
+    });
+  }
+
   try {
-    const response = client.post.getAllPosts.query();
+    const response = client.post.getAllPosts.query(data);
     // When using defer, pass response as unawaited promise
     return defer({
       data: response,

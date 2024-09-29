@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { z } from "zod";
 import { useFetch } from "@frontend/hooks/use-fetch";
-import { Comment } from "../comment/comment";
+import { Comment } from "../comment";
 import { client } from "@frontend/lib/trpc";
 import { validateInput } from "@frontend/utils/input-validation";
 import { numberToStringSchema } from "@frontend/types/zod";

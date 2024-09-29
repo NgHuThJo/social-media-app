@@ -1,4 +1,4 @@
-import { Form, useActionData, useNavigation } from "react-router-dom";
+import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import { Button } from "@frontend/components/ui/button/button";
 import { FormError } from "@frontend/components/ui/form/error/error";
 import { Input } from "@frontend/components/ui/form/input/input";
@@ -20,6 +20,7 @@ export const createFeed: ActionDispatchFunction = async (
   params,
   formData,
 ) => {
+  const currentUrl = new URL(request.url);
   const convertedFormData = Object.fromEntries(formData);
   const { userId } = params;
   const payload = {
@@ -44,7 +45,7 @@ export const createFeed: ActionDispatchFunction = async (
       publicId: json.publicId,
     });
 
-    return response;
+    return redirect(currentUrl.pathname + currentUrl.search);
   } catch (error) {
     return handleError(error, "Creation of feed failed");
   }
@@ -66,17 +67,16 @@ export function FeedForm({ onClose }: FeedFormProps) {
         >
           <Input
             type="text"
-            label="Post"
             name="title"
             placeholder="Your post title..."
-            error={actionData?.errors?.title}
+            error={actionData?.errors?.fieldErrors?.title}
           />
           <TextArea
             name="content"
             cols={20}
             rows={5}
             placeholder="Your post..."
-            error={actionData?.errors?.content}
+            error={actionData?.errors?.fieldErrors?.content}
           />
           <Input type="file" name="file" label="Upload a file" />
           {actionData?.errors?.general && (

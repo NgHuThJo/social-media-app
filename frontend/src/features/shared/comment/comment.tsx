@@ -1,9 +1,10 @@
 import { useToggle } from "@frontend/hooks/use-toggle";
 import { Button } from "@frontend/components/ui/button/button";
-import { CommentList } from "../list/list";
+import { CommentList } from "./list/list";
 import { formatRelativeTimeDate } from "@frontend/utils/intl";
-import { CommentForm } from "../form/form";
-import { CommentListData } from "../list/list";
+import { CommentForm } from "./form/form";
+import { CommentLike } from "./like/like";
+import { CommentListData } from "./list/list";
 import { Intent } from "@frontend/types";
 import styles from "./comment.module.css";
 
@@ -34,6 +35,7 @@ export function Comment({ data, intent }: CommentProps) {
         <Button type="button" onClick={openForm}>
           Reply
         </Button>
+        <CommentLike commentId={data.id} likes={data._count.likes} />
       </div>
       {isFormOpen && (
         <CommentForm parentId={data.id} intent={intent} onClose={closeForm} />

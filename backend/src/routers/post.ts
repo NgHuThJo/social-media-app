@@ -9,15 +9,23 @@ import {
 } from "@backend/types/zod";
 
 export const postRouter = router({
-  getAllPosts: publicProcedure.query(async () => {
-    try {
-      const posts = await postService.getAllPosts();
+  getAllPosts: publicProcedure
+    .input(
+      z.object({
+        userId: stringToNumberSchema,
+      }),
+    )
+    .query(async ({ input }) => {
+      const { userId } = input;
 
-      return posts;
-    } catch (error) {
-      logError(error);
-    }
-  }),
+      try {
+        const posts = await postService.getAllPosts(userId);
+
+        return posts;
+      } catch (error) {
+        logError(error);
+      }
+    }),
 
   createPost: publicProcedure
     .input(
@@ -167,5 +175,35 @@ export const postRouter = router({
       } catch (error) {
         logError(error);
       }
+    }),
+
+  getLikesOfPost: publicProcedure
+    .input(
+      z.object({
+        postId: stringToNumberSchema,
+        userId: stringToNumberSchema,
+      }),
+    )
+    .query(async ({ input }) => {
+      const { postId, userId } = input;
+
+      const isLiked = await postService.togglePostLike(postId, userId);
+
+      return isLiked;
+    }),
+
+  getLikesOfComment: publicProcedure
+    .input(
+      z.object({
+        commentId: stringToNumberSchema,
+        userId: stringToNumberSchema,
+      }),
+    )
+    .query(async ({ input }) => {
+      const { commentId, userId } = input;
+
+      const totalLikes = await postService.toggleCommentLike(commentId, userId);
+
+      return totalLikes;
     }),
 });

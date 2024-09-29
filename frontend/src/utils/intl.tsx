@@ -2,6 +2,10 @@ export function formatDate(date: Date) {
   return new Intl.DateTimeFormat(navigator.language).format(date);
 }
 
+export function formatNumber(number: number) {
+  return new Intl.NumberFormat(navigator.language).format(number);
+}
+
 export function formatRelativeTimeDate(date: Date, locale?: string) {
   const now = new Date();
   const diffInSeconds = Math.floor(-(now.getTime() - date.getTime()) / 1000);
@@ -26,8 +30,4 @@ export function formatRelativeTimeDate(date: Date, locale?: string) {
   }
 
   return relativeTimeFormat.format(Math.round(diffInSeconds / 86400), "days");
-}
-
-export function formatNumber(number: number) {
-  return new Intl.NumberFormat(navigator.language).format(number);
 }

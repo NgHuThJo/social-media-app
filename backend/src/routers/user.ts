@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { string, z } from "zod";
 import { userService } from "@backend/services/user";
 import { publicProcedure, router } from "./trpc";
 import { logError } from "@backend/utils/error-logger";
@@ -131,5 +131,20 @@ export const userRouter = router({
       } catch (error) {
         logError(error);
       }
+    }),
+
+  followUser: publicProcedure
+    .input(
+      z.object({
+        followingId: stringToNumberSchema,
+        userId: stringToNumberSchema,
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const { userId, followingId } = input;
+
+      const isFollowing = await userService.followUser(userId, followingId);
+
+      return isFollowing;
     }),
 });

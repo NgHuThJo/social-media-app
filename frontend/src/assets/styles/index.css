@@ -86,7 +86,8 @@ body {
 
 a,
 button,
-input {
+input,
+label {
   cursor: pointer;
 }
 

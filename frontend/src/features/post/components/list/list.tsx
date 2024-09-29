@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useIntersectionObserver } from "@frontend/hooks/use-intersection-observer";
-import { Post } from "@frontend/features/shared/post/post/post";
+import { Post } from "@frontend/features/post/components/post";
 import { PostData } from "@frontend/types/api";
 import styles from "./list.module.css";
 

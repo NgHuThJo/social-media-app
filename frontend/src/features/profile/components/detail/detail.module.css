@@ -1,6 +1,0 @@
-.detail {
-  > span {
-    font-weight: var(--fw-heading);
-    font-size: var(--fs-profile);
-  }
-}

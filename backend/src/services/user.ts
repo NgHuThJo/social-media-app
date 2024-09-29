@@ -20,6 +20,51 @@ class UserService {
     return user;
   }
 
+  async followUser(userId: number, followingId: number) {
+    const isFollowing = await prisma.$transaction(async (tx) => {
+      const follow = await tx.follow.findUnique({
+        where: {
+          followerId_followingId: {
+            followerId: userId,
+            followingId,
+          },
+        },
+      });
+
+      if (!follow) {
+        await tx.follow.create({
+          data: {
+            follower: {
+              connect: {
+                id: userId,
+              },
+            },
+            following: {
+              connect: {
+                id: followingId,
+              },
+            },
+          },
+        });
+
+        return true;
+      }
+
+      await tx.follow.delete({
+        where: {
+          followerId_followingId: {
+            followerId: userId,
+            followingId,
+          },
+        },
+      });
+
+      return false;
+    });
+
+    return isFollowing;
+  }
+
   async getListOfUsers(userIdList: number[]) {
     const users = await prisma.user.findMany({
       where: {

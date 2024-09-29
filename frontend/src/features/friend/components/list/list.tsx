@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+import { useIntersectionObserver } from "@frontend/hooks/use-intersection-observer";
 import { FriendData } from "@frontend/types/api";
 import styles from "./list.module.css";
 import { avatar_placeholder, pattern } from "@frontend/assets/images";
@@ -7,8 +9,25 @@ type FriendListProps = {
 };
 
 export function FriendList({ data }: FriendListProps) {
+  const parentNodeRef = useRef<HTMLUListElement>(null);
+  const { observeChildNodes } = useIntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("fade-in");
+      } else {
+        entry.target.classList.remove("fade-in");
+      }
+    });
+  });
+
+  useEffect(() => {
+    if (parentNodeRef.current) {
+      observeChildNodes(parentNodeRef.current);
+    }
+  }, [observeChildNodes]);
+
   return (
-    <ul className={styles.list}>
+    <ul className={styles.list} ref={parentNodeRef}>
       {data?.map((friend) => (
         <li
           className={styles["list-item"]}

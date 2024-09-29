@@ -2,7 +2,7 @@ import { prisma } from "@backend/models";
 // import { AppError } from "@backend/utils/app-error";
 
 class PostService {
-  async getAllPosts() {
+  async getAllPosts(userId: number) {
     const posts = await prisma.post.findMany({
       orderBy: {
         id: "desc",
@@ -12,17 +12,131 @@ class PostService {
         _count: {
           select: {
             comments: true,
-            likes: true,
+          },
+        },
+        likes: {
+          select: {
+            userId: true,
           },
         },
       },
     });
 
-    // if (!posts.length) {
-    //   throw new AppError("NOT_FOUND", "No posts found");
-    // }
+    const followedUsersIdList = await prisma.user.findMany({
+      where: {
+        follows: {
+          some: {
+            followerId: userId,
+          },
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+    const followedUsers = new Set(followedUsersIdList.map((user) => user.id));
 
-    return posts;
+    const likedPosts = new Map(
+      posts.map((post) => [post.id, post.likes.map((like) => like.userId)]),
+    );
+
+    const enhancedPosts = posts.map((post) => ({
+      ...post,
+      isFollowed: followedUsers.has(post.authorId),
+      isLiked: likedPosts?.get(post.id)?.some((id) => id === userId),
+    }));
+
+    return enhancedPosts;
+  }
+
+  async togglePostLike(postId: number, userId: number) {
+    const isLiked = await prisma.$transaction(async (tx) => {
+      const like = await tx.postLike.findUnique({
+        where: {
+          userId_postId: {
+            userId,
+            postId,
+          },
+        },
+      });
+
+      if (!like) {
+        await tx.postLike.create({
+          data: {
+            user: {
+              connect: {
+                id: userId,
+              },
+            },
+            post: {
+              connect: {
+                id: postId,
+              },
+            },
+          },
+        });
+
+        return true;
+      } else {
+        await tx.postLike.delete({
+          where: {
+            userId_postId: {
+              userId,
+              postId,
+            },
+          },
+        });
+
+        return false;
+      }
+    });
+
+    return isLiked;
+  }
+
+  async toggleCommentLike(commentId: number, userId: number) {
+    const isLiked = await prisma.$transaction(async (tx) => {
+      const like = await tx.commentLike.findUnique({
+        where: {
+          userId_commentId: {
+            userId,
+            commentId,
+          },
+        },
+      });
+
+      if (!like) {
+        await tx.commentLike.create({
+          data: {
+            user: {
+              connect: {
+                id: userId,
+              },
+            },
+            comment: {
+              connect: {
+                id: commentId,
+              },
+            },
+          },
+        });
+
+        return true;
+      } else {
+        await tx.commentLike.delete({
+          where: {
+            userId_commentId: {
+              userId,
+              commentId,
+            },
+          },
+        });
+
+        return false;
+      }
+    });
+
+    return isLiked;
   }
 
   async createPost(userId: number, title: string, content: string) {

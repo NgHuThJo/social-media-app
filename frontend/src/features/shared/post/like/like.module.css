@@ -1,0 +1,14 @@
+.button {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  > span {
+    font-weight: var(--fw-heading);
+    font-size: var(--fs-h3);
+  }
+}
+
+.active {
+  background-color: blue;
+}
