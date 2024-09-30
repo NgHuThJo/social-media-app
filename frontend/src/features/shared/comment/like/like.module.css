@@ -10,5 +10,7 @@
 }
 
 .active {
-  background-color: var(--bgc-like);
+  path {
+    fill: var(--bgc-like);
+  }
 }

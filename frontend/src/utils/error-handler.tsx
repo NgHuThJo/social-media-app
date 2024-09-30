@@ -1,21 +1,16 @@
 import { TRPCClientError } from "@trpc/client";
 
-export function handleError(error: unknown, defaultMessage = "Unknown error") {
-  let errorMessage: string | null = null;
-
+export function handleError(error: unknown) {
+  if (error instanceof DOMException && error.name === "AbortError") {
+    console.log("Fetch aborted:", error.message);
+    return;
+  }
   if (error instanceof TRPCClientError) {
-    console.error("TRPC client error:", error.message);
-    errorMessage = error.message;
-  } else if (error instanceof Error) {
-    console.error("General error:", error.message);
-    errorMessage = error.message;
-  } else {
-    console.error("Unknown error:", error);
+    return { message: error.message, name: error.name };
+  }
+  if (error instanceof Error) {
+    return { message: error.message, name: error.name };
   }
 
-  return {
-    errors: {
-      general: errorMessage ?? defaultMessage,
-    },
-  };
+  return { message: "Unknown error", name: "UnknownError" };
 }

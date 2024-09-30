@@ -1,37 +1,44 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { z } from "zod";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { handleError } from "@frontend/utils/error-handler";
-import { SchemaError } from "@frontend/types/zod";
 
-export function useFetch<T extends z.ZodSchema>() {
+type FetchErrorType = ReturnType<typeof handleError>;
+type FetchOptionsType = {
+  delay?: number;
+  retries?: number;
+};
+
+export function useFetch({ delay = 500, retries = 3 }: FetchOptionsType = {}) {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<SchemaError<T> | null>(null);
-  const abortControllerRef = useRef<AbortController | null>(null);
+  const [error, setError] = useState<FetchErrorType>();
+  const abortControllerRef = useRef<AbortController>();
 
-  const fetchData = async (
-    fetchFn: (
-      controller: AbortController,
-      setError: Dispatch<SetStateAction<SchemaError<T> | null>>,
-    ) => Promise<void>,
-  ) => {
-    setIsLoading(true);
-    setError(null);
+  const fetchData = useCallback(
+    async (fetchFn: (controller: AbortController) => Promise<void>) => {
+      setIsLoading(true);
+      setError(undefined);
 
-    abortControllerRef.current?.abort();
-    abortControllerRef.current = new AbortController();
+      abortControllerRef.current?.abort();
+      abortControllerRef.current = new AbortController();
 
-    try {
-      await fetchFn(abortControllerRef.current, setError);
-    } catch (error) {
-      if (abortControllerRef.current.signal.aborted) {
-        console.log("Fetch aborted:", (error as Error).message);
-      } else {
-        setError(handleError(error));
+      for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+          await fetchFn(abortControllerRef.current);
+          break;
+        } catch (error) {
+          if (attempt < retries) {
+            await new Promise((resolve) =>
+              setTimeout(resolve, delay * attempt),
+            );
+          } else {
+            setError(handleError(error));
+          }
+        }
       }
-    } finally {
+
       setIsLoading(false);
-    }
-  };
+    },
+    [delay, retries],
+  );
 
   useEffect(() => {
     return () => abortControllerRef.current?.abort();

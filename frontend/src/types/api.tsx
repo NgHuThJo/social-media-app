@@ -16,6 +16,10 @@ export type OnlineUsersData = Awaited<
   ReturnType<typeof client.user.getAllOnlineUsers.query>
 >;
 
+export type UsersData = Awaited<
+  ReturnType<typeof client.user.getAllOtherUsers.query>
+>;
+
 export type PostData = Awaited<
   ReturnType<typeof client.post.getAllPosts.query>
 >;
