@@ -7,7 +7,7 @@ type WebSocketContextType = {
 } | null;
 
 type WebSocketContextApiType = {
-  connect: (userId: string) => (() => void) | undefined;
+  connect: (userId: string) => void;
   disconnect: (userId: string) => void;
   emit: <T>(event: string, data: T) => void;
   subscribe: <T>(event: string, callback: (data: T) => void) => () => void;
@@ -31,11 +31,13 @@ export function WebSocketContextProvider({ children }: PropsWithChildren) {
     off,
   } = useWebSocket();
 
+  console.log("in websocket context", isSocketReady);
+
   const contextValue = useMemo(() => ({ isSocketReady }), [isSocketReady]);
 
   const api = useMemo(() => {
     const connect = (userId: string) => {
-      return connectWebSocket(userId);
+      connectWebSocket(userId);
     };
     const disconnect = (userId: string) => {
       disconnectWebSocket(userId);

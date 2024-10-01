@@ -6,6 +6,7 @@ type NavigationListProps = {
 };
 
 const navigationMap = new Map([
+  ["Index", "index"],
   ["About", "profile"],
   ["Friends", "friends"],
   ["Posts", "posts"],

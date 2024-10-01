@@ -19,7 +19,7 @@ export function ProtectedRoute() {
     const cleanUpFn = connect(userId);
 
     return cleanUpFn;
-  }, []);
+  }, [userId, connect, isSocketReady]);
 
   return !userId ? (
     <Navigate to="/auth/login" replace />

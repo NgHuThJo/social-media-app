@@ -102,15 +102,53 @@ class UserService {
         },
       },
       include: {
-        avatar: true,
+        avatar: {
+          select: {
+            url: true,
+          },
+        },
+        followers: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
 
-    // if (!otherUsers) {
-    //   throw new AppError("NOT_FOUND", "No other users found");
-    // }
+    const friendList = await prisma.user.findMany({
+      where: {
+        OR: [
+          {
+            sentFriendRequests: {
+              some: {
+                addresseeId: userId,
+                status: "ACCEPTED",
+              },
+            },
+          },
+          {
+            receivedFriendRequests: {
+              some: {
+                requesterId: userId,
+                status: "ACCEPTED",
+              },
+            },
+          },
+        ],
+      },
+      select: {
+        id: true,
+      },
+    });
 
-    return otherUsers;
+    const friendIdSet = new Set(friendList.map((friend) => friend.id));
+    const enhancedUsers = otherUsers.map((user) => ({
+      ...user,
+      isFriend: friendIdSet.has(user.id),
+      isFollowed: user.followers.some((follower) => follower.id === userId),
+    }));
+
+    return enhancedUsers;
   }
 
   async registerUser(email: string, name: string, password: string) {

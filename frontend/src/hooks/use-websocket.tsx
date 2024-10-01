@@ -1,74 +1,117 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
 export function useWebSocket() {
   const [isSocketReady, setIsSocketReady] = useState(false);
-  const socket = useRef<Socket>();
+  const socket = useRef<Socket | null>(null);
 
-  const connect = (userId: string) => {
-    if (socket.current?.connected) {
-      console.log("Socket already connected, skipping re-connection");
-      return;
-    }
-
-    socket.current = io(import.meta.env.VITE_WEBSOCKET_URL, {
-      reconnectionAttempts: 3,
-    });
-
-    const handleConnect = () => {
-      console.log("Connected to WebSocket server");
-      socket.current?.emit("login", userId);
-      setIsSocketReady(true);
-    };
-    const handleDisconnect = () => {
-      console.log("Disconnected from WebSocket server");
-      cleanUpListeners();
-      setIsSocketReady(false);
-    };
-    const handleConnectError = (error: Error) => {
-      console.error("Connection error:", error.message);
-    };
-    const handleLogin = (data: string) => {
-      console.log(data);
-    };
-    const handleLogout = (data: string) => {
-      console.log(data);
-    };
-
-    socket.current.on("connect", handleConnect);
-    socket.current.on("disconnect", handleDisconnect);
-    socket.current.on("connect_error", handleConnectError);
-    socket.current.on("login", handleLogin);
-    socket.current.on("logout", handleLogout);
-
-    return () => {
-      socket.current?.off("connect", handleConnect);
-      socket.current?.off("disconnect", handleDisconnect);
-      socket.current?.off("connect_error", handleConnectError);
-      socket.current?.off("login", handleLogin);
-      socket.current?.off("logout", handleLogout);
-    };
-  };
-  const disconnect = (userId: string) => {
-    socket.current?.emit("logout", userId);
-    socket.current?.disconnect();
-    socket.current = undefined;
-  };
-
-  const emit = <T,>(event: string, data: T) => {
+  const emit = useCallback(<T,>(event: string, data: T) => {
     socket.current?.emit(event, data);
-  };
-  const on = <T,>(event: string, callback: (data: T) => void) => {
-    socket.current?.on(event, callback);
-  };
-  const off = <T,>(event: string, callback: (data: T) => void) => {
-    socket.current?.off(event, callback);
-  };
+  }, []);
 
-  const cleanUpListeners = () => {
+  const on = useCallback(<T,>(event: string, callback: (data: T) => void) => {
+    socket.current?.on(event, callback);
+  }, []);
+
+  const off = useCallback(<T,>(event: string, callback: (data: T) => void) => {
+    socket.current?.off(event, callback);
+  }, []);
+
+  const cleanUpListeners = useCallback(() => {
     socket.current?.removeAllListeners();
-    console.log("Cleaned up all WebSocket event listeners");
-  };
+  }, []);
+
+  // Event Handlers
+  const handleConnect = useCallback((userId: string) => {
+    console.log("Connected to WebSocket server");
+    socket.current?.emit("login", userId);
+    setIsSocketReady(true);
+  }, []);
+
+  const handleDisconnect = useCallback(
+    (reason: string) => {
+      setIsSocketReady((prev) => {
+        console.log("Disconnected from WebSocket server:", reason, prev);
+        return !prev;
+      });
+      cleanUpListeners();
+      socket.current = null;
+    },
+    [cleanUpListeners],
+  );
+
+  const handleReconnect = useCallback((attemptNumber: number) => {
+    console.log(`Reconnected to WebSocket after ${attemptNumber} attempts`);
+    setIsSocketReady(true);
+  }, []);
+
+  const handleConnectError = useCallback((error: Error) => {
+    console.error("Connection error:", error.message);
+  }, []);
+
+  const handleLogin = useCallback((data: string) => {
+    console.log("Login event received:", data);
+  }, []);
+
+  const handleLogout = useCallback((data: string) => {
+    console.log("Logout event received:", data);
+  }, []);
+
+  // Core listeners for connection lifecycle and common events
+  const attachCoreListeners = useCallback(
+    (userId: string) => {
+      if (!socket.current) {
+        return;
+      }
+
+      socket.current?.on("connect", () => handleConnect(userId));
+      socket.current?.on("disconnect", handleDisconnect);
+      socket.current?.on("reconnect", handleReconnect);
+      socket.current?.on("connect_error", handleConnectError);
+
+      // Custom events
+      socket.current?.on("login", handleLogin);
+      socket.current?.on("logout", handleLogout);
+    },
+    [
+      handleConnect,
+      handleDisconnect,
+      handleReconnect,
+      handleConnectError,
+      handleLogin,
+      handleLogout,
+    ],
+  );
+
+  // Manage the lifecycle of the socket and event listeners
+  const connect = useCallback(
+    (userId: string) => {
+      if (socket.current) return;
+
+      socket.current = io(import.meta.env.VITE_WEBSOCKET_URL);
+
+      // Attach core WebSocket event listeners
+      attachCoreListeners(userId);
+    },
+    [attachCoreListeners],
+  );
+
+  const disconnect = useCallback((userId: string) => {
+    if (!socket.current?.connected) return;
+
+    // Emit logout and then disconnect
+    socket.current.emit("logout", userId);
+    socket.current.disconnect();
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (socket.current) {
+        socket.current.disconnect();
+        socket.current = null;
+      }
+    };
+  }, [cleanUpListeners]);
 
   return { isSocketReady, connect, disconnect, emit, on, off };
 }

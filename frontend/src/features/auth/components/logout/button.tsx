@@ -1,13 +1,15 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "@frontend/providers/auth-context";
 import { useAuthContextApi } from "@frontend/providers/auth-context";
 import { useWebSocketContextApi } from "@frontend/providers/websocket-context";
 import { Button } from "@frontend/components/ui/button/button";
 
 export function LogoutButton() {
-  const { userId } = useParams();
+  const { user } = useAuthContext();
   const { setUserData } = useAuthContextApi();
   const { disconnect } = useWebSocketContextApi();
   const navigate = useNavigate();
+  const userId = user?.id.toLocaleString();
 
   const handleLogout = () => {
     if (!userId) {

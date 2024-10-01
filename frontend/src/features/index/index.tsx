@@ -2,13 +2,21 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuthContext } from "@frontend/providers/auth-context";
 import { useFetch } from "@frontend/hooks/use-fetch";
+import { Button } from "@frontend/components/ui/button/button";
+import { Follow } from "../shared/follow/follow";
 import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
 import { client } from "@frontend/lib/trpc";
 import { numericStringSchema } from "@frontend/types/zod";
 import { UsersData } from "@frontend/types/api";
+import styles from "./index.module.css";
+import { avatar_placeholder } from "@frontend/assets/images";
 
-export function Index() {
-  const [userList, setUserList] = useState<UsersData>();
+type IndexProps = {
+  data: UsersData;
+};
+
+export function Index({ data }: IndexProps) {
+  const [userList, setUserList] = useState(data);
   const { user } = useAuthContext();
   const { error, isLoading, fetchData } = useFetch();
 
@@ -34,7 +42,7 @@ export function Index() {
 
       setUserList(response);
     });
-  }, []);
+  }, [userId]);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -49,7 +57,23 @@ export function Index() {
 
   return (
     <div>
-      <ul>{userList?.map((user) => <li>Hello, world!</li>)}</ul>
+      <ul className={styles.list}>
+        {userList?.map((user) => (
+          <li className={styles.item} key={user.id}>
+            <img src={user?.avatar?.url ?? avatar_placeholder} alt="" />
+            <p>{user.name}</p>
+            <p>{user.email}</p>
+            <Follow
+              followingId={user.id}
+              userId={userId}
+              isFollowed={user.isFollowed}
+            />
+            <Button type="button">
+              {user.isFriend ? "Unfriend" : "Befriend"}
+            </Button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

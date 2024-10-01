@@ -3,12 +3,10 @@ import { Navigate } from "react-router-dom";
 import { z } from "zod";
 import { useAuthContext } from "@frontend/providers/auth-context";
 import { useFetch } from "@frontend/hooks/use-fetch";
-import { Image } from "@frontend/components/ui/image/image";
+import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
 import { client } from "@frontend/lib/trpc";
-import { validateInput } from "@frontend/utils/input-validation";
 import { numberToStringSchema, numericStringSchema } from "@frontend/types/zod";
 import styles from "./like.module.css";
-import { thumbs_up_icon } from "@frontend/assets/images";
 
 type CommentLikeProps = {
   isLiked: boolean;
@@ -25,7 +23,7 @@ export function CommentLike({ commentId, likes, isLiked }: CommentLikeProps) {
   const [isCommentLiked, setIsCommentLiked] = useState(isLiked);
   const [likeCount, setLikeCount] = useState(likes);
   const { user } = useAuthContext();
-  const { isLoading, error, fetchData } = useFetch<typeof postLikeSchema>();
+  const { isLoading, error, fetchData } = useFetch();
 
   if (!user) {
     return <Navigate to="/auth/login" />;
@@ -33,25 +31,40 @@ export function CommentLike({ commentId, likes, isLiked }: CommentLikeProps) {
   const userId = user.id.toLocaleString();
 
   const likePost = () => {
-    fetchData(async (controller, setError) => {
+    fetchData(async (controller) => {
       const payload = {
         commentId,
         userId,
       };
-      const { data, errors, isValid } = validateInput(postLikeSchema, payload);
+      const parsedData = postLikeSchema.safeParse(payload);
 
-      if (!isValid) {
-        return setError({ errors });
+      if (!parsedData.success) {
+        throw new Error("Invalid data format");
       }
 
-      const response = await client.post.getLikesOfComment.query(data, {
-        signal: controller.signal,
-      });
+      const response = await client.post.getLikesOfComment.query(
+        parsedData.data,
+        {
+          signal: controller.signal,
+        },
+      );
 
       setLikeCount((prev) => (response ? prev + 1 : prev - 1));
       setIsCommentLiked(response);
     });
   };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return (
+      <p>
+        {error.name}: {error.message}
+      </p>
+    );
+  }
 
   return (
     <button

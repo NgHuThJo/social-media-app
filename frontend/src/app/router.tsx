@@ -6,6 +6,7 @@ import { chatLoader, ChatRoute } from "./routes/chat";
 import { ErrorRoute } from "./routes/error";
 import { FeedRoute, feedAction, feedLoader } from "./routes/feed";
 import { FriendRoute, friendLoader } from "./routes/friend";
+import { IndexRoute, indexLoader } from "./routes";
 import { LandingRoute } from "./routes/landing";
 import { LoginRoute } from "./routes/login";
 import { loginAction } from "@frontend/features/auth/components/login/form";
@@ -46,6 +47,11 @@ export function Router() {
               path: ":userId",
               element: <AppRoot />,
               children: [
+                {
+                  path: "index",
+                  element: <IndexRoute />,
+                  loader: indexLoader,
+                },
                 {
                   path: "profile",
                   element: <ProfileRoute />,

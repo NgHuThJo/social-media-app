@@ -38,11 +38,6 @@ export default [
         ...globals.node, // Add Node.js globals
       },
     },
-    env: {
-      browser: true, // Enable browser-specific globals like 'IntersectionObserverInit'
-      node: true, // Enable Node.js globals
-      es6: true,
-    },
     plugins: {
       react: reactPlugin,
       "react-hooks": reactHooksPlugin,
@@ -51,6 +46,8 @@ export default [
     rules: {
       // React-specific rules
       "react/jsx-filename-extension": [1, { extensions: [".jsx", ".tsx"] }], // Allow JSX in .jsx and .tsx files
+      "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+      "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
       "prettier/prettier": ["error"], // Enforce Prettier formatting
       ...prettierConfig.rules, // Disable rules that conflict with Prettier
     },

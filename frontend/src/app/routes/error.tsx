@@ -15,7 +15,7 @@ export function ErrorRoute() {
         textAlign: "center",
       }}
     >
-      {error instanceof TRPCClientError ? (
+      {error instanceof TRPCClientError || error instanceof Error ? (
         <>
           <p>{error.name}</p>
           <pre>{error.message}</pre>
