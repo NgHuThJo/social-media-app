@@ -8,15 +8,15 @@
 .item {
   display: grid;
   align-items: center;
-  gap: 1rem 2rem;
+  column-gap: 2rem;
   grid-template-columns: auto 1fr;
-  grid-template-areas: "avatar name" "avatar email" "button .";
+  grid-template-areas: "avatar name" "avatar email" "button friend";
   padding: 2rem;
   background-color: var(--bgc-notification);
 
   img {
     grid-area: avatar;
-    width: 4rem;
+    width: 4.5rem;
     aspect-ratio: 1;
     border-radius: 50%;
   }

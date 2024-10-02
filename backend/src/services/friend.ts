@@ -1,5 +1,6 @@
 import { prisma } from "@backend/models";
-import { AppError } from "@backend/utils/app-error";
+import { FriendRequestAction } from "@backend/types";
+import { FriendshipStatus } from "@prisma/client";
 
 class FriendService {
   async getAllFriends(userId: number) {
@@ -22,13 +23,6 @@ class FriendService {
       },
     });
 
-    // if (!friendships.length) {
-    //   throw new AppError(
-    //     "NOT_FOUND",
-    //     `No friends with userId "${userId}" associated`,
-    //   );
-    // }
-
     const friends = friendships.map((friendship) =>
       friendship.requesterId === userId
         ? friendship.addressee
@@ -36,6 +30,107 @@ class FriendService {
     );
 
     return friends;
+  }
+
+  async updateFriendship(
+    userId: number,
+    friendId: number,
+    action: FriendRequestAction,
+  ) {
+    const friendshipStatus: {
+      friendshipStatus: FriendshipStatus | null;
+      isCurrentUserSender: boolean | null;
+    } = await prisma.$transaction(async (tx) => {
+      switch (action) {
+        case "SEND_REQUEST": {
+          {
+            await tx.friendship.upsert({
+              where: {
+                requesterId_addresseeId: {
+                  requesterId: userId,
+                  addresseeId: friendId,
+                },
+              },
+              update: {
+                status: FriendshipStatus.PENDING,
+              },
+              create: {
+                requester: {
+                  connect: {
+                    id: userId,
+                  },
+                },
+                addressee: {
+                  connect: {
+                    id: friendId,
+                  },
+                },
+              },
+            });
+          }
+
+          return {
+            friendshipStatus: "PENDING",
+            isCurrentUserSender: true,
+          };
+        }
+        case "REMOVE_FRIEND": {
+          await tx.friendship.deleteMany({
+            where: {
+              OR: [
+                {
+                  requesterId: userId,
+                  addresseeId: friendId,
+                },
+                {
+                  requesterId: friendId,
+                  addresseeId: userId,
+                },
+              ],
+            },
+          });
+
+          return {
+            friendshipStatus: null,
+            isCurrentUserSender: null,
+          };
+        }
+        case "ACCEPT_REQUEST": {
+          await tx.friendship.updateMany({
+            where: {
+              requesterId: friendId,
+              addresseeId: userId,
+            },
+            data: {
+              status: "ACCEPTED",
+            },
+          });
+
+          return {
+            friendshipStatus: "ACCEPTED",
+            isCurrentUserSender: false,
+          };
+        }
+        case "DECLINE_REQUEST": {
+          await tx.friendship.updateMany({
+            where: {
+              requesterId: friendId,
+              addresseeId: userId,
+            },
+            data: {
+              status: "DECLINED",
+            },
+          });
+
+          return {
+            friendshipStatus: "DECLINED",
+            isCurrentUserSender: false,
+          };
+        }
+      }
+    });
+
+    return friendshipStatus;
   }
 }
 

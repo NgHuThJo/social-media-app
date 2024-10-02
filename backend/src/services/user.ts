@@ -112,41 +112,54 @@ class UserService {
             id: true,
           },
         },
+        sentFriendRequests: {
+          where: {
+            addresseeId: userId,
+          },
+          select: {
+            status: true,
+          },
+        },
+        receivedFriendRequests: {
+          where: {
+            requesterId: userId,
+          },
+          select: {
+            status: true,
+          },
+        },
       },
     });
 
-    const friendList = await prisma.user.findMany({
-      where: {
-        OR: [
-          {
-            sentFriendRequests: {
-              some: {
-                addresseeId: userId,
-                status: "ACCEPTED",
-              },
-            },
-          },
-          {
-            receivedFriendRequests: {
-              some: {
-                requesterId: userId,
-                status: "ACCEPTED",
-              },
-            },
-          },
-        ],
-      },
-      select: {
-        id: true,
-      },
-    });
+    const enhancedUsers = otherUsers.map((user) => {
+      let friendshipStatus;
+      let isCurrentUserSender;
 
-    const friendIdSet = new Set(friendList.map((friend) => friend.id));
-    const enhancedUsers = otherUsers.map((user) => ({
-      ...user,
-      isFriend: friendIdSet.has(user.id),
-      isFollowed: user.followers.some((follower) => follower.id === userId),
-    }));
+      if (user.sentFriendRequests.length > 0) {
+        friendshipStatus = user.sentFriendRequests[0].status;
+        isCurrentUserSender = false;
+      } else if (user.receivedFriendRequests.length > 0) {
+        friendshipStatus = user.receivedFriendRequests[0].status;
+        isCurrentUserSender = true;
+      } else {
+        friendshipStatus = null;
+        isCurrentUserSender = null;
+      }
+
+      const {
+        sentFriendRequests: _sentFriendRequests,
+        receivedFriendRequests: _receivedFriendRequests,
+        followers: _followers,
+        ...rest
+      } = user;
+
+      return {
+        ...rest,
+        friendshipStatus,
+        isCurrentUserSender,
+        isFollowed: user.followers.some((follower) => follower.id === userId),
+      };
+    });
 
     return enhancedUsers;
   }
@@ -194,7 +207,7 @@ class UserService {
       });
     }
 
-    const newAvatar = await prisma.avatar.create({
+    await prisma.avatar.create({
       data: {
         user: {
           connect: {

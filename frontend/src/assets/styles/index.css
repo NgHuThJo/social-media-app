@@ -47,10 +47,13 @@
   --c-link: #000;
   --c-link-active: #a020f0;
   --c-logo: #fff;
+  --c-pending-message: var(--c-error);
   --c-root: #71728c;
 
   --bgc-brand: #2d5be3;
   --bgc-button: #343f46;
+  --bgc-follow-button: var(--bgc-brand);
+  --bgc-friend-button: #e0a427;
   --bgc-content: #fff;
   --bgc-emoji-grid: #2c4e70;
   --bgc-like: #ed2c49;

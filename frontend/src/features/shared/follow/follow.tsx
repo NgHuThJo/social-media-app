@@ -7,13 +7,13 @@ import styles from "./follow.module.css";
 
 type FollowProps = {
   isFollowed: boolean;
-  userId: string;
+  userId: number;
   followingId: number;
 };
 
 const followSchema = z.object({
   followingId: numberToStringSchema,
-  userId: numericStringSchema,
+  userId: numberToStringSchema,
 });
 
 export function Follow({ followingId, userId, isFollowed }: FollowProps) {
@@ -41,7 +41,7 @@ export function Follow({ followingId, userId, isFollowed }: FollowProps) {
   };
 
   if (isLoading) {
-    return <p>Is loading...</p>;
+    return <p>Loading...</p>;
   }
   if (error) {
     return (
@@ -55,7 +55,7 @@ export function Follow({ followingId, userId, isFollowed }: FollowProps) {
     <button
       type="button"
       onClick={followUser}
-      className={isFollowing ? styles.active : ""}
+      className={[styles.button, isFollowing ? styles.active : ""].join(" ")}
     >
       {isFollowing ? "Unfollow" : "Follow"}
     </button>

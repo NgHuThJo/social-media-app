@@ -1,0 +1,18 @@
+.container {
+  display: grid;
+  justify-self: start;
+  align-self: stretch;
+  align-items: center;
+  column-gap: 0.5rem;
+  grid-auto-flow: column;
+
+  > button {
+    align-self: stretch;
+    padding-inline: 1rem;
+    background-color: var(--bgc-friend-button);
+  }
+
+  > p {
+    color: var(--c-pending-message);
+  }
+}

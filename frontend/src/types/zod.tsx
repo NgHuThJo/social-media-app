@@ -32,6 +32,12 @@ export const fileSchema = z.object({
   lastModified: z.number(),
   lastModifiedDate: z.date(),
 });
+export const friendRequestSchema = z.enum([
+  "SEND_REQUEST",
+  "ACCEPT_REQUEST",
+  "DECLINE_REQUEST",
+  "REMOVE_FRIEND",
+]);
 
 // Schemas and error types for React Router actions and event handlers
 export type SchemaError<T extends z.ZodSchema> = {

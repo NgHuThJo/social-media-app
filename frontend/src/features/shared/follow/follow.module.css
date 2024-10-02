@@ -1,3 +1,8 @@
 .active {
   color: red;
 }
+
+.button {
+  align-self: stretch;
+  background-color: var(--bgc-follow-button);
+}

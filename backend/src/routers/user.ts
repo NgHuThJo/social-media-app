@@ -1,4 +1,4 @@
-import { string, z } from "zod";
+import { z } from "zod";
 import { userService } from "@backend/services/user";
 import { publicProcedure, router } from "./trpc";
 import { logError } from "@backend/utils/error-logger";

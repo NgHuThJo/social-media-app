@@ -24,7 +24,7 @@ export default [
       "no-unused-vars": "off", // Disable base rule
       "@typescript-eslint/no-unused-vars": [
         "warn",
-        { argsIgnorePattern: "^_" },
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ], // Enable TS-specific rule
     },
   },

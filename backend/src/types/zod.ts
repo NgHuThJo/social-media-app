@@ -37,3 +37,9 @@ export const passwordSchema = z
   .trim()
   .min(8, "Password must have at least 8 characters");
 export const urlSchema = z.string().trim().url();
+export const friendRequestSchema = z.enum([
+  "SEND_REQUEST",
+  "ACCEPT_REQUEST",
+  "DECLINE_REQUEST",
+  "REMOVE_FRIEND",
+]);
