@@ -13,6 +13,9 @@ export default [
     files: ["**/*.{ts,tsx}"], // Apply to TypeScript files
     languageOptions: {
       parser: typescriptParser,
+      parserOptions: {
+        project: "./tsconfig.json",
+      },
       ecmaVersion: "latest",
       sourceType: "module",
     },

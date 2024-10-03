@@ -1,9 +1,10 @@
-import { string, z } from "zod";
+import { z } from "zod";
 import { publicProcedure, router } from "./trpc";
 import { postService } from "@backend/services/post";
 import { logError } from "@backend/utils/error-logger";
 import {
   nonEmptyStringSchema,
+  positiveNumberSchema,
   stringToNumberSchema,
   urlSchema,
 } from "@backend/types/zod";
@@ -13,13 +14,15 @@ export const postRouter = router({
     .input(
       z.object({
         userId: stringToNumberSchema,
+        page: positiveNumberSchema,
+        limit: positiveNumberSchema,
       }),
     )
     .query(async ({ input }) => {
-      const { userId } = input;
+      const { userId, page, limit } = input;
 
       try {
-        const posts = await postService.getAllPosts(userId);
+        const posts = await postService.getAllPosts(userId, page, limit);
 
         return posts;
       } catch (error) {

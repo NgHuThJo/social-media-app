@@ -31,8 +31,6 @@ export function WebSocketContextProvider({ children }: PropsWithChildren) {
     off,
   } = useWebSocket();
 
-  console.log("in websocket context", isSocketReady);
-
   const contextValue = useMemo(() => ({ isSocketReady }), [isSocketReady]);
 
   const api = useMemo(() => {

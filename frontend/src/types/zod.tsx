@@ -32,6 +32,10 @@ export const fileSchema = z.object({
   lastModified: z.number(),
   lastModifiedDate: z.date(),
 });
+export const paginationSchema = z.object({
+  page: z.number().positive("Page must be positive number"),
+  limit: z.number().positive("Limit must be positive number"),
+});
 export const friendRequestSchema = z.enum([
   "SEND_REQUEST",
   "ACCEPT_REQUEST",
@@ -98,3 +102,6 @@ export const chatFormSchema = userIdSchema.extend({
   title: nonEmptyStringSchema,
 });
 export type ChatFormSchemaError = SchemaError<typeof chatFormSchema>;
+
+export const paginatedPostSchema = userIdSchema.merge(paginationSchema);
+export type PaginatedPostSchemaError = SchemaError<typeof paginatedPostSchema>;

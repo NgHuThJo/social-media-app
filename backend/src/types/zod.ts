@@ -4,6 +4,9 @@ export const numericStringSchema = z
   .string()
   .trim()
   .regex(/^\d+$/, "String is not numeric");
+export const positiveNumberSchema = z
+  .number()
+  .positive("Number must be positive");
 export const emailSchema = z
   .string()
   .trim()

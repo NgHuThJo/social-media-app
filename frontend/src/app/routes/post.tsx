@@ -24,7 +24,7 @@ import {
 import { handleError } from "@frontend/utils/error-handler";
 import { validateInput } from "@frontend/utils/input-validation";
 import { LoaderData } from "@frontend/types";
-import { userIdSchema } from "@frontend/types/zod";
+import { paginatedPostSchema } from "@frontend/types/zod";
 
 type PostLoaderData = LoaderData<typeof postLoader>;
 
@@ -32,8 +32,10 @@ export const postLoader = ({ params }: LoaderFunctionArgs) => {
   const { userId } = params;
   const payload = {
     userId,
+    page: 1,
+    limit: 10,
   };
-  const { data, errors, isValid } = validateInput(userIdSchema, payload);
+  const { data, errors, isValid } = validateInput(paginatedPostSchema, payload);
 
   if (!isValid) {
     throw new Response(JSON.stringify({ errors }), {

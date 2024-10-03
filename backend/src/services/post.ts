@@ -2,8 +2,8 @@ import { prisma } from "@backend/models";
 // import { AppError } from "@backend/utils/app-error";
 
 class PostService {
-  async getAllPosts(userId: number) {
-    const posts = await prisma.post.findMany({
+  async getAllPosts(userId: number, page: number, limit: number) {
+    const allPosts = await prisma.post.findMany({
       orderBy: {
         id: "desc",
       },
@@ -15,23 +15,34 @@ class PostService {
           },
         },
         likes: {
+          where: {
+            userId,
+          },
           select: {
             userId: true,
           },
         },
       },
+      skip: (page - 1) * limit,
+      take: limit,
     });
 
     const likedPosts = new Map(
-      posts.map((post) => [post.id, post.likes.map((like) => like.userId)]),
+      allPosts.map((post) => [post.id, post.likes.map((like) => like.userId)]),
     );
 
-    const enhancedPosts = posts.map((post) => ({
+    const posts = allPosts.map((post) => ({
       ...post,
       isLiked: likedPosts.get(post.id)?.some((id) => id === userId) ?? false,
     }));
 
-    return enhancedPosts;
+    const totalPostCount = await prisma.post.count();
+
+    return {
+      posts,
+      totalPages: Math.ceil(totalPostCount / limit),
+      page,
+    };
   }
 
   async togglePostLike(postId: number, userId: number) {
