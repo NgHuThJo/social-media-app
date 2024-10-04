@@ -33,7 +33,7 @@ export const postLoader = ({ params }: LoaderFunctionArgs) => {
   const payload = {
     userId,
     page: 1,
-    limit: 10,
+    limit: 5,
   };
   const { data, errors, isValid } = validateInput(paginatedPostSchema, payload);
 

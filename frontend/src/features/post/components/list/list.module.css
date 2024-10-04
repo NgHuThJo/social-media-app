@@ -9,7 +9,16 @@
 
 .button-layout {
   display: flex;
+  align-items: center;
   gap: 1rem;
+
+  input[type="number"] {
+    text-align: right;
+  }
+
+  > span {
+    font-weight: var(--fw-heading);
+  }
 
   > button {
     padding: 0.5rem;

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Navigate } from "react-router-dom";
 import { useAuthContext } from "@frontend/providers/auth-context";
-import { useFetch } from "@frontend/hooks/use-fetch";
+import { useOffsetPagination } from "@frontend/hooks/use-offset-pagination";
 import { useIntersectionObserver } from "@frontend/hooks/use-intersection-observer";
 import { client } from "@frontend/lib/trpc";
 import { Post } from "@frontend/features/post/components/post";
@@ -15,13 +14,8 @@ type PostListProps = {
 
 export function PostList({ data }: PostListProps) {
   const [postData, setPostData] = useState(data?.posts ?? []);
-  const [pageData, setPageData] = useState(() => {
-    return { page: 1, totalPages: data?.totalPages ?? 1 };
-  });
-  const limit = 10;
   const parentNodeRef = useRef<HTMLUListElement>(null);
   const { user } = useAuthContext();
-  const { isLoading, error, fetchData } = useFetch();
   const { observeChildNodes } = useIntersectionObserver((entries) => {
     for (const entry of entries) {
       if (entry.isIntersecting) {
@@ -38,54 +32,47 @@ export function PostList({ data }: PostListProps) {
     }
   }, [observeChildNodes]);
 
-  if (!user) {
-    return <Navigate to="/auth/login" />;
+  const {
+    isLoading,
+    error,
+    pageData,
+    goToNextPage,
+    goToPreviousPage,
+    goToSpecificPage,
+  } = useOffsetPagination(
+    async (payload, controller, setPageData) => {
+      console.log(payload);
+
+      const parsedData = paginatedPostSchema.safeParse(payload);
+
+      if (!parsedData.success) {
+        throw new Error(JSON.stringify(parsedData.error));
+      }
+
+      const response = await client.post.getAllPosts.query(parsedData.data, {
+        signal: controller.signal,
+      });
+
+      if (response) {
+        setPostData(response.posts);
+        setPageData({ page: response.page, totalPages: response.totalPages });
+      }
+    },
+    { userId: user?.id.toLocaleString() },
+    data?.totalPages,
+  );
+
+  if (isLoading) {
+    return <p>Loading...</p>;
   }
-  const userId = user.id.toLocaleString();
 
-  const goToNextPage = () => {
-    fetchData(async (controller) => {
-      const payload = {
-        userId,
-        page: pageData.page + 1,
-        limit,
-      };
-      await processPageTransition(payload, controller);
-    });
-  };
-
-  const goToPreviousPage = () => {
-    fetchData(async (controller) => {
-      const payload = {
-        userId,
-        page: pageData.page - 1,
-        limit,
-      };
-      await processPageTransition(payload, controller);
-    });
-  };
-
-  const processPageTransition = async (
-    payload: any,
-    controller: AbortController,
-  ) => {
-    const parsedData = paginatedPostSchema.safeParse(payload);
-
-    if (!parsedData.success) {
-      throw new Error("Invalid data format");
-    }
-
-    const response = await client.post.getAllPosts.query(parsedData.data, {
-      signal: controller.signal,
-    });
-
-    if (response) {
-      setPostData(response.posts);
-      setPageData({ page: response.page, totalPages: response.totalPages });
-    }
-  };
-
-  console.log(pageData.totalPages);
+  if (error) {
+    return (
+      <p>
+        {error.name}: {error.message}
+      </p>
+    );
+  }
 
   return (
     <>
@@ -95,14 +82,31 @@ export function PostList({ data }: PostListProps) {
           onClick={goToPreviousPage}
           disabled={pageData.page === 1}
         >
-          Go to previous page
+          {pageData.page === 1
+            ? "Already at first page"
+            : "Go to previous page"}
         </button>
+        <form method="POST" onSubmit={goToSpecificPage}>
+          <input
+            type="number"
+            name="page"
+            id="page"
+            min={1}
+            max={pageData.totalPages}
+            placeholder={String(pageData.page)}
+          />
+        </form>
+        <span>
+          {pageData.page} of {pageData.totalPages}
+        </span>
         <button
           type="button"
           onClick={goToNextPage}
           disabled={pageData.page === pageData.totalPages}
         >
-          Go to next page
+          {pageData.page === pageData.totalPages
+            ? "Already at last page"
+            : "Go to next page"}
         </button>
       </div>
       <ul className={styles.list} ref={parentNodeRef}>
