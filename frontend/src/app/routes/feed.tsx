@@ -22,7 +22,7 @@ import { createFeed } from "@frontend/features/feed/components/form/form";
 import { handleError } from "@frontend/utils/error-handler";
 import { validateInput } from "@frontend/utils/input-validation";
 import { LoaderData } from "@frontend/types";
-import { userIdSchema } from "@frontend/types/zod";
+import { cursorFeedSchema } from "@frontend/types/zod";
 
 type FeedLoaderData = LoaderData<typeof feedLoader>;
 
@@ -30,8 +30,14 @@ export const feedLoader = ({ params }: LoaderFunctionArgs) => {
   const { userId } = params;
   const payload = {
     userId,
+    cursors: {
+      next: null,
+      back: null,
+    },
+    isForward: true,
+    limit: 2,
   };
-  const { data, errors, isValid } = validateInput(userIdSchema, payload);
+  const { data, errors, isValid } = validateInput(cursorFeedSchema, payload);
 
   if (!isValid) {
     throw new Response(JSON.stringify({ errors }), {
@@ -47,13 +53,10 @@ export const feedLoader = ({ params }: LoaderFunctionArgs) => {
       data: response,
     });
   } catch (error) {
-    throw new Response(
-      JSON.stringify(handleError(error, "Could not fetch feed data")),
-      {
-        status: 500,
-        statusText: "Internal Server Error",
-      },
-    );
+    throw new Response(JSON.stringify(handleError(error)), {
+      status: 500,
+      statusText: "Internal Server Error",
+    });
   }
 };
 

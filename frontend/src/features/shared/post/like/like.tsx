@@ -3,7 +3,6 @@ import { Navigate } from "react-router-dom";
 import { z } from "zod";
 import { useAuthContext } from "@frontend/providers/auth-context";
 import { useFetch } from "@frontend/hooks/use-fetch";
-import { Image } from "@frontend/components/ui/image/image";
 import { client } from "@frontend/lib/trpc";
 import { validateInput } from "@frontend/utils/input-validation";
 import { numberToStringSchema, numericStringSchema } from "@frontend/types/zod";
@@ -25,7 +24,7 @@ export function PostLike({ postId, likes, isLiked }: PostLikeProps) {
   const [likeCount, setLikeCount] = useState(likes);
   const [isPostLiked, setIsPostLiked] = useState(isLiked);
   const { user } = useAuthContext();
-  const { isLoading, error, fetchData } = useFetch<typeof postLikeSchema>();
+  const { isLoading, error, fetchData } = useFetch();
 
   if (!user) {
     return <Navigate to="/auth/login" />;
@@ -33,7 +32,7 @@ export function PostLike({ postId, likes, isLiked }: PostLikeProps) {
   const userId = user.id.toLocaleString();
 
   const likePost = () => {
-    fetchData(async (controller, setError) => {
+    fetchData(async (controller) => {
       const payload = {
         postId,
         userId,
@@ -41,7 +40,7 @@ export function PostLike({ postId, likes, isLiked }: PostLikeProps) {
       const { data, errors, isValid } = validateInput(postLikeSchema, payload);
 
       if (!isValid) {
-        return setError({ errors });
+        throw new Error("Invalid data format");
       }
 
       const response = await client.post.getLikesOfPost.query(data, {

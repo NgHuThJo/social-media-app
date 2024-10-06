@@ -1,10 +1,7 @@
 import { useEffect, useRef } from "react";
 
-export function useIntersectionObserver(
-  callback: IntersectionObserverCallback,
-  options?: IntersectionObserverInit,
-) {
-  const observerRef = useRef<IntersectionObserver | null>(null);
+export function useResizeObserver(callback: ResizeObserverCallback) {
+  const observerRef = useRef<ResizeObserver | null>(null);
   const observedElements = useRef<Set<Element>>(new Set());
 
   const observeElement = (element: Element | null) => {
@@ -28,15 +25,16 @@ export function useIntersectionObserver(
       }
     }
   };
+
   useEffect(() => {
-    observerRef.current = new IntersectionObserver(callback, options);
+    observerRef.current = new ResizeObserver(callback);
 
     return () => {
       observerRef.current?.disconnect();
       observerRef.current = null;
       observedElements.current.clear();
     };
-  }, [callback, options]);
+  }, [callback]);
 
   return { observeElement, unobserveElement, observeChildNodes };
 }

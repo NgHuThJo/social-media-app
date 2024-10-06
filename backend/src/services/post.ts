@@ -1,4 +1,5 @@
 import { prisma } from "@backend/models";
+import { Cursors } from "@backend/types";
 // import { AppError } from "@backend/utils/app-error";
 
 class PostService {
@@ -299,15 +300,26 @@ class PostService {
     return newFeed;
   }
 
-  async getAllFeeds(userId: number) {
+  async getAllFeeds(
+    userId: number,
+    cursors: Cursors,
+    isForward: boolean,
+    limit: number,
+  ) {
+    const takeLimit = Math.min(limit, 2);
+    const cursorId = isForward ? cursors.next : cursors.back;
+    const cursor = cursorId ? { id: cursorId } : undefined;
+    const skip = cursor ? 1 : 0;
+    const take = isForward ? takeLimit + 1 : -(takeLimit + 1);
+
     const feeds = await prisma.post.findMany({
       where: {
         AND: [
-          {
-            asset: {
-              isNot: {},
-            },
-          },
+          // {
+          //   asset: {
+          //     is: null,
+          //   },
+          // },
           {
             OR: [
               {
@@ -348,26 +360,80 @@ class PostService {
           },
         },
         likes: {
+          where: {
+            userId,
+          },
           select: {
-            userId: true,
+            id: true,
           },
         },
       },
-      orderBy: {
-        createdAt: "desc",
-      },
+      orderBy: [
+        {
+          id: "desc",
+        },
+      ],
+      cursor,
+      take,
+      skip,
     });
 
-    const likedPosts = new Map(
-      feeds.map((feed) => [feed.id, feed.likes.map((like) => like.userId)]),
-    );
+    let hasMoreForward = false;
+    let hasMoreBackward = false;
+    let nextCursor: number | null = null;
+    let backCursor: number | null = null;
+
+    if (isForward) {
+      if (feeds.length > takeLimit) {
+        feeds.pop();
+        hasMoreForward = true;
+      }
+
+      if (skip) {
+        hasMoreBackward = true;
+      }
+    } else {
+      if (feeds.length > takeLimit) {
+        feeds.shift();
+        hasMoreBackward = true;
+      }
+
+      if (skip) {
+        hasMoreForward = true;
+      }
+    }
+
+    if (feeds.length > 0) {
+      nextCursor = feeds[feeds.length - 1].id;
+      backCursor = feeds[0].id;
+    }
 
     const enhancedFeeds = feeds.map((feed) => ({
       ...feed,
-      isLiked: likedPosts.get(feed.id)?.some((id) => id === userId) ?? false,
+      isLiked: feed.likes.length > 0,
     }));
 
-    return enhancedFeeds;
+    const test = {
+      feeds: enhancedFeeds,
+      cursors: {
+        nextCursor,
+        backCursor,
+        hasMoreForward,
+        hasMoreBackward,
+      },
+    };
+
+    console.log(test);
+
+    return {
+      feeds: enhancedFeeds,
+      cursors: {
+        nextCursor,
+        backCursor,
+        hasMoreForward,
+        hasMoreBackward,
+      },
+    };
   }
 }
 

@@ -36,6 +36,12 @@ export const paginationSchema = z.object({
   page: z.number().positive("Page must be positive number"),
   limit: z.number().positive("Limit must be positive number"),
 });
+export const cursorSchema = z.object({
+  cursors: z.object({
+    next: z.number().positive().nullable(),
+    back: z.number().positive().nullable(),
+  }),
+});
 export const friendRequestSchema = z.enum([
   "SEND_REQUEST",
   "ACCEPT_REQUEST",
@@ -105,3 +111,11 @@ export type ChatFormSchemaError = SchemaError<typeof chatFormSchema>;
 
 export const paginatedPostSchema = userIdSchema.merge(paginationSchema);
 export type PaginatedPostSchemaError = SchemaError<typeof paginatedPostSchema>;
+
+export const cursorFeedSchema = userIdSchema.merge(cursorSchema).merge(
+  z.object({
+    isForward: z.boolean(),
+    limit: z.number().positive(),
+  }),
+);
+export type CursorFeedSchemaErrors = SchemaError<typeof cursorFeedSchema>;

@@ -25,13 +25,6 @@ export function PostList({ data }: PostListProps) {
       }
     }
   });
-
-  useEffect(() => {
-    if (parentNodeRef.current) {
-      observeChildNodes(parentNodeRef.current);
-    }
-  }, [observeChildNodes]);
-
   const {
     isLoading,
     error,
@@ -41,8 +34,6 @@ export function PostList({ data }: PostListProps) {
     goToSpecificPage,
   } = useOffsetPagination(
     async (payload, controller, setPageData) => {
-      console.log(payload);
-
       const parsedData = paginatedPostSchema.safeParse(payload);
 
       if (!parsedData.success) {
@@ -61,6 +52,12 @@ export function PostList({ data }: PostListProps) {
     { userId: user?.id.toLocaleString() },
     data?.totalPages,
   );
+
+  useEffect(() => {
+    if (parentNodeRef.current) {
+      observeChildNodes(parentNodeRef.current);
+    }
+  }, [observeChildNodes]);
 
   if (isLoading) {
     return <p>Loading...</p>;

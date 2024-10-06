@@ -13,7 +13,7 @@ export function useOffsetPagination(
     setPageData: Dispatch<SetStateAction<PageData>>,
   ) => Promise<void>,
   payloadData: any,
-  totalPages = 1,
+  totalPages = 2,
   pageLimit = 5,
 ) {
   const [pageData, setPageData] = useState<PageData>(() => ({

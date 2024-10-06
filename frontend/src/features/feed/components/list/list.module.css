@@ -2,3 +2,26 @@
   composes: grid from global;
   gap: 2rem;
 }
+
+.button-layout {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  input[type="number"] {
+    text-align: right;
+  }
+
+  > span {
+    font-weight: var(--fw-heading);
+  }
+
+  > button {
+    padding: 0.5rem;
+    background-color: var(--bgc-button);
+  }
+
+  > button:disabled {
+    background-color: var(--bgc-button-disabled);
+  }
+}

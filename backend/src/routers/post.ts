@@ -173,14 +173,25 @@ export const postRouter = router({
   getAllFeeds: publicProcedure
     .input(
       z.object({
+        cursors: z.object({
+          next: z.number().positive().nullable(),
+          back: z.number().positive().nullable(),
+        }),
+        isForward: z.boolean(),
+        limit: z.number().positive(),
         userId: stringToNumberSchema,
       }),
     )
     .query(async ({ input }) => {
-      const { userId } = input;
+      const { cursors, isForward, limit, userId } = input;
 
       try {
-        const feeds = await postService.getAllFeeds(userId);
+        const feeds = await postService.getAllFeeds(
+          userId,
+          cursors,
+          isForward,
+          limit,
+        );
 
         return feeds;
       } catch (error) {
