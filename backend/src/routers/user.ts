@@ -148,15 +148,15 @@ export const userRouter = router({
   followUser: publicProcedure
     .input(
       z.object({
-        followingId: stringToNumberSchema,
+        followsId: stringToNumberSchema,
         userId: stringToNumberSchema,
       }),
     )
     .mutation(async ({ input }) => {
-      const { userId, followingId } = input;
+      const { userId, followsId } = input;
 
-      const isFollowing = await userService.followUser(userId, followingId);
+      const isfollows = await userService.followUser(userId, followsId);
 
-      return isFollowing;
+      return isfollows;
     }),
 });

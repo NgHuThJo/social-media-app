@@ -17,14 +17,15 @@ export function useInfiniteScroll(
   currentCursor?: InfiniteScrollCursor,
   pageLimit = 5,
 ) {
-  const lastItemRef = useRef<HTMLElement>();
+  const lastItemRef = useRef<Element>();
   const [cursor, setCursor] = useState<InfiniteScrollCursor>(() => {
     return currentCursor ?? null;
   });
   const { observeElement, unobserveElement } = useIntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
+        if (cursor?.hasMore && entry.isIntersecting) {
+          console.log("Execute intersection observer");
           fetchNextBatch();
         }
       });
@@ -43,16 +44,20 @@ export function useInfiniteScroll(
     });
   };
 
-  const observeLastItem = (node: HTMLElement) => {
+  const observeLastItem = (node: Element) => {
     if (isLoading) {
       return;
     }
 
     if (lastItemRef.current) {
       unobserveElement(lastItemRef.current);
+      lastItemRef.current = undefined;
     }
-    lastItemRef.current = node;
-    observeElement(node);
+
+    if (cursor?.hasMore) {
+      lastItemRef.current = node;
+      observeElement(node);
+    }
   };
 
   return { isLoading, error, fetchData, cursor, observeLastItem };

@@ -8,22 +8,22 @@ import styles from "./follow.module.css";
 type FollowProps = {
   isFollowed: boolean;
   userId: number;
-  followingId: number;
+  followsId: number;
 };
 
 const followSchema = z.object({
-  followingId: numberToStringSchema,
+  followsId: numberToStringSchema,
   userId: numberToStringSchema,
 });
 
-export function Follow({ followingId, userId, isFollowed }: FollowProps) {
-  const [isFollowing, setIsFollowing] = useState(isFollowed);
+export function Follow({ followsId, userId, isFollowed }: FollowProps) {
+  const [isfollows, setIsfollows] = useState(isFollowed);
   const { isLoading, error, fetchData } = useFetch();
 
   const followUser = () => {
     fetchData(async (controller) => {
       const payload = {
-        followingId,
+        followsId,
         userId,
       };
       const parsedData = followSchema.safeParse(payload);
@@ -36,7 +36,7 @@ export function Follow({ followingId, userId, isFollowed }: FollowProps) {
         signal: controller.signal,
       });
 
-      setIsFollowing(response);
+      setIsfollows(response);
     });
   };
 
@@ -55,9 +55,9 @@ export function Follow({ followingId, userId, isFollowed }: FollowProps) {
     <button
       type="button"
       onClick={followUser}
-      className={[styles.button, isFollowing ? styles.active : ""].join(" ")}
+      className={[styles.button, isfollows ? styles.active : ""].join(" ")}
     >
-      {isFollowing ? "Unfollow" : "Follow"}
+      {isfollows ? "Unfollow" : "Follow"}
     </button>
   );
 }

@@ -21,13 +21,13 @@ class UserService {
     return user;
   }
 
-  async followUser(userId: number, followingId: number) {
-    const isFollowing = await prisma.$transaction(async (tx) => {
+  async followUser(userId: number, followsId: number) {
+    const isfollows = await prisma.$transaction(async (tx) => {
       const follow = await tx.follow.findUnique({
         where: {
-          followerId_followingId: {
-            followerId: userId,
-            followingId,
+          followedById_followsId: {
+            followedById: userId,
+            followsId,
           },
         },
       });
@@ -35,14 +35,14 @@ class UserService {
       if (!follow) {
         await tx.follow.create({
           data: {
-            follower: {
+            followedBy: {
               connect: {
                 id: userId,
               },
             },
-            following: {
+            follows: {
               connect: {
-                id: followingId,
+                id: followsId,
               },
             },
           },
@@ -53,9 +53,9 @@ class UserService {
 
       await tx.follow.delete({
         where: {
-          followerId_followingId: {
-            followerId: userId,
-            followingId,
+          followedById_followsId: {
+            followedById: userId,
+            followsId,
           },
         },
       });
@@ -63,7 +63,7 @@ class UserService {
       return false;
     });
 
-    return isFollowing;
+    return isfollows;
   }
 
   async getListOfUsers(userIdList: number[]) {
@@ -121,12 +121,12 @@ class UserService {
             url: true,
           },
         },
-        followers: {
+        followedBy: {
           select: {
             id: true,
           },
         },
-        sentFriendRequests: {
+        friendRequestTo: {
           where: {
             addresseeId: userId,
           },
@@ -134,7 +134,7 @@ class UserService {
             status: true,
           },
         },
-        receivedFriendRequests: {
+        friendRequestFrom: {
           where: {
             requesterId: userId,
           },
@@ -164,11 +164,11 @@ class UserService {
       let friendshipStatus;
       let isCurrentUserSender;
 
-      if (user.sentFriendRequests.length > 0) {
-        friendshipStatus = user.sentFriendRequests[0].status;
+      if (user.friendRequestTo.length > 0) {
+        friendshipStatus = user.friendRequestTo[0].status;
         isCurrentUserSender = false;
-      } else if (user.receivedFriendRequests.length > 0) {
-        friendshipStatus = user.receivedFriendRequests[0].status;
+      } else if (user.friendRequestFrom.length > 0) {
+        friendshipStatus = user.friendRequestFrom[0].status;
         isCurrentUserSender = true;
       } else {
         friendshipStatus = null;
@@ -176,9 +176,9 @@ class UserService {
       }
 
       const {
-        sentFriendRequests: _sentFriendRequests,
-        receivedFriendRequests: _receivedFriendRequests,
-        followers: _followers,
+        friendRequestTo: _friendRequestTo,
+        friendRequestFrom: _friendRequestFrom,
+        followedBy: _followedBy,
         ...rest
       } = user;
 
@@ -186,7 +186,9 @@ class UserService {
         ...rest,
         friendshipStatus,
         isCurrentUserSender,
-        isFollowed: user.followers.some((follower) => follower.id === userId),
+        isFollowed: user.followedBy.some(
+          (followedBy) => followedBy.id === userId,
+        ),
       };
     });
 

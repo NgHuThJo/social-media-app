@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuthContext } from "@frontend/providers/auth-context";
 import { useInfiniteScroll } from "@frontend/hooks/use-infinite-scroll";
+import { useLatest } from "@frontend/hooks/use-latest";
 import { FriendButton } from "../shared/friend/button/button";
 import { Follow } from "../shared/follow/follow";
 import { client } from "@frontend/lib/trpc";
@@ -17,32 +18,53 @@ type IndexProps = {
 export function Index({ data }: IndexProps) {
   const [indexData, setIndexData] = useState(data?.index ?? []);
   const { user } = useAuthContext();
-  const { isLoading, error, fetchData, cursor, observeLastItem } =
-    useInfiniteScroll(
-      async (payload, controller, setCursor) => {
-        const parsedData = indexSchema.safeParse(payload);
+  const { isLoading, error, observeLastItem } = useInfiniteScroll(
+    async (payload, controller, setCursor) => {
+      const parsedData = indexSchema.safeParse(payload);
 
-        if (!parsedData.success) {
-          throw new Error(JSON.stringify(parsedData.error.flatten()));
-        }
+      if (!parsedData.success) {
+        throw new Error(JSON.stringify(parsedData.error.flatten()));
+      }
 
-        const response = await client.user.getAllOtherUsers.query(
-          parsedData.data,
-          {
-            signal: controller.signal,
-          },
-        );
+      const response = await client.user.getAllOtherUsers.query(
+        parsedData.data,
+        {
+          signal: controller.signal,
+        },
+      );
 
-        if (response) {
-          setIndexData(response.index);
-          setCursor(response.cursor);
-        }
-      },
-      { userId: user?.id.toLocaleString() },
-    );
+      if (response) {
+        setIndexData((prev) => [...prev, ...response.index]);
+        setCursor(response.cursor);
+      }
+    },
+    { userId: user?.id.toLocaleString() },
+    data?.cursor,
+  );
+  const latestRef = useLatest({ observeLastItem });
+
+  useEffect(() => {
+    const { observeLastItem } = latestRef.current;
+
+    const lastChild = document.querySelector(
+      `.${styles.list}`,
+    )?.lastElementChild;
+
+    if (lastChild) {
+      observeLastItem(lastChild);
+    }
+  }, [indexData, latestRef]);
 
   if (!user) {
     return <Navigate to="/auth/login" />;
+  }
+
+  if (error) {
+    return (
+      <p>
+        {error.name}: {error.message}
+      </p>
+    );
   }
 
   return (
@@ -54,7 +76,7 @@ export function Index({ data }: IndexProps) {
             <p>{otherUser.name}</p>
             <p>{otherUser.email}</p>
             <Follow
-              followingId={otherUser.id}
+              followsId={otherUser.id}
               userId={user.id}
               isFollowed={otherUser.isFollowed}
             />
@@ -67,6 +89,7 @@ export function Index({ data }: IndexProps) {
           </li>
         ))}
       </ul>
+      {isLoading && <p>Loading more users...</p>}
     </div>
   );
 }

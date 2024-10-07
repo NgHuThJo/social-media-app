@@ -14,31 +14,44 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Gender {
+  MALE
+  FEMALE
+  NON_BINARY
+  OTHER
+  PREFER_NOT_TO_SAY
+}
+
 model User {
-  id                     Int           @id @default(autoincrement())
-  email                  String        @unique
-  name                   String
-  password               String
-  posts                  Post[]
-  comments               Comment[]
-  messages               Message[]
-  sentFriendRequests     Friendship[]  @relation("sentRequests")
-  receivedFriendRequests Friendship[]  @relation("receivedRequests")
-  postLikes              PostLike[]
-  commentLikes           CommentLike[]
-  follows                Follow[]      @relation("following")
-  followers              Follow[]      @relation("follower")
-  avatar                 Avatar?
+  id                Int           @id @default(autoincrement())
+  email             String        @unique
+  firstName         String
+  lastName          String
+  displayName       String?
+  bio               String?
+  birthday          DateTime?
+  gender            Gender?
+  avatar            Avatar?
+  password          String
+  posts             Post[]
+  comments          Comment[]
+  messages          Message[]
+  friendRequestTo   Friendship[]  @relation("to")
+  friendRequestFrom Friendship[]  @relation("from")
+  postLikes         PostLike[]
+  commentLikes      CommentLike[]
+  follows           Follow[]      @relation("follows")
+  followedBy        Follow[]      @relation("followedBy")
 }
 
 model Follow {
-  id          Int  @id @default(autoincrement())
-  followerId  Int
-  followingId Int
-  follower    User @relation("follower", fields: [followerId], references: [id])
-  following   User @relation("following", fields: [followingId], references: [id])
+  id           Int  @id @default(autoincrement())
+  followedById Int
+  followsId    Int
+  followedBy   User @relation("followedBy", fields: [followedById], references: [id])
+  follows      User @relation("follows", fields: [followsId], references: [id])
 
-  @@unique([followerId, followingId])
+  @@unique([followedById, followsId])
 }
 
 enum FriendshipStatus {
@@ -49,9 +62,9 @@ enum FriendshipStatus {
 
 model Friendship {
   id          Int              @id @default(autoincrement())
-  requester   User             @relation("sentRequests", fields: [requesterId], references: [id])
+  requester   User             @relation("to", fields: [requesterId], references: [id])
   requesterId Int
-  addressee   User             @relation("receivedRequests", fields: [addresseeId], references: [id])
+  addressee   User             @relation("from", fields: [addresseeId], references: [id])
   addresseeId Int
   status      FriendshipStatus @default(PENDING)
 
@@ -90,9 +103,9 @@ model Comment {
   authorId        Int
   parentPost      Post?         @relation(fields: [parentPostId], references: [id], onDelete: Cascade)
   parentPostId    Int?
-  parentComment   Comment?      @relation("commentReplies", fields: [parentCommentId], references: [id], onDelete: Cascade)
+  parentComment   Comment?      @relation("replies", fields: [parentCommentId], references: [id], onDelete: Cascade)
   parentCommentId Int?
-  replies         Comment[]     @relation("commentReplies")
+  replies         Comment[]     @relation("replies")
   likes           CommentLike[]
 }
 
@@ -111,6 +124,7 @@ model Message {
   author     User     @relation(fields: [authorId], references: [id])
   authorId   Int
   createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
   content    String
   chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
   chatroomId Int

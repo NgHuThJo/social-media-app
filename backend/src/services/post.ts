@@ -329,7 +329,7 @@ class PostService {
               },
               {
                 author: {
-                  sentFriendRequests: {
+                  friendRequestTo: {
                     some: {
                       addresseeId: userId,
                       status: "ACCEPTED",
@@ -339,7 +339,7 @@ class PostService {
               },
               {
                 author: {
-                  receivedFriendRequests: {
+                  friendRequestFrom: {
                     some: {
                       requesterId: userId,
                       status: "ACCEPTED",
