@@ -9,6 +9,7 @@ import {
   stringToNumberSchema,
   passwordSchema,
   urlSchema,
+  positiveNumberSchema,
 } from "@backend/types/zod";
 
 export const userRouter = router({
@@ -61,14 +62,25 @@ export const userRouter = router({
   getAllOtherUsers: publicProcedure
     .input(
       z.object({
+        cursor: z
+          .object({
+            id: positiveNumberSchema,
+            hasMore: z.boolean(),
+          })
+          .nullable(),
         userId: stringToNumberSchema,
+        limit: positiveNumberSchema,
       }),
     )
     .query(async ({ input }) => {
-      const { userId } = input;
+      const { userId, cursor, limit } = input;
 
       try {
-        const otherUsers = await userService.getAllOtherUsers(userId);
+        const otherUsers = await userService.getAllOtherUsers(
+          userId,
+          cursor,
+          limit,
+        );
 
         return otherUsers;
       } catch (error) {

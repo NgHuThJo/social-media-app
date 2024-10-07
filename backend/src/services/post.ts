@@ -306,7 +306,7 @@ class PostService {
     isForward: boolean,
     limit: number,
   ) {
-    const takeLimit = Math.min(limit, 2);
+    const takeLimit = Math.min(limit, 10);
     const cursorId = isForward ? cursors.next : cursors.back;
     const cursor = cursorId ? { id: cursorId } : undefined;
     const skip = cursor ? 1 : 0;
@@ -412,18 +412,6 @@ class PostService {
       ...feed,
       isLiked: feed.likes.length > 0,
     }));
-
-    const test = {
-      feeds: enhancedFeeds,
-      cursors: {
-        nextCursor,
-        backCursor,
-        hasMoreForward,
-        hasMoreBackward,
-      },
-    };
-
-    console.log(test);
 
     return {
       feeds: enhancedFeeds,

@@ -10,7 +10,7 @@ import { Index } from "@frontend/features/index";
 import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
 import { client } from "@frontend/lib/trpc";
 import { handleError } from "@frontend/utils/error-handler";
-import { userIdSchema } from "@frontend/types/zod";
+import { indexSchema } from "@frontend/types/zod";
 import { LoaderData } from "@frontend/types";
 
 type IndexLoaderData = LoaderData<typeof indexLoader>;
@@ -19,8 +19,10 @@ export const indexLoader = async ({ params }: LoaderFunctionArgs) => {
   const { userId } = params;
   const payload = {
     userId,
+    cursor: null,
+    limit: 5,
   };
-  const parsedData = userIdSchema.safeParse(payload);
+  const parsedData = indexSchema.safeParse(payload);
 
   if (!parsedData.success) {
     throw new Response(JSON.stringify(parsedData.error.flatten()), {

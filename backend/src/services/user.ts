@@ -1,6 +1,7 @@
 import { v2 as cloudinary } from "cloudinary";
 import { prisma } from "@backend/models";
 import { AppError } from "@backend/utils/app-error";
+import { Cursor } from "@backend/types";
 
 class UserService {
   async getUser(userId: number) {
@@ -94,7 +95,20 @@ class UserService {
     return users;
   }
 
-  async getAllOtherUsers(userId: number) {
+  async getAllOtherUsers(
+    userId: number,
+    cursorItem: Cursor | null,
+    limit: number,
+  ) {
+    const cursor = cursorItem
+      ? {
+          id: cursorItem.id,
+        }
+      : undefined;
+    const takeLimit = Math.min(limit, 10);
+    const take = takeLimit + 1;
+    const skip = cursor ? 1 : 0;
+
     const otherUsers = await prisma.user.findMany({
       where: {
         NOT: {
@@ -129,7 +143,22 @@ class UserService {
           },
         },
       },
+      orderBy: {
+        id: "asc",
+      },
+      skip,
+      take,
+      cursor,
     });
+
+    let hasMore = false;
+    let nextCursor = null;
+
+    if (otherUsers.length > takeLimit) {
+      hasMore = true;
+      otherUsers.pop();
+      nextCursor = otherUsers[otherUsers.length - 1].id;
+    }
 
     const enhancedUsers = otherUsers.map((user) => {
       let friendshipStatus;
@@ -161,7 +190,15 @@ class UserService {
       };
     });
 
-    return enhancedUsers;
+    return {
+      index: enhancedUsers,
+      cursor: nextCursor
+        ? {
+            hasMore,
+            id: nextCursor,
+          }
+        : null,
+    };
   }
 
   async registerUser(email: string, name: string, password: string) {

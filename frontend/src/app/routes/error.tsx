@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
 import { TRPCClientError } from "@trpc/client";
 import { Link, useRouteError } from "react-router-dom";
 
 export function ErrorRoute() {
   const error = useRouteError();
+  console.error(error);
 
   return (
     <div

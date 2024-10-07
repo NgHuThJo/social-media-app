@@ -42,6 +42,15 @@ export const cursorSchema = z.object({
     back: z.number().positive().nullable(),
   }),
 });
+export const infiniteScrollSchema = z.object({
+  cursor: z
+    .object({
+      id: z.number().positive(),
+      hasMore: z.boolean(),
+    })
+    .nullable(),
+  limit: z.number().positive(),
+});
 export const friendRequestSchema = z.enum([
   "SEND_REQUEST",
   "ACCEPT_REQUEST",
@@ -119,3 +128,5 @@ export const cursorFeedSchema = userIdSchema.merge(cursorSchema).merge(
   }),
 );
 export type CursorFeedSchemaErrors = SchemaError<typeof cursorFeedSchema>;
+
+export const indexSchema = userIdSchema.merge(infiniteScrollSchema);

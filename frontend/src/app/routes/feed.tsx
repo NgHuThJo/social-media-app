@@ -35,7 +35,7 @@ export const feedLoader = ({ params }: LoaderFunctionArgs) => {
       back: null,
     },
     isForward: true,
-    limit: 2,
+    limit: 5,
   };
   const { data, errors, isValid } = validateInput(cursorFeedSchema, payload);
 

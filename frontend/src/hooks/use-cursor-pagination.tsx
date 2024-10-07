@@ -14,9 +14,9 @@ export function useCursorPagination(
     controller: AbortController,
     setCursors: Dispatch<SetStateAction<Cursors>>,
   ) => Promise<void>,
-  payloadData: any,
+  payloadData?: any,
   currentCursors?: Cursors,
-  pageLimit = 2,
+  pageLimit = 5,
 ) {
   const [cursors, setCursors] = useState<Cursors>({
     nextCursor: currentCursors?.nextCursor ?? null,
