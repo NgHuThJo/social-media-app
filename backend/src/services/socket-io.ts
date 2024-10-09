@@ -14,7 +14,8 @@ export class SocketService {
   constructor(server: HttpServer) {
     this.#io = new SocketIOServer(server, {
       cors: {
-        origin: process.env.PROXY_URL || "http://localhost:5173",
+        origin: "*",
+        // origin: process.env.PROXY_URL || "http://localhost:5173",
         credentials: true,
       },
     });

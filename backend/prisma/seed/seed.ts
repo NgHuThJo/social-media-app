@@ -1,72 +1,196 @@
 import { PrismaClient } from "@prisma/client";
+import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
 
+const genderList = [
+  "MALE",
+  "FEMALE",
+  "NON_BINARY",
+  "OTHER",
+  "PREFER_NOT_TO_SAY",
+] as const;
+
+type OmitDate<T> = Omit<T, "createdAt" | "updatedAt">;
+
+type DbAvatar = Awaited<ReturnType<typeof prisma.avatar.create>>;
+type Avatar = OmitDate<DbAvatar>;
+type DbPost = Awaited<ReturnType<typeof prisma.post.create>>;
+type Post = OmitDate<DbPost>;
+type User = Awaited<ReturnType<typeof prisma.user.create>>;
+
+const avatarFactory = (): Omit<Avatar, "id" | "userId"> => {
+  const url = faker.image.avatar();
+  const publicId = faker.internet.url();
+
+  return {
+    url,
+    publicId,
+  };
+};
+
+const userFactory = (): Omit<User, "id"> => {
+  const gender = faker.helpers.arrayElement(genderList);
+  const sex = faker.person.sexType();
+  const firstName = faker.person.firstName(sex);
+  const lastName = faker.person.lastName();
+  const displayName = faker.person.fullName({ firstName, lastName });
+  const email = faker.internet
+    .email({ firstName, lastName })
+    .toLocaleLowerCase();
+  const birthday = faker.date.birthdate();
+  const password = faker.internet.password({ length: 8, memorable: true });
+  const bio = faker.lorem.paragraph();
+
+  return {
+    firstName,
+    lastName,
+    displayName,
+    email,
+    birthday,
+    gender,
+    password,
+    bio,
+  };
+};
+
+const postFactory = (): Omit<Post, "id" | "authorId"> => {
+  const title = faker.lorem.lines(1);
+  const content = faker.lorem.paragraphs();
+
+  return {
+    title,
+    content,
+  };
+};
+
 async function main() {
-  // Create 10 users
-  const users = await prisma.user.createMany({
-    data: Array.from({ length: 10 }, (_, i) => ({
-      email: `user${i + 1}@example.com`,
-      name: `User ${i + 1}`,
-      password: `password${i + 1}`, // In real apps, store hashed passwords
-    })),
-  });
+  const userCount = 20;
+  const postCountPerUser = 2;
+  const commentCountPerPost = 2;
 
-  console.log("Created users:", users);
+  await Promise.all(
+    Array.from({ length: userCount }, async () => {
+      const createdUser = await prisma.user.create({
+        data: {
+          ...userFactory(),
+          avatar: {
+            create: avatarFactory(),
+          },
+          posts: {
+            create: Array.from({ length: postCountPerUser }, () => ({
+              ...postFactory(),
+            })),
+          },
+        },
+        include: {
+          posts: true,
+          avatar: true,
+        },
+      });
 
-  // Fetch all users to use them in relations
-  const allUsers = await prisma.user.findMany();
+      console.log(`Created user with id: ${createdUser.id}`);
 
-  // Create posts for each user
-  for (const user of allUsers) {
-    await prisma.post.createMany({
-      data: Array.from({ length: 2 }, (_, i) => ({
-        title: `Post ${i + 1} by ${user.name}`,
-        content: `This is the content of post ${i + 1} by ${user.name}.`,
-        authorId: user.id,
-      })),
-    });
-  }
+      return createdUser;
+    }),
+  );
 
-  // Create comments for the first post of each user
-  const allPosts = await prisma.post.findMany();
-  for (const post of allPosts) {
-    await prisma.comment.create({
-      data: {
-        content: `Comment on post ${post.title}`,
-        authorId: allUsers[0].id, // Let's say the first user comments on every post
-        parentPostId: post.id,
-      },
-    });
-  }
+  const [allUsers, allPosts] = await Promise.all([
+    prisma.user.findMany(),
+    prisma.post.findMany(),
+  ]);
 
-  // Create some likes on posts
-  for (const post of allPosts) {
-    await prisma.postLike.create({
-      data: {
-        userId: allUsers[1].id, // Let's say the second user likes every post
-        postId: post.id,
-      },
-    });
-  }
+  await Promise.all(
+    allPosts.map(async (post) => {
+      const commentPromises = Array.from(
+        { length: commentCountPerPost },
+        async () => {
+          return prisma.comment.create({
+            data: {
+              content: faker.lorem.paragraph(),
+              parentPost: {
+                connect: {
+                  id: post.id,
+                },
+              },
+              author: {
+                connect: {
+                  id: faker.helpers.arrayElement(allUsers).id,
+                },
+              },
+              likes: {
+                create: {
+                  user: {
+                    connect: {
+                      id: faker.helpers.arrayElement(allUsers).id,
+                    },
+                  },
+                },
+              },
+            },
+          });
+        },
+      );
 
-  // Create friendships between users
+      await prisma.postLike.create({
+        data: {
+          user: {
+            connect: {
+              id: faker.helpers.arrayElement(allUsers).id,
+            },
+          },
+          post: {
+            connect: {
+              id: post.id,
+            },
+          },
+        },
+      });
+
+      console.log(
+        `Created ${commentCountPerPost} comments for postId: ${post.id}`,
+      );
+
+      return Promise.all(commentPromises);
+    }),
+  );
+
   for (let i = 0; i < allUsers.length; i++) {
     for (let j = i + 1; j < allUsers.length; j++) {
-      if (Math.random() > 0.5) {
-        // Randomly decide if a friendship is created
+      if (Math.random() < 0.5) {
         await prisma.friendship.create({
           data: {
-            requesterId: allUsers[i].id,
-            addresseeId: allUsers[j].id,
+            requester: {
+              connect: {
+                id: i + 1,
+              },
+            },
+            addressee: {
+              connect: {
+                id: j + 1,
+              },
+            },
             status: "ACCEPTED",
+          },
+        });
+
+        await prisma.follow.create({
+          data: {
+            followedBy: {
+              connect: {
+                id: i + 1,
+              },
+            },
+            follows: {
+              connect: {
+                id: j + 1,
+              },
+            },
           },
         });
       }
     }
   }
-
-  console.log("Seed data created successfully with more friendships");
 }
 
 main()

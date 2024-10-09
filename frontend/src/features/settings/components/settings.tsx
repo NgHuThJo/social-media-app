@@ -52,7 +52,7 @@ export const settingsAction =
         return response;
       }
     } catch (error) {
-      return handleError(error, "Could not upload avatar");
+      return handleError(error);
     }
   };
 

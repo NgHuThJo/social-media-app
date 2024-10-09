@@ -15,5 +15,7 @@ export function logError(error: unknown) {
       code: "INTERNAL_SERVER_ERROR",
       message: "Unexpected error",
     });
+  } else {
+    logger.error(`Unknown error: ${error}`);
   }
 }

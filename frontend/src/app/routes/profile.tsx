@@ -37,13 +37,10 @@ export const profileLoader = ({ params }: LoaderFunctionArgs) => {
       data: response,
     });
   } catch (error) {
-    throw new Response(
-      JSON.stringify(handleError(error, "Could not fetch profile data")),
-      {
-        status: 500,
-        statusText: "Internal Server Error",
-      },
-    );
+    throw new Response(JSON.stringify(handleError(error)), {
+      status: 500,
+      statusText: "Internal Server Error",
+    });
   }
 };
 //

@@ -1,6 +1,3 @@
-declare module "cors";
-declare module "multer";
-
 import { File } from "multer";
 
 declare global {
@@ -11,3 +8,6 @@ declare global {
     }
   }
 }
+
+declare module "cors";
+declare module "multer";

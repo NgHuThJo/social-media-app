@@ -73,7 +73,7 @@ export function Index({ data }: IndexProps) {
         {indexData?.map((otherUser) => (
           <li className={styles.item} key={otherUser.id}>
             <img src={otherUser?.avatar?.url ?? avatar_placeholder} alt="" />
-            <p>{otherUser.name}</p>
+            <p>{otherUser.displayName}</p>
             <p>{otherUser.email}</p>
             <Follow
               followsId={otherUser.id}

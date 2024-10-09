@@ -53,6 +53,7 @@
   --bgc-brand: #2d5be3;
   --bgc-button: #343f46;
   --bgc-button-disabled: var(--bgc-emoji-grid);
+  --bgc-follow-button-active: #452857;
   --bgc-friend-button: #e0a427;
   --bgc-content: #fff;
   --bgc-emoji-grid: #2c4e70;

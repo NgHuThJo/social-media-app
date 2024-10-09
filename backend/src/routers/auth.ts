@@ -15,6 +15,8 @@ export const authRouter = router({
     .mutation(async ({ input }) => {
       const { email, password } = input;
 
+      console.log(input);
+
       try {
         const user = await authService.loginUser(email, password);
 

@@ -23,7 +23,7 @@ export function CommentLike({ commentId, likes, isLiked }: CommentLikeProps) {
   const [isCommentLiked, setIsCommentLiked] = useState(isLiked);
   const [likeCount, setLikeCount] = useState(likes);
   const { user } = useAuthContext();
-  const { isLoading, error, fetchData } = useFetch();
+  const { error, fetchData } = useFetch();
 
   if (!user) {
     return <Navigate to="/auth/login" />;
@@ -53,10 +53,6 @@ export function CommentLike({ commentId, likes, isLiked }: CommentLikeProps) {
       setIsCommentLiked(response);
     });
   };
-
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
 
   if (error) {
     return (

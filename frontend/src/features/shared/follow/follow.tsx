@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { z } from "zod";
 import { useFetch } from "@frontend/hooks/use-fetch";
+import { useDebounce } from "@frontend/hooks/use-debounce";
 import { client } from "@frontend/lib/trpc";
-import { numericStringSchema, numberToStringSchema } from "@frontend/types/zod";
+import { numberToStringSchema } from "@frontend/types/zod";
 import styles from "./follow.module.css";
 
 type FollowProps = {
@@ -16,11 +17,15 @@ const followSchema = z.object({
   userId: numberToStringSchema,
 });
 
-export function Follow({ followsId, userId, isFollowed }: FollowProps) {
-  const [isfollows, setIsfollows] = useState(isFollowed);
-  const { isLoading, error, fetchData } = useFetch();
+export function Follow({
+  followsId,
+  userId,
+  isFollowed: isUserFollowed,
+}: FollowProps) {
+  const [isFollowed, setIsFollowed] = useState(isUserFollowed);
+  const { error, fetchData } = useFetch();
 
-  const followUser = () => {
+  const followUser = useDebounce(() => {
     fetchData(async (controller) => {
       const payload = {
         followsId,
@@ -29,20 +34,17 @@ export function Follow({ followsId, userId, isFollowed }: FollowProps) {
       const parsedData = followSchema.safeParse(payload);
 
       if (!parsedData.success) {
-        throw new Error("Invalid data format");
+        throw new Error(JSON.stringify(parsedData.error.flatten()));
       }
 
       const response = await client.user.followUser.mutate(parsedData.data, {
         signal: controller.signal,
       });
 
-      setIsfollows(response);
+      setIsFollowed(response);
     });
-  };
+  }, 200);
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
   if (error) {
     return (
       <p>
@@ -55,9 +57,9 @@ export function Follow({ followsId, userId, isFollowed }: FollowProps) {
     <button
       type="button"
       onClick={followUser}
-      className={[styles.button, isfollows ? styles.active : ""].join(" ")}
+      className={[styles.button, isFollowed ? styles.active : ""].join(" ")}
     >
-      {isfollows ? "Unfollow" : "Follow"}
+      {isFollowed ? "Unfollow" : "Follow"}
     </button>
   );
 }

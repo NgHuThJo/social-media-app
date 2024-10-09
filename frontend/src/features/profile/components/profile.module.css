@@ -1,22 +1,47 @@
-.list {
+.profile {
+  --outer-breakout: 4rem;
+  --avatar-width: 5rem;
+  --p-container: 2rem;
+
   display: grid;
-  align-items: center;
-  grid-template-areas: "avatar info" "avatar info";
-  grid-template-columns: auto 1fr;
-  grid-auto-rows: minmax(0, 10rem);
-  column-gap: 2rem;
-  padding: 2rem;
-  color: red;
-  background-color: var(--bgc-content);
+  justify-items: center;
+  grid-template-rows: [avatar-start] auto [avatar-end info-start] 1fr [info-end];
+  grid-template-columns: var(--outer-breakout) [info-start] auto [avatar-start] auto [avatar-end] auto [info-end] var(
+      --outer-breakout
+    );
+  row-gap: 2rem;
+  padding: var(--p-container);
+  position: relative;
+  text-align: center;
+  background-color: var(--bgc-notification);
+
+  [data-bg] {
+    width: 100%;
+    height: calc(var(--p-container) + var(--avatar-width) / 2);
+    position: absolute;
+    background-image: linear-gradient(135deg, red, blue, green);
+  }
 }
 
-.list-item {
+.info {
   grid-area: info;
   font-weight: var(--fw-button);
   font-size: var(--fs-profile);
 
+  [data-name] {
+    color: blue;
+  }
+
+  [data-info] {
+    color: red;
+  }
+
+  [data-bio] {
+    color: green;
+  }
+
   > * {
-    padding: 1rem;
+    padding: 0.5rem;
   }
 
   > span {
@@ -27,7 +52,14 @@
 
 .avatar {
   grid-area: avatar;
-  width: 5rem;
+  width: var(--avatar-width);
   aspect-ratio: 1;
+  padding: 6px;
   border-radius: 50%;
+  position: relative;
+  background-image: linear-gradient(green, orange);
+
+  img {
+    border-radius: inherit;
+  }
 }

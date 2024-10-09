@@ -50,7 +50,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: process.env.PROXY_URL || "http://localhost:5173",
+    origin: "*",
+    // origin: process.env.PROXY_URL || "http://localhost:5173",
     credentials: true,
   }),
 );

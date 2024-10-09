@@ -1,8 +1,8 @@
 .active {
-  color: red;
+  color: var(--c-link-active);
 }
 
 .button {
   align-self: stretch;
-  background-color: var(--bgc-follow-button);
+  background-color: var(--bgc-follow-button-active);
 }

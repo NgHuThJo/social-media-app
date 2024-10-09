@@ -22,8 +22,8 @@ export function Comment({ data, intent }: CommentProps) {
   return (
     <li key={data.id} className={styles.comment}>
       <div className={styles.metadata}>
-        <p>{data.author.name}</p>
-        <p>{formatRelativeTimeDate(new Date(data.createdAt), "en")}</p>
+        <p>Author: {data.author.displayName}</p>
+        <p>Created: {formatRelativeTimeDate(new Date(data.createdAt), "en")}</p>
       </div>
       <p>{data.content}</p>
       <div className={styles.options}>

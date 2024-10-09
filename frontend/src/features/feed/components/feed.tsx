@@ -19,8 +19,8 @@ export function Feed({ data }: FeedProps) {
   return (
     <li key={data.id} className={styles["list-item"]}>
       <div className={styles["flex-row"]}>
+        <p>Author: {data.author.displayName}</p>
         <p>Created: {formatRelativeTimeDate(new Date(data.createdAt), "en")}</p>
-        <p>Author: {data.author.name}</p>
       </div>
       <h3>{data.title}</h3>
       <p>{data.content}</p>

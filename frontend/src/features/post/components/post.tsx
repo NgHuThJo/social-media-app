@@ -7,7 +7,7 @@ import { formatRelativeTimeDate } from "@frontend/utils/intl";
 import { PostData } from "@frontend/types/api";
 import styles from "./post.module.css";
 
-type PostItemData = NonNullable<PostData>[number];
+type PostItemData = NonNullable<PostData>["posts"][number];
 
 type PostProps = {
   data: PostItemData;
@@ -22,7 +22,7 @@ export function Post({ data }: PostProps) {
       {data && (
         <li className={styles["post"]}>
           <div className={styles["flex-row"]}>
-            <p>Author: {data.author.name}</p>
+            <p>Author: {data.author.displayName}</p>
             <p>
               Created: {formatRelativeTimeDate(new Date(data.createdAt), "en")}
             </p>
@@ -35,9 +35,11 @@ export function Post({ data }: PostProps) {
                 {!isCommentOpen ? "Show comments" : "Hide comments"}
               </Button>
             )}
-            <Button type="button" onClick={openForm}>
-              Reply
-            </Button>
+            {!isFormOpen && (
+              <Button type="button" onClick={openForm}>
+                Reply
+              </Button>
+            )}
             <PostLike
               postId={data.id}
               likes={data.likes.length}
