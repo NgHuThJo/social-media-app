@@ -1,9 +1,5 @@
-import { Navigation } from "@frontend/components/ui/navigation/navigation";
+import { LandingPage } from "@frontend/features/landing/landing";
 
 export function LandingRoute() {
-  return (
-    <>
-      <Navigation />
-    </>
-  );
+  return <LandingPage />;
 }

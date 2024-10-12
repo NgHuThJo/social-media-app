@@ -1,7 +1,7 @@
 import { formatDate } from "@frontend/utils/intl";
 import { ProfileData } from "@frontend/types/api";
 import styles from "./profile.module.css";
-import { avatar_placeholder } from "@frontend/assets/images";
+import { avatar_placeholder } from "@frontend/assets/resources/icons";
 import {
   capitalizeFirstLetter,
   convertAllUnderscoresToHyphens,

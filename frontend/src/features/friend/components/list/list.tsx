@@ -1,9 +1,7 @@
-import { useEffect } from "react";
 import { useDragAndDropSwap } from "@frontend/hooks/use-drag-and-drop-swap";
-import { useIntersectionObserver } from "@frontend/hooks/use-intersection-observer";
 import { FriendData } from "@frontend/types/api";
 import styles from "./list.module.css";
-import { avatar_placeholder } from "@frontend/assets/images";
+import { avatar_placeholder } from "@frontend/assets/resources/icons";
 
 type FriendListProps = {
   data: FriendData;

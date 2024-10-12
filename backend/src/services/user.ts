@@ -22,7 +22,7 @@ class UserService {
   }
 
   async followUser(userId: number, followsId: number) {
-    const isfollows = await prisma.$transaction(async (tx) => {
+    const isFollowed = await prisma.$transaction(async (tx) => {
       const follow = await tx.follow.findUnique({
         where: {
           followedById_followsId: {
@@ -63,7 +63,7 @@ class UserService {
       return false;
     });
 
-    return isfollows;
+    return isFollowed;
   }
 
   async getListOfUsers(userIdList: number[]) {
@@ -121,11 +121,7 @@ class UserService {
             url: true,
           },
         },
-        followedBy: {
-          select: {
-            id: true,
-          },
-        },
+        follows: true,
         friendRequestTo: {
           where: {
             addresseeId: userId,
@@ -178,7 +174,7 @@ class UserService {
       const {
         friendRequestTo: _friendRequestTo,
         friendRequestFrom: _friendRequestFrom,
-        followedBy: _followedBy,
+        follows: _follows,
         ...rest
       } = user;
 
@@ -186,8 +182,8 @@ class UserService {
         ...rest,
         friendshipStatus,
         isCurrentUserSender,
-        isFollowed: user.followedBy.some(
-          (followedBy) => followedBy.id === userId,
+        isFollowed: user.follows.some(
+          (follows) => follows.followedById === userId,
         ),
       };
     });

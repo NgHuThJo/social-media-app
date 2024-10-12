@@ -37,13 +37,10 @@ export const friendLoader = ({ params }: LoaderFunctionArgs) => {
       data: response,
     });
   } catch (error) {
-    throw new Response(
-      JSON.stringify(handleError(error, "Could not fetch friend data")),
-      {
-        status: 500,
-        statusText: "Internal Server Error",
-      },
-    );
+    throw new Response(JSON.stringify(handleError(error)), {
+      status: 500,
+      statusText: "Internal Server Error",
+    });
   }
 };
 

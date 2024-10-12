@@ -40,10 +40,11 @@ export function Follow({
       const response = await client.user.followUser.mutate(parsedData.data, {
         signal: controller.signal,
       });
+      console.log("isfollowed", response);
 
       setIsFollowed(response);
     });
-  }, 200);
+  }, 100);
 
   if (error) {
     return (

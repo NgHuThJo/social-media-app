@@ -2,7 +2,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useAuthContext } from "@frontend/providers/auth-context";
 import { Image } from "@frontend/components/ui/image/image";
 import styles from "./display.module.css";
-import { avatar_placeholder } from "@frontend/assets/images";
+import { avatar_placeholder } from "@frontend/assets/resources/icons";
 
 export function UserDisplay() {
   const { user } = useAuthContext();
@@ -26,8 +26,8 @@ export function UserDisplay() {
           className="icon"
         />
       </button>
-      <p className={styles.name}>{user?.name}</p>
-      <p className={styles.email}>{user?.email}</p>
+      <p className={styles.name}>{user.displayName}</p>
+      <p className={styles.email}>{user.email}</p>
     </div>
   );
 }

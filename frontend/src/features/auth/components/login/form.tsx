@@ -1,7 +1,9 @@
+import { MouseEvent } from "react";
 import {
   ActionFunction,
   Form,
   redirect,
+  useSubmit,
   useActionData,
 } from "react-router-dom";
 import { AuthContextApiType } from "@frontend/providers/auth-context";
@@ -21,6 +23,8 @@ export const loginAction =
     const formData = Object.fromEntries(await request.formData());
     const { data, errors, isValid } = validateInput(authSchema, formData);
 
+    console.log("In loginAction");
+
     if (!isValid) {
       return {
         errors,
@@ -37,25 +41,38 @@ export const loginAction =
         return redirect(`/${response.id}/profile`);
       }
     } catch (error) {
-      return handleError(error, "Login failed");
+      return handleError(error);
     }
   };
 
 export function LoginForm() {
   const actionData = useActionData() as AuthSchemaError;
+  const submit = useSubmit();
+
+  const handleGuestLogin = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData();
+    formData.set("email", "joe.doe@gmail.com");
+    formData.set("password", "password");
+
+    submit(formData, {
+      method: "post",
+    });
+  };
 
   return (
     <div className={styles.container}>
       <h1>Login</h1>
       <Form className={styles.form} method="post">
         <Input
-          error={actionData?.errors?.email}
+          error={actionData?.errors?.fieldErrors?.email}
           name="email"
           placeholder="Email address"
           type="email"
         />
         <Input
-          error={actionData?.errors?.password}
+          error={actionData?.errors?.fieldErrors?.password}
           name="password"
           placeholder="Password"
           type="password"
@@ -67,9 +84,14 @@ export function LoginForm() {
           <Button className="auth" type="submit">
             Login
           </Button>
+          <Button className="auth" type="button" onClick={handleGuestLogin}>
+            Login as Guest
+          </Button>
+        </div>
+        <div className={styles.links}>
+          <NavigationLink to="/">Back to home</NavigationLink>
           <NavigationLink to="/auth/register">Sign up</NavigationLink>
         </div>
-        <NavigationLink to="/">Back to home</NavigationLink>
       </Form>
     </div>
   );

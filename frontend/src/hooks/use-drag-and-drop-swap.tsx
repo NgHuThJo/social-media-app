@@ -20,8 +20,8 @@ export function useDragAndDropSwap<T extends HTMLElement>() {
 
     const handleDragEnter = (event: DragEvent) => {
       if (
-        event.target === draggedElementRef.current ||
-        !(event.target instanceof HTMLElement)
+        !(event.target instanceof HTMLElement) ||
+        event.target === draggedElementRef.current
       ) {
         return;
       }
@@ -60,8 +60,12 @@ export function useDragAndDropSwap<T extends HTMLElement>() {
         return;
       }
 
-      const onTransitionEnd = () => {
-        if (!draggedElementRef.current || !target) {
+      const onTransitionEnd = (event: TransitionEvent) => {
+        if (
+          event.propertyName !== "transform" ||
+          !draggedElementRef.current ||
+          !target
+        ) {
           return;
         }
 
@@ -80,6 +84,8 @@ export function useDragAndDropSwap<T extends HTMLElement>() {
         target.removeEventListener("transitionend", onTransitionEnd);
 
         draggedElementRef.current = null;
+
+        delete parentRef.current?.dataset.animating;
       };
 
       draggedElementRef.current.addEventListener(
@@ -96,6 +102,10 @@ export function useDragAndDropSwap<T extends HTMLElement>() {
       draggedElementRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
       target.style.transform = `translate(${-deltaX}px, ${-deltaY}px)`;
       delete target.dataset.drop;
+
+      if (parentRef.current) {
+        parentRef.current.dataset.animating = "true";
+      }
     };
 
     const handleDragEnd = () => {

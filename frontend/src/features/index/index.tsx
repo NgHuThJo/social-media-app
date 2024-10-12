@@ -9,7 +9,7 @@ import { client } from "@frontend/lib/trpc";
 import { UsersData } from "@frontend/types/api";
 import { indexSchema } from "@frontend/types/zod";
 import styles from "./index.module.css";
-import { avatar_placeholder } from "@frontend/assets/images";
+import { avatar_placeholder } from "@frontend/assets/resources/icons";
 
 type IndexProps = {
   data: UsersData;

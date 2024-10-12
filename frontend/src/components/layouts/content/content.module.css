@@ -1,4 +1,3 @@
 .container {
   composes: flow-spacing from global;
-  /* padding: var(--p-inline-container); */
 }

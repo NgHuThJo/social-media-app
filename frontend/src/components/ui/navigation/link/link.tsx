@@ -11,7 +11,9 @@ export function NavigationLink({ children, to }: NavLinkProps) {
           isActive ? styles.active : "",
           isPending ? styles.pending : "",
           isTransitioning ? styles.transitioning : "",
-        ].join(" ")
+        ]
+          .join(" ")
+          .trim()
       }
     >
       {children}

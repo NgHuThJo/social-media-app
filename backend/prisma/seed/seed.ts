@@ -54,6 +54,28 @@ const userFactory = (): Omit<User, "id"> => {
   };
 };
 
+const createGuest = (): Omit<User, "id"> => {
+  const gender = faker.helpers.arrayElement(genderList);
+  const firstName = "Joe";
+  const lastName = "Doe";
+  const displayName = faker.person.fullName({ firstName, lastName });
+  const email = "joe.doe@gmail.com";
+  const birthday = faker.date.birthdate();
+  const password = "password";
+  const bio = faker.lorem.paragraph();
+
+  return {
+    firstName,
+    lastName,
+    displayName,
+    email,
+    birthday,
+    gender,
+    password,
+    bio,
+  };
+};
+
 const postFactory = (): Omit<Post, "id" | "authorId"> => {
   const title = faker.lorem.lines(1);
   const content = faker.lorem.paragraphs();
@@ -68,6 +90,26 @@ async function main() {
   const userCount = 20;
   const postCountPerUser = 2;
   const commentCountPerPost = 2;
+
+  await prisma.user.create({
+    data: {
+      ...createGuest(),
+      avatar: {
+        create: avatarFactory(),
+      },
+      posts: {
+        create: Array.from({ length: postCountPerUser }, () => ({
+          ...postFactory(),
+        })),
+      },
+    },
+    include: {
+      posts: true,
+      avatar: true,
+    },
+  });
+
+  console.log(`Created guest user`);
 
   await Promise.all(
     Array.from({ length: userCount }, async () => {
@@ -157,38 +199,44 @@ async function main() {
 
   for (let i = 0; i < allUsers.length; i++) {
     for (let j = i + 1; j < allUsers.length; j++) {
-      if (Math.random() < 0.5) {
-        await prisma.friendship.create({
-          data: {
-            requester: {
-              connect: {
-                id: i + 1,
-              },
-            },
-            addressee: {
-              connect: {
-                id: j + 1,
-              },
-            },
-            status: "ACCEPTED",
-          },
-        });
+      const randomNumber = Math.random();
+      const friendStatus = 3 * randomNumber;
 
-        await prisma.follow.create({
-          data: {
-            followedBy: {
-              connect: {
-                id: i + 1,
-              },
-            },
-            follows: {
-              connect: {
-                id: j + 1,
-              },
+      await prisma.friendship.create({
+        data: {
+          requester: {
+            connect: {
+              id: randomNumber < 0.5 ? i + 1 : j + 1,
             },
           },
-        });
-      }
+          addressee: {
+            connect: {
+              id: randomNumber < 0.5 ? j + 1 : i + 1,
+            },
+          },
+          status:
+            friendStatus < 1
+              ? "PENDING"
+              : friendStatus < 2
+                ? "ACCEPTED"
+                : "DECLINED",
+        },
+      });
+
+      await prisma.follow.create({
+        data: {
+          followedBy: {
+            connect: {
+              id: randomNumber < 0.5 ? i + 1 : j + 1,
+            },
+          },
+          follows: {
+            connect: {
+              id: randomNumber < 0.5 ? j + 1 : i + 1,
+            },
+          },
+        },
+      });
     }
   }
 }
