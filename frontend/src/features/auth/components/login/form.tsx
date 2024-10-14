@@ -9,13 +9,22 @@ import {
 import { AuthContextApiType } from "@frontend/providers/auth-context";
 import { Button } from "@frontend/components/ui/button/button";
 import { FormError } from "@frontend/components/ui/form/error/error";
+import { Image } from "@frontend/components/ui/image/image";
 import { Input } from "@frontend/components/ui/form/input/input";
 import { NavigationLink } from "@frontend/components/ui/navigation/link/link";
 import { client } from "@frontend/lib/trpc";
+import { getBreakpoints } from "@frontend/utils/breakpoints";
 import { handleError } from "@frontend/utils/error-handler";
 import { validateInput } from "@frontend/utils/input-validation";
 import { authSchema, AuthSchemaError } from "@frontend/types/zod";
 import styles from "./form.module.css";
+import {
+  landing_page_desktop,
+  landing_page_mobile,
+  landing_page_tablet,
+} from "@frontend/assets/resources/images";
+
+const { xs, s } = getBreakpoints();
 
 export const loginAction =
   (authContextApi: AuthContextApiType): ActionFunction =>
@@ -63,8 +72,14 @@ export function LoginForm() {
 
   return (
     <div className={styles.container}>
-      <h1>Login</h1>
+      <Image
+        src={landing_page_mobile}
+        srcSet={`${landing_page_mobile} 480w, ${landing_page_tablet} 800w, ${landing_page_desktop} 1440w`}
+        sizes={`(max-width: ${xs}) 480px, (max-width: ${s}) 800px, 1440px`}
+        alt="Background landing page"
+      />
       <Form className={styles.form} method="post">
+        <h1>Login</h1>
         <Input
           error={actionData?.errors?.fieldErrors?.email}
           name="email"

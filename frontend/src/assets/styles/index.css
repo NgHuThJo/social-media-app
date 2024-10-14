@@ -43,7 +43,9 @@
 
   /* colors */
   --c-box-shadow: #d8e1ef;
+  --c-brand: #2d5be3;
   --c-error: #da3633;
+  --c-heading: #ff00ff;
   --c-link: #000;
   --c-link-active: #a020f0;
   --c-logo: #fff;
@@ -82,12 +84,12 @@
 html {
   display: flex;
   flex-direction: column;
-  min-height: 100svh;
-  overflow-y: scroll;
+  min-height: 100vh;
 }
 
 body {
   flex-grow: 1;
+  overflow-y: scroll;
 }
 
 a,
@@ -141,11 +143,19 @@ ul {
 /* root styles */
 #root {
   display: grid;
+  min-height: 100vh;
   min-width: var(--min-w-root);
-  min-height: 100svh;
   font-family: var(--ff-root);
   font-weight: var(--fw-root);
   font-size: var(--fs-root);
   color: var(--c-root);
   background-color: var(--bgc-root);
+}
+
+@media (prefers-reduced-motion) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -1,9 +1,9 @@
-.container {
+.wrapper {
   display: grid;
   grid-template-rows: auto 1fr;
 }
 
-.background {
+.content-wrapper {
   composes: grid-stack from global;
 
   img {
@@ -13,17 +13,17 @@
   }
 }
 
-.canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
 .content {
   display: grid;
-  grid-template-rows: 1fr auto;
-  gap: 2rem;
+  grid-template-rows: repeat(3, 1fr);
+  align-items: center;
+  justify-items: center;
   padding: 2rem;
-  margin: 2rem;
-  background-color: var(--bgc-content);
+  text-align: center;
+  color: var(--c-brand);
+
+  h1 {
+    font-size: var(--fs-h1);
+    color: var(--c-heading);
+  }
 }

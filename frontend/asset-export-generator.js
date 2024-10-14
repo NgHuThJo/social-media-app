@@ -32,6 +32,10 @@ async function generateExports(dir, relativeDir = ".") {
 
     const exportLines = await Promise.all(
       files.map(async (file) => {
+        if (file === "index.ts") {
+          return "";
+        }
+
         const filePath = path.join(dir, file);
         const relativePath = path.join(relativeDir, file);
         const stat = await fs.stat(filePath);

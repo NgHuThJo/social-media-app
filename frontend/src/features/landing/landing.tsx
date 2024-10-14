@@ -1,43 +1,57 @@
+import { Image } from "@frontend/components/ui/image/image";
 import { Navigation } from "@frontend/components/ui/navigation/navigation";
-import { useCanvas } from "@frontend/hooks/use-canvas";
 import { getBreakpoints } from "@frontend/utils/breakpoints";
 import styles from "./landing.module.css";
 import {
+  landing_page_desktop,
   landing_page_mobile,
   landing_page_tablet,
-  landing_page_desktop,
 } from "@frontend/assets/resources/images";
 
-const { xs, s, m } = getBreakpoints();
+const { xs, s } = getBreakpoints();
 
 export function LandingPage() {
-  const { canvasRef } = useCanvas();
-
   return (
-    <div className={styles.container}>
+    <div className={styles.wrapper}>
       <Navigation />
-      <div className={styles.background}>
-        <img
+      <div className={styles["content-wrapper"]}>
+        <Image
           src={landing_page_mobile}
           srcSet={`${landing_page_mobile} 480w, ${landing_page_tablet} 800w, ${landing_page_desktop} 1440w`}
-          sizes={`(max-width: 600px) ${xs}, (max-width: 900px) ${s}, (max-width: 1200px) ${m}`}
-          alt="background image landing page"
+          sizes={`(max-width: ${xs}) 480px, (max-width: ${s}) 800px, 1440px`}
+          alt="Background landing page"
         />
-        <section className={styles.content}>
-          <div>
-            <canvas ref={canvasRef} className={styles.canvas}>
-              <p>Fallback for browsers which do not support Canvas</p>
-            </canvas>
-          </div>
-          <section>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime
-            laudantium, dignissimos distinctio ex quod veniam quibusdam
-            obcaecati consequuntur blanditiis earum harum dolorem esse, illum
-            hic reiciendis voluptas, necessitatibus possimus quasi vero
-            accusamus ipsum quo nulla provident! At sit ipsa eius sunt facere
-            sapiente consequuntur assumenda libero quasi! Ipsum, libero ut?
-          </section>
-        </section>
+        <div className={styles.content}>
+          <h1>Welcome to the social media landing page</h1>
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit
+            aut perferendis sint ullam, architecto, molestias tenetur laudantium
+            autem minus animi possimus veritatis nam omnis. Pariatur, amet
+            nostrum odio officia vero eum beatae, placeat sequi et quidem ipsam
+            molestiae debitis maiores. Aperiam ea cumque, quod hic quas
+            consequatur exercitationem! Velit delectus saepe, pariatur officia
+            impedit fugiat, voluptatibus quas, distinctio id consequatur quidem.
+            Nobis dolorem ut natus repellendus error iure. Quam, eos molestias
+            perspiciatis in est voluptatum, qui dolorum enim debitis laboriosam
+            voluptate delectus magnam aliquam at error et? Ab tempora maxime
+            natus quibusdam vitae est, animi optio dolorem voluptatibus ea
+            rerum?
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates
+            commodi quo totam nulla. Veniam, quis et voluptatibus recusandae est
+            ullam nemo quas, expedita hic, at doloremque perspiciatis veritatis
+            minus? Non eos sint placeat animi, suscipit quidem magni libero
+            numquam id? Facilis possimus asperiores provident fuga aliquid
+            nostrum necessitatibus! Ipsa praesentium repellendus eligendi eum
+            fugit sapiente molestiae numquam architecto iure impedit quod,
+            recusandae nemo nostrum repellat pariatur ex, porro veritatis minima
+            corrupti. Repudiandae officia quod quisquam, molestiae totam nisi
+            magnam esse voluptates sit, dolorem dicta debitis blanditiis
+            accusamus ex! Vero repellendus ea nobis, tempora labore molestias
+            laudantium corrupti perspiciatis! Dignissimos, quis.
+          </p>
+        </div>
       </div>
     </div>
   );
