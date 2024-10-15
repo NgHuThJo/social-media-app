@@ -14,6 +14,7 @@ import {
   registrationSchema,
   RegistrationSchemaError,
 } from "@frontend/types/zod";
+import styles from "./form.module.css";
 
 export const registerAction: ActionFunction = async ({ request }) => {
   const formData = Object.fromEntries(await request.formData());
@@ -26,7 +27,7 @@ export const registerAction: ActionFunction = async ({ request }) => {
   try {
     await client.user.registerUser.mutate(data);
   } catch (error) {
-    return handleError(error, "Registration failed");
+    return handleError(error);
   }
 
   return redirect("/auth/login");
@@ -36,13 +37,28 @@ export function RegisterForm() {
   const actionData = useActionData() as RegistrationSchemaError;
 
   return (
-    <>
-      <Form method="post">
+    <div className={styles.container}>
+      <div className={styles.left}></div>
+      <div className={styles.right}></div>
+      <Form method="post" className={styles.form}>
+        <h2>Register form</h2>
         <Input
           type="text"
-          name="name"
-          placeholder="Name"
-          error={actionData?.errors?.fieldErrors?.name}
+          name="firstName"
+          placeholder="First name"
+          error={actionData?.errors?.fieldErrors?.firstName}
+        />
+        <Input
+          type="text"
+          name="lastName"
+          placeholder="Last name"
+          error={actionData?.errors?.fieldErrors?.lastName}
+        />
+        <Input
+          type="text"
+          name="displayName"
+          placeholder="First name"
+          error={actionData?.errors?.fieldErrors?.displayName}
         />
         <Input
           type="email"
@@ -59,8 +75,8 @@ export function RegisterForm() {
         <Button type="submit" className="auth">
           Register
         </Button>
+        <Link to="/">Back to home</Link>
       </Form>
-      <Link to="/">Back to home</Link>
-    </>
+    </div>
   );
 }

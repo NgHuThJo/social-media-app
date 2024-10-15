@@ -98,7 +98,6 @@ export function FeedRoute() {
         {(feeds) => (
           <ContentLayout>
             <h2>Feeds</h2>
-            <FeedList data={feeds} />
             {isOpen ? (
               <FeedForm onClose={close} />
             ) : (
@@ -106,6 +105,7 @@ export function FeedRoute() {
                 Create Feed
               </Button>
             )}
+            <FeedList data={feeds} />
           </ContentLayout>
         )}
       </Await>

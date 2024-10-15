@@ -228,4 +228,28 @@ export const postRouter = router({
 
       return isLiked;
     }),
+
+  updatePost: publicProcedure
+    .input(
+      z.object({
+        title: nonEmptyStringSchema,
+        content: nonEmptyStringSchema,
+        postId: positiveNumberSchema,
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const { title, content, postId } = input;
+
+      try {
+        const updatedPost = await postService.updatePost(
+          postId,
+          title,
+          content,
+        );
+
+        return updatedPost;
+      } catch (error) {
+        logError(error);
+      }
+    }),
 });

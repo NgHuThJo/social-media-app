@@ -1,11 +1,15 @@
 .form {
   display: grid;
   justify-items: start;
-  gap: 1rem;
+  gap: 2rem;
   padding: 2rem;
-  background-color: var(--bgc-content);
+  background-image: var(--gradient-friend);
 
   > label {
     flex-direction: column;
+
+    input[type="file"] {
+      padding: 0;
+    }
   }
 }

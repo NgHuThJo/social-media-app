@@ -105,15 +105,23 @@ export const userRouter = router({
     .input(
       z.object({
         email: emailSchema,
-        name: nameSchema,
+        firstName: nameSchema,
+        lastName: nameSchema,
+        displayName: nameSchema,
         password: passwordSchema,
       }),
     )
     .mutation(async ({ input }) => {
-      const { email, name, password } = input;
+      const { email, firstName, lastName, displayName, password } = input;
 
       try {
-        const newUser = await userService.registerUser(email, name, password);
+        const newUser = await userService.registerUser(
+          email,
+          firstName,
+          lastName,
+          displayName,
+          password,
+        );
 
         return newUser;
       } catch (error) {

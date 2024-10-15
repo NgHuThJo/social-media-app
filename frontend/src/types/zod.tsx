@@ -79,7 +79,9 @@ export type AuthSchemaError = SchemaError<typeof authSchema>;
 
 // Extended schemas
 export const registrationSchema = authSchema.extend({
-  name: nameSchema,
+  firstName: nameSchema,
+  lastName: nameSchema,
+  displayName: nameSchema,
 });
 export type RegistrationSchemaError = SchemaError<typeof registrationSchema>;
 
@@ -100,6 +102,11 @@ export const postSchema = userIdSchema.extend({
   title: nonEmptyStringSchema,
 });
 export type PostSchemaError = SchemaError<typeof postSchema>;
+export const updatePostSchema = z.object({
+  postId: z.number().min(1, "Number must be positive"),
+  content: nonEmptyStringSchema,
+  title: nonEmptyStringSchema,
+});
 
 export const feedFormSchema = userIdSchema.extend({
   file: fileSchema,

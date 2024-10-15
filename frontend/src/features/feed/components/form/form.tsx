@@ -47,7 +47,7 @@ export const createFeed: ActionDispatchFunction = async (
 
     return redirect(currentUrl.pathname + currentUrl.search);
   } catch (error) {
-    return handleError(error, "Creation of feed failed");
+    return handleError(error);
   }
 };
 
@@ -78,7 +78,12 @@ export function FeedForm({ onClose }: FeedFormProps) {
             placeholder="Your post..."
             error={actionData?.errors?.fieldErrors?.content}
           />
-          <Input type="file" name="file" label="Upload a file" />
+          <Input
+            type="file"
+            name="file"
+            labelClassName="file-selector"
+            label="Upload a file"
+          />
           {actionData?.errors?.general && (
             <FormError message={actionData.errors.general} />
           )}

@@ -3,9 +3,11 @@
   grid-template-rows: auto 1fr;
   gap: var(--gap-main);
   padding: var(--p-inline-container);
+  background-image: var(--gradient-app);
 }
 
 .nav {
   padding: var(--p-inline-container);
-  background-color: var(--bgc-content);
+  background-image: var(--gradient-inbox);
+  color: var(--c-inbox);
 }

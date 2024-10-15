@@ -95,11 +95,14 @@ export function PostRoute() {
         {(posts) => (
           <ContentLayout>
             <h2>Posts</h2>
+            {isOpen ? (
+              <PostForm onClose={close} />
+            ) : (
+              <Button type="button" className="submit" onClick={open}>
+                Create post
+              </Button>
+            )}
             <PostList data={posts} />
-            <Button type="button" className="submit" onClick={open}>
-              Create post
-            </Button>
-            {isOpen && <PostForm onClose={close} />}
           </ContentLayout>
         )}
       </Await>

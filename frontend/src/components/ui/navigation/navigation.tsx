@@ -19,7 +19,10 @@ export function Navigation() {
       {userId && <NavigationList userId={userId} />}
       <div className={styles["flex-row"]}>
         {!userId ? (
-          <NavigationLink to="/auth/login">Login</NavigationLink>
+          <>
+            <NavigationLink to="/auth/login">Login</NavigationLink>
+            <NavigationLink to="/auth/register">Register</NavigationLink>
+          </>
         ) : (
           <>
             <UserDisplay />

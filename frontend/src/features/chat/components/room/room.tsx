@@ -124,7 +124,7 @@ export function Chatroom({ currentRoomId }: ChatroomProps) {
             ref={index === messages.length - 1 ? scrollRef : null}
           >
             <span>
-              {message.author.name} (
+              {message.author.displayName} (
               {formatRelativeTimeDate(new Date(message.createdAt), "en")})
             </span>
             : {message.content}

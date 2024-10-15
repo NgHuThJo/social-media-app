@@ -1,0 +1,49 @@
+.container {
+  display: grid;
+  place-content: center;
+  background-image: var(--gradient-app);
+}
+
+.form {
+  display: grid;
+  gap: 2rem;
+  padding: 2rem;
+  background-image: var(--gradient-friend);
+
+  h2 {
+    color: var(--c-inbox);
+  }
+}
+
+.left,
+.right {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  position: absolute;
+  background-image: var(--gradient-profile);
+  animation: 1.5s linear 0.5s forwards move;
+}
+
+.left {
+  --translateX: -100%;
+
+  inset: 0 40% 0 0;
+  clip-path: polygon(0 0, 100% 0, 67% 100%, 0 100%);
+}
+
+.right {
+  --translateX: 100%;
+
+  inset: 0 0 0 40%;
+  clip-path: polygon(33% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+@keyframes move {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--translateX));
+  }
+}

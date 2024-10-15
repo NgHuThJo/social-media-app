@@ -24,7 +24,7 @@ export function Feed({ data }: FeedProps) {
       </div>
       <h3>{data.title}</h3>
       <p>{data.content}</p>
-      <Image src={data.asset?.url} alt="" />
+      {data.asset?.url && <Image src={data.asset.url} alt="" />}
       <div className={styles["flex-row"]}>
         {data._count.comments > 0 && (
           <Button type="button" className="toggle" onClick={toggleComment}>

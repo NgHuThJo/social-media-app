@@ -3,6 +3,12 @@
 
   padding: 2rem;
   background-color: var(--bgc-content);
+
+  img {
+    width: 100%;
+    max-height: 20rem;
+    object-fit: cover;
+  }
 }
 
 .flex-row {

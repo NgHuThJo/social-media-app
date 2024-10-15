@@ -39,7 +39,7 @@ export const createPost: ActionDispatchFunction = async (
 
     return redirect(currentUrl.pathname + currentUrl.search);
   } catch (error) {
-    return handleError(error, "Creation of post failed");
+    return handleError(error);
   }
 };
 
@@ -50,7 +50,6 @@ export function PostForm({ onClose }: PostProps) {
     <Form method="post" className={styles.form}>
       <Input
         type="text"
-        label="Post"
         name="title"
         placeholder="Your post title..."
         error={actionData?.errors?.fieldErrors?.title}

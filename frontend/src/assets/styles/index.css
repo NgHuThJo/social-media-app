@@ -47,10 +47,11 @@
   --c-error: #da3633;
   --c-heading: #ff00ff;
   --c-link: #000;
-  --c-link-active: #a020f0;
+  --c-link-active: #ff2020;
   --c-logo: #fff;
   --c-pending-message: var(--c-error);
   --c-root: #71728c;
+  --c-inbox: #804000;
 
   --bgc-brand: #2d5be3;
   --bgc-button: #343f46;
@@ -64,6 +65,18 @@
   --bgc-root: #eff4fb;
   --bgc-chat-sidebar-grid-item: #4e5d6b;
   --bgc-active-chat: #38230b;
+  --bgc-progress-bar: #40ff00;
+  --gradient-inbox: linear-gradient(to right, #457fca, #5691c8);
+  --gradient-app: linear-gradient(43deg, #4158d0 0%, #c850c0 46%, #ffcc70 100%);
+  --gradient-friend: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
+  --gradient-profile: linear-gradient(180deg, #52acff 25%, #ffe32c 100%);
+
+  --gradient-progress-bar: linear-gradient(
+    43deg,
+    #4158d0 0%,
+    #c850c0 46%,
+    #ffcc70 100%
+  );
 
   /* transition */
   --transition-duration: 0.5s;

@@ -11,7 +11,7 @@
   font-weight: var(--fw-heading);
 
   input[type="file"]::file-selector-button {
-    background-color: var(--bgc-button);
+    background-image: var(--gradient-app);
   }
 }
 

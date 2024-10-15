@@ -61,8 +61,8 @@ export function Settings() {
 
   return (
     <ContentLayout>
-      <h1>Settings</h1>
       <Form method="post" encType="multipart/form-data" className={styles.form}>
+        <h1>Settings</h1>
         <Input
           type="file"
           name="file"

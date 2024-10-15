@@ -8,7 +8,7 @@
 .item {
   display: grid;
   align-items: center;
-  column-gap: 2rem;
+  gap: 1rem 2rem;
   grid-template-columns: auto 1fr;
   grid-template-areas: "avatar name" "avatar email" "button friend";
   padding: 2rem;
@@ -20,4 +20,16 @@
     aspect-ratio: 1;
     border-radius: 50%;
   }
+
+  > p {
+    font-size: 1.25rem;
+  }
+}
+
+.name {
+  align-self: end;
+}
+
+.email {
+  align-self: start;
 }

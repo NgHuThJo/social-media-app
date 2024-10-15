@@ -199,7 +199,13 @@ class UserService {
     };
   }
 
-  async registerUser(email: string, name: string, password: string) {
+  async registerUser(
+    email: string,
+    firstName: string,
+    lastName: string,
+    displayName: string,
+    password: string,
+  ) {
     const user = await prisma.user.findUnique({
       where: {
         email,
@@ -219,7 +225,9 @@ class UserService {
     return await prisma.user.create({
       data: {
         email,
-        name,
+        firstName,
+        lastName,
+        displayName,
         password,
       },
     });

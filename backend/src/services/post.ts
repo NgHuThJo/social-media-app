@@ -423,6 +423,43 @@ class PostService {
       },
     };
   }
+
+  async updatePost(postId: number, title: string, content: string) {
+    const updatedPost = await prisma.$transaction(async (tx) => {
+      const post = await tx.post.update({
+        where: { id: postId },
+        data: {
+          title,
+          content,
+        },
+        include: {
+          author: {
+            omit: {
+              password: true,
+            },
+          },
+          _count: {
+            select: {
+              comments: true,
+              likes: true,
+            },
+          },
+          likes: {
+            select: {
+              userId: true,
+            },
+          },
+        },
+      });
+
+      return {
+        ...post,
+        isLiked: post.likes.some(({ userId }) => userId === post.authorId),
+      };
+    });
+
+    return updatedPost;
+  }
 }
 
 export const postService = new PostService();
