@@ -252,4 +252,46 @@ export const postRouter = router({
         logError(error);
       }
     }),
+
+  updateComment: publicProcedure
+    .input(
+      z.object({
+        content: nonEmptyStringSchema,
+        commentId: positiveNumberSchema,
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const { content, commentId } = input;
+
+      const updatedComment = await postService.updateComment(
+        commentId,
+        content,
+      );
+
+      return updatedComment;
+    }),
+
+  updateFeed: publicProcedure
+    .input(
+      z.object({
+        title: nonEmptyStringSchema,
+        content: nonEmptyStringSchema,
+        postId: positiveNumberSchema,
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const { title, content, postId } = input;
+
+      try {
+        const updatedFeed = await postService.updateFeed(
+          postId,
+          title,
+          content,
+        );
+
+        return updatedFeed;
+      } catch (error) {
+        logError(error);
+      }
+    }),
 });

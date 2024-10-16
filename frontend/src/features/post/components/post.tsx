@@ -90,7 +90,13 @@ export function Post({ data: postData }: PostProps) {
             />
           </div>
           {isEditing && (
-            <EditForm edit={editPost} close={closeEdit} id={data.id} />
+            <EditForm
+              edit={editPost}
+              close={closeEdit}
+              id={data.id}
+              title={data.title}
+              content={data.content}
+            />
           )}
           {isFormOpen && (
             <CommentForm

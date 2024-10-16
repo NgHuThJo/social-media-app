@@ -90,6 +90,10 @@ export const commentSchema = userIdSchema.extend({
   postId: numericStringSchema,
 });
 export type CommentSchemaError = SchemaError<typeof commentSchema>;
+export const updateCommentSchema = z.object({
+  commentId: z.number().min(1, "Number must be positive"),
+  content: nonEmptyStringSchema,
+});
 
 export const messageSchema = userIdSchema.extend({
   content: nonEmptyStringSchema,
