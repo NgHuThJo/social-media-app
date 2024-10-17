@@ -3,18 +3,21 @@
   max-height: var(--max-h-chat-sidebar-list);
   background-color: var(--bgc-chat-sidebar-grid-item);
   overflow: auto;
-
-  > :last-child {
-    border-bottom: 1px solid var(--c-root);
-  }
 }
 
 .list-item {
   display: block;
   padding: var(--p-chat-sidebar-grid-item);
-  border-top: 1px solid var(--c-root);
+
+  &:last-child {
+    border-bottom: 1px solid var(--c-root);
+  }
 }
 
 .active {
   background-color: var(--bgc-active-chat);
+}
+
+.no-chatroom {
+  padding: 1rem;
 }

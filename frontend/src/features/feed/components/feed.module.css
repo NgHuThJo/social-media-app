@@ -9,6 +9,11 @@
     max-height: 20rem;
     object-fit: cover;
   }
+
+  a {
+    font-weight: var(--fw-heading);
+    color: var(--c-error);
+  }
 }
 
 .flex-row {

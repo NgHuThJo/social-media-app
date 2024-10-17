@@ -1,4 +1,5 @@
 import { FormEvent, useState } from "react";
+import { Link } from "react-router-dom";
 import { useAuthContext } from "@frontend/providers/auth-context";
 import { useFetch } from "@frontend/hooks/use-fetch";
 import { useToggle } from "@frontend/hooks/use-toggle";
@@ -56,7 +57,16 @@ export function Feed({ data: feedData }: FeedProps) {
   return (
     <li key={data.id} className={styles["list-item"]}>
       <div className={styles["flex-row"]}>
-        <p>Author: {data.author.displayName}</p>
+        <p>
+          Author:{" "}
+          {data.authorId !== user?.id ? (
+            <Link to={`../profile/${String(data.authorId)}`}>
+              {data.author.displayName}
+            </Link>
+          ) : (
+            data.author.displayName
+          )}
+        </p>
         <p>Created: {formatRelativeTimeDate(new Date(data.createdAt), "en")}</p>
       </div>
       <h3>{data.title}</h3>

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useDragAndDropSwap } from "@frontend/hooks/use-drag-and-drop-swap";
 import { FriendData } from "@frontend/types/api";
 import styles from "./list.module.css";
@@ -19,7 +20,9 @@ export function FriendList({ data }: FriendListProps) {
             alt="avatar"
             className={styles.avatar}
           />
-          <p className={styles.name}>{friend.displayName}</p>
+          <Link to={`../profile/${String(friend.id)}`}>
+            <p className={styles.name}>{friend.displayName}</p>
+          </Link>
           <p className={styles.email}>{friend.email}</p>
         </li>
       ))}

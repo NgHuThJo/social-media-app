@@ -1,4 +1,5 @@
 import { FormEvent, useState } from "react";
+import { Link } from "react-router-dom";
 import { useAuthContext } from "@frontend/providers/auth-context";
 import { useToggle } from "@frontend/hooks/use-toggle";
 import { useFetch } from "@frontend/hooks/use-fetch";
@@ -60,7 +61,16 @@ export function Post({ data: postData }: PostProps) {
       {data && (
         <li className={styles["post"]}>
           <div className={styles["flex-row"]}>
-            <p>Author: {data.author.displayName}</p>
+            <p>
+              Author:{" "}
+              {data.authorId !== user?.id ? (
+                <Link to={`../profile/${String(data.authorId)}`}>
+                  {data.author.displayName}
+                </Link>
+              ) : (
+                data.author.displayName
+              )}
+            </p>
             <p>
               Created: {formatRelativeTimeDate(new Date(data.createdAt), "en")}
             </p>

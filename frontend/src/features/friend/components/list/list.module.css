@@ -33,6 +33,10 @@
   &[data-drop] {
     opacity: 0.5;
   }
+
+  a {
+    color: var(--c-brand);
+  }
 }
 
 .avatar {

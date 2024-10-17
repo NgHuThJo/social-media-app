@@ -12,6 +12,7 @@ import { LoginRoute } from "./routes/login";
 import { loginAction } from "@frontend/features/auth/components/login/form";
 import { NotFoundRoute } from "./routes/not-found";
 import { PostRoute, postLoader, postAction } from "./routes/post";
+import { PublicProfileRoute } from "./routes/public-profile";
 import { ProfileRoute, profileLoader } from "./routes/profile";
 import { ProtectedRoute } from "./routes/protected";
 import { RegisterRoute } from "./routes/register";
@@ -84,6 +85,10 @@ export function Router() {
                   path: "settings",
                   element: <SettingsRoute />,
                   action: settingsAction(authContextApi),
+                },
+                {
+                  path: "profile/:profileId",
+                  element: <PublicProfileRoute />,
                 },
               ],
             },

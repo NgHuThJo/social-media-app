@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useAuthContext } from "@frontend/providers/auth-context";
 import { useInfiniteScroll } from "@frontend/hooks/use-infinite-scroll";
 import { useLatest } from "@frontend/hooks/use-latest";
@@ -73,7 +73,9 @@ export function Index({ data }: IndexProps) {
         {indexData?.map((otherUser) => (
           <li className={styles.item} key={otherUser.id}>
             <img src={otherUser?.avatar?.url ?? avatar_placeholder} alt="" />
-            <p className={styles.name}>{otherUser.displayName}</p>
+            <Link to={`../profile/${String(otherUser.id)}`}>
+              <p className={styles.name}>{otherUser.displayName}</p>
+            </Link>
             <p className={styles.email}>{otherUser.email}</p>
             <Follow
               followsId={otherUser.id}

@@ -2,6 +2,11 @@
   composes: flow-spacing from global;
   padding: 2rem;
   background-color: var(--bgc-content);
+
+  a {
+    font-weight: var(--fw-heading);
+    color: var(--c-error);
+  }
 }
 
 .flex-row {

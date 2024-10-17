@@ -24,6 +24,12 @@
   > p {
     font-size: 1.25rem;
   }
+
+  a {
+    font-weight: var(--fw-heading);
+    font-size: var(--fs-h3);
+    color: var(--c-brand);
+  }
 }
 
 .name {
