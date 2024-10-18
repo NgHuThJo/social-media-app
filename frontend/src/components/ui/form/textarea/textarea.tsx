@@ -17,7 +17,9 @@ export function TextArea({
       {typeof error === "string" ? (
         <FormError message={error} />
       ) : (
-        error?.map((message) => <FormError message={message} />)
+        error?.map((message, index) => (
+          <FormError message={message} key={index} />
+        ))
       )}
     </div>
   );

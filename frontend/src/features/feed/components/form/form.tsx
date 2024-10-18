@@ -29,6 +29,8 @@ export const createFeed: ActionDispatchFunction = async (
   };
   const { data, errors, isValid } = validateInput(feedFormSchema, payload);
 
+  console.log(errors);
+
   if (!isValid) {
     return { errors };
   }
@@ -52,7 +54,7 @@ export const createFeed: ActionDispatchFunction = async (
 };
 
 export function FeedForm({ onClose }: FeedFormProps) {
-  const actionData = useActionData as FeedFormSchemaError;
+  const actionData = useActionData() as FeedFormSchemaError;
   const navigation = useNavigation();
 
   return (
@@ -83,6 +85,7 @@ export function FeedForm({ onClose }: FeedFormProps) {
             name="file"
             labelClassName="file-selector"
             label="Upload a file"
+            error={actionData?.errors?.fieldErrors?.file}
           />
           {actionData?.errors?.general && (
             <FormError message={actionData.errors.general} />

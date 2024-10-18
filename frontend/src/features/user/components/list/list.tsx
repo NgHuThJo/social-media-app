@@ -10,7 +10,11 @@ export function UserList({ data }: UserListProps) {
   return (
     <div className={styles.layout}>
       {data?.map((user) => (
-        <Link to="/" key={user.id} className={styles.item}>
+        <Link
+          to={`../profile/${user.id}`}
+          key={user.id}
+          className={styles.item}
+        >
           {user.displayName}
         </Link>
       ))}

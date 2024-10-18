@@ -64,14 +64,14 @@ export function FeedList({ data }: FeedListProps) {
           onClick={goToPreviousPage}
           disabled={!cursors.hasMoreBackward}
         >
-          {isLoading ? "Loading..." : "Back"}
+          {cursors.hasMoreBackward ? "Back" : "Already at first page"}
         </button>
         <button
           type="button"
           onClick={goToNextPage}
           disabled={!cursors.hasMoreForward}
         >
-          {isLoading ? "Loading..." : "Next"}
+          {cursors.hasMoreForward ? "Next" : "Already at last page"}
         </button>
       </div>
       <ul className={styles.list}>

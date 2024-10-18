@@ -24,13 +24,14 @@ export function CommentList({ parentId, commentType }: PostCommentProps) {
   const { isLoading, error, fetchData } = useFetch();
   const location = useLocation();
 
-  if (!user) {
-    return <Navigate to="/auth/login" />;
-  }
-  const userId = user.id.toLocaleString();
+  const userId = user?.id.toLocaleString();
 
   useEffect(() => {
-    fetchData(async (controller, setError) => {
+    fetchData(async (controller) => {
+      if (!userId) {
+        return;
+      }
+
       const payload = {
         postId: parentId,
         userId,
@@ -45,7 +46,7 @@ export function CommentList({ parentId, commentType }: PostCommentProps) {
       );
 
       if (!isValid) {
-        return setError({ errors });
+        throw new Error(JSON.stringify(errors));
       }
 
       const response =
@@ -63,6 +64,10 @@ export function CommentList({ parentId, commentType }: PostCommentProps) {
       setComments(response);
     });
   }, [parentId, commentType, location]);
+
+  if (!user) {
+    return <Navigate to="/auth/login" />;
+  }
 
   if (isLoading) {
     return <div>Loading comments...</div>;

@@ -1,6 +1,11 @@
 .wrapper {
   display: grid;
   grid-template-rows: auto 1fr;
+
+  > nav {
+    position: sticky;
+    top: 0;
+  }
 }
 
 .content-wrapper {
@@ -9,21 +14,25 @@
   img {
     width: 100%;
     height: 100%;
+    max-height: 100vh;
     object-fit: cover;
   }
 }
 
 .content {
   display: grid;
-  grid-template-rows: repeat(3, 1fr);
   align-items: center;
   justify-items: center;
+  place-content: center;
+  gap: 2rem;
+  grid-template-columns: min(100%, 60rem);
+  grid-template-rows: repeat(3, auto);
   padding: 2rem;
   text-align: center;
-  color: var(--c-brand);
+  color: var(--c-text);
 
   h1 {
     font-size: var(--fs-h1);
-    color: var(--c-heading);
+    color: var(--c-text);
   }
 }

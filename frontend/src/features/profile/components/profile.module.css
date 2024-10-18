@@ -28,18 +28,6 @@
   font-weight: var(--fw-button);
   font-size: var(--fs-profile);
 
-  [data-name] {
-    color: blue;
-  }
-
-  [data-info] {
-    color: red;
-  }
-
-  [data-bio] {
-    color: green;
-  }
-
   > * {
     padding: 0.5rem;
   }

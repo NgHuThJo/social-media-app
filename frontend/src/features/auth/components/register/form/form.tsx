@@ -1,12 +1,12 @@
 import {
   ActionFunction,
   Form,
-  Link,
   redirect,
   useActionData,
 } from "react-router-dom";
 import { Button } from "@frontend/components/ui/button/button";
 import { Input } from "@frontend/components/ui/form/input/input";
+import { NavigationLink } from "@frontend/components/ui/navigation/link/link";
 import { client } from "@frontend/lib/trpc";
 import { handleError } from "@frontend/utils/error-handler";
 import { validateInput } from "@frontend/utils/input-validation";
@@ -43,30 +43,35 @@ export function RegisterForm() {
       <Form method="post" className={styles.form}>
         <h2>Register form</h2>
         <Input
+          labelClassName="register"
           type="text"
           name="firstName"
           placeholder="First name"
           error={actionData?.errors?.fieldErrors?.firstName}
         />
         <Input
+          labelClassName="register"
           type="text"
           name="lastName"
           placeholder="Last name"
           error={actionData?.errors?.fieldErrors?.lastName}
         />
         <Input
+          labelClassName="register"
           type="text"
           name="displayName"
-          placeholder="First name"
+          placeholder="Display name"
           error={actionData?.errors?.fieldErrors?.displayName}
         />
         <Input
+          labelClassName="register"
           type="email"
           name="email"
           placeholder="Email address"
           error={actionData?.errors?.fieldErrors?.email}
         />
         <Input
+          labelClassName="register"
           type="password"
           name="password"
           placeholder="Password"
@@ -75,7 +80,10 @@ export function RegisterForm() {
         <Button type="submit" className="auth">
           Register
         </Button>
-        <Link to="/">Back to home</Link>
+        <div className={styles.links}>
+          <NavigationLink to="/">Back to home</NavigationLink>
+          <NavigationLink to="/auth/login">Login</NavigationLink>
+        </div>
       </Form>
     </div>
   );

@@ -61,7 +61,6 @@ export const feedLoader = ({ params }: LoaderFunctionArgs) => {
 };
 
 export const feedAction = async ({ request, params }: ActionFunctionArgs) => {
-  const currentUrl = new URL(request.url);
   const formData = await request.formData();
   const intent = formData.get("intent");
   // Delete intent from FormData to prevent issues with Zod
@@ -69,23 +68,18 @@ export const feedAction = async ({ request, params }: ActionFunctionArgs) => {
 
   switch (intent) {
     case "feed": {
-      await createFeed(request, params, formData);
-      break;
+      return await createFeed(request, params, formData);
     }
     case "postComment": {
-      await createPostComment(request, params, formData);
-      break;
+      return await createPostComment(request, params, formData);
     }
     case "comment": {
-      await createComment(request, params, formData);
-      break;
+      return await createComment(request, params, formData);
     }
     default: {
       throw new Error("Unknown intent");
     }
   }
-
-  return redirect(currentUrl.pathname + currentUrl.search);
 };
 
 export function FeedRoute() {

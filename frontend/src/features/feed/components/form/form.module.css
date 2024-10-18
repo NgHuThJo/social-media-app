@@ -3,6 +3,7 @@
   gap: 2rem;
   padding: 2rem;
   background-color: var(--bgc-notification);
+  font-weight: var(--fw-button);
 
   input,
   textarea {

@@ -41,7 +41,7 @@ export const createPostComment: ActionDispatchFunction = async (
 
     return redirect(currentUrl.pathname + currentUrl.search);
   } catch (error) {
-    return handleError(error, "Creation of comment failed");
+    return handleError(error);
   }
 };
 
@@ -60,6 +60,7 @@ export const createComment: ActionDispatchFunction = async (
   const { data, errors, isValid } = validateInput(commentSchema, payload);
 
   if (!isValid) {
+    console.log("comment", errors);
     return {
       errors,
     };
@@ -70,7 +71,7 @@ export const createComment: ActionDispatchFunction = async (
 
     return redirect(currentUrl.pathname + currentUrl.search);
   } catch (error) {
-    return handleError(error, "Creation of comment failed");
+    return handleError(error);
   }
 };
 
@@ -88,7 +89,7 @@ export function CommentForm({ intent, onClose, parentId }: CommentProps) {
       {actionData?.errors?.general && (
         <FormError message={actionData.errors.general} />
       )}
-      <Input type="hidden" name="postId" value={parentId} />
+      <input type="hidden" name="postId" value={parentId} />
       <div className={styles.actions}>
         <Button type="submit" name="intent" value={intent}>
           Submit post

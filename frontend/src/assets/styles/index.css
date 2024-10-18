@@ -42,34 +42,40 @@
   --fs-root: 0.9375rem;
 
   /* colors */
+  --c-text: #ffffff;
   --c-box-shadow: #d8e1ef;
-  --c-brand: #2d5be3;
+  --c-brand: #333377;
   --c-error: #da3633;
-  --c-heading: #ff00ff;
+  --c-heading: #6000ff;
   --c-link: #000;
-  --c-link-active: #ff2020;
-  --c-logo: #fff;
-  --c-pending-message: var(--c-error);
-  --c-root: #71728c;
+  --c-link-active: #4020f0;
+  --c-follow-active: #6080b0;
+  --c-logo: #404040;
+  --c-pending-message: #4060b0;
+  --c-root: #000000;
   --c-inbox: #804000;
 
-  --bgc-brand: #2d5be3;
-  --bgc-button: #343f46;
+  --bgc-brand: #cccccc;
+  --bgc-button: #408fa6;
   --bgc-button-disabled: var(--bgc-emoji-grid);
-  --bgc-follow-button-active: #452857;
+  --bgc-follow-button-active: #454857;
   --bgc-friend-button: #e0a427;
   --bgc-content: #fff;
   --bgc-emoji-grid: #2c4e70;
-  --bgc-like: #ed2c49;
+  --bgc-like: #402c80;
   --bgc-notification: #2c4e70;
   --bgc-root: #eff4fb;
   --bgc-chat-sidebar-grid-item: #4e5d6b;
   --bgc-active-chat: #38230b;
-  --bgc-progress-bar: #40ff00;
-  --gradient-inbox: linear-gradient(to right, #457fca, #5691c8);
-  --gradient-app: linear-gradient(43deg, #4158d0 0%, #c850c0 46%, #ffcc70 100%);
+  --bgc-progress-bar: #0f1880;
+  --gradient-inbox: linear-gradient(0deg, #d9afd9 0%, #97d9e1 100%);
+  --gradient-app: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
   --gradient-friend: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
-  --gradient-profile: linear-gradient(180deg, #52acff 25%, #ffe32c 100%);
+  --gradient-profile: radial-gradient(
+    circle farthest-corner at 3.2% 49.6%,
+    rgba(80, 12, 139, 0.87) 0%,
+    rgba(161, 10, 144, 0.72) 83.6%
+  );
 
   --gradient-progress-bar: linear-gradient(
     43deg,
@@ -90,6 +96,7 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  /* border: 1px solid red; */
   font: inherit;
   color: inherit;
 }

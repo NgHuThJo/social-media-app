@@ -1,5 +1,7 @@
 .container {
   place-self: center;
+  width: min(100%, 40rem);
+  padding-inline: clamp(1rem, -1rem + 10vw, 3rem);
   isolation: isolate;
 
   img {
@@ -13,17 +15,20 @@
 }
 
 .form {
-  composes: flow-spacing from global;
-  padding: 3rem;
-  background-color: var(--bgc-brand);
+  --space-gutter: 1.5rem;
+
+  display: grid;
+  gap: var(--space-gutter);
+  padding: 2rem;
+  background-image: var(--gradient-friend);
 }
 
 .actions {
   display: flex;
-  gap: 1rem;
+  gap: var(--space-gutter);
 }
 
 .links {
   display: flex;
-  gap: 1rem;
+  gap: var(--space-gutter);
 }

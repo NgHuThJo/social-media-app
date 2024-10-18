@@ -81,12 +81,14 @@ export function LoginForm() {
       <Form className={styles.form} method="post">
         <h1>Login</h1>
         <Input
+          labelClassName="register"
           error={actionData?.errors?.fieldErrors?.email}
           name="email"
           placeholder="Email address"
           type="email"
         />
         <Input
+          labelClassName="register"
           error={actionData?.errors?.fieldErrors?.password}
           name="password"
           placeholder="Password"

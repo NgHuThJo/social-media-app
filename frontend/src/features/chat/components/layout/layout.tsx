@@ -31,10 +31,6 @@ export function ChatLayout({
   const { emit, subscribe } = useWebSocketContextApi();
   const userId = user?.id.toLocaleString();
 
-  if (!user) {
-    return <Navigate to={"/auth/login"} />;
-  }
-
   useEffect(() => {
     const unsubscribeGetOnlineUsers = subscribe(
       "getOnlineUsers",
@@ -53,7 +49,11 @@ export function ChatLayout({
       unsubscribeGetOnlineUsers();
       unsubscribeCreateChatroom();
     };
-  }, []);
+  }, [subscribe]);
+
+  if (!user) {
+    return <Navigate to={"/auth/login"} />;
+  }
 
   const selectChatroom = (
     currentRoomId: number | undefined,

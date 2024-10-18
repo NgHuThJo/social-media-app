@@ -1,6 +1,8 @@
 .container {
   display: grid;
+  grid-template-columns: min(100%, 40rem);
   place-content: center;
+  padding-inline: clamp(1rem, -1rem + 10vw, 3rem);
   background-image: var(--gradient-app);
 }
 
@@ -15,14 +17,17 @@
   }
 }
 
+.links {
+  display: flex;
+  gap: 1rem;
+}
+
 .left,
 .right {
   display: grid;
-  justify-items: center;
-  align-items: center;
   position: absolute;
   background-image: var(--gradient-profile);
-  animation: 1.5s linear 0.5s forwards move;
+  animation: 1s linear 0.5s forwards move;
 }
 
 .left {
@@ -44,6 +49,7 @@
     transform: translateX(0);
   }
   to {
+    display: none;
     transform: translateX(var(--translateX));
   }
 }

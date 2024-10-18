@@ -28,6 +28,8 @@ export const createPost: ActionDispatchFunction = async (
   };
   const { data, errors, isValid } = validateInput(postSchema, payload);
 
+  console.log(errors);
+
   if (!isValid) {
     return {
       errors,
@@ -46,9 +48,12 @@ export const createPost: ActionDispatchFunction = async (
 export function PostForm({ onClose }: PostProps) {
   const actionData = useActionData() as PostSchemaError;
 
+  console.log(actionData);
+
   return (
     <Form method="post" className={styles.form}>
       <Input
+        labelClassName="post"
         type="text"
         name="title"
         placeholder="Your post title..."

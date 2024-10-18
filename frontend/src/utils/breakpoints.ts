@@ -6,7 +6,7 @@ export function getBreakpoints() {
     xs: "480px",
     s: "768px",
     m: "1024px",
-    l: "1200px",
+    l: "1280px",
     xl: "1440px",
     xxl: "1920px",
   };
