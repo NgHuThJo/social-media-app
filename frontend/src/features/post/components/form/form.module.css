@@ -3,7 +3,11 @@
   gap: 2rem;
   padding: 2rem;
   font-weight: var(--fw-form);
-  background-image: var(--gradient-inbox);
+  background-color: var(--bgc-notification);
+
+  label {
+    width: fit-content;
+  }
 }
 
 .actions {

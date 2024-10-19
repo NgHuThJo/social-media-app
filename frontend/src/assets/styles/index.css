@@ -33,10 +33,10 @@
   --fw-root: 400;
   --fw-user-info: 800;
 
-  --fs-h1: 3rem;
-  --fs-h2: 2rem;
-  --fs-h3: 1.5rem;
-  --fs-h4: 1.125rem;
+  --fs-h1: clamp(3rem, 2rem + 5vw, 5rem);
+  --fs-h2: clamp(2rem, 1.5rem + 2.5vw, 3rem);
+  --fs-h3: clamp(1.5rem, 1rem + 2.5vw, 2.5rem);
+  --fs-h4: clamp(1.125rem, 0.6875rem + 2.1875vw, 2rem);
   --fs-label: 0.8125rem;
   --fs-profile: 1.125rem;
   --fs-root: 0.9375rem;
@@ -44,7 +44,7 @@
   /* colors */
   --c-text: #ffffff;
   --c-box-shadow: #d8e1ef;
-  --c-brand: #808307;
+  --c-brand: #b08307;
   --c-error: #da3633;
   --c-heading: #4040ff;
   --c-link: #000;
@@ -55,7 +55,7 @@
   --c-root: #000000;
   --c-inbox: #804000;
 
-  --bgc-brand: #aaa;
+  --bgc-brand: #803070;
   --bgc-button: #408fa6;
   --bgc-button-disabled: var(--bgc-emoji-grid);
   --bgc-follow-button-active: #454857;
@@ -66,7 +66,7 @@
   --bgc-notification: #2c4e70;
   --bgc-root: #eff4fb;
   --bgc-chat-sidebar-grid-item: #4e5d6b;
-  --bgc-active-chat: #38230b;
+  --bgc-active-chat: #88230b;
   --bgc-progress-bar: #0f1880;
   --gradient-inbox: linear-gradient(0deg, #d9afd9 0%, #97d9e1 100%);
   --gradient-app: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
@@ -161,9 +161,12 @@ ul {
 }
 
 textarea {
-  padding: 0.2em;
   width: 100%;
-  max-width: 100%;
+  min-height: 10em;
+  padding: 0.2em;
+  cursor: text;
+  background-color: #ddd;
+  overflow: auto;
 }
 
 /* root styles */

@@ -48,17 +48,17 @@ export const createPost: ActionDispatchFunction = async (
 export function PostForm({ onClose }: PostProps) {
   const actionData = useActionData() as PostSchemaError;
 
-  console.log(actionData);
-
   return (
     <Form method="post" className={styles.form}>
-      <Input
-        labelClassName="post"
-        type="text"
-        name="title"
-        placeholder="Your post title..."
-        error={actionData?.errors?.fieldErrors?.title}
-      />
+      <div>
+        <Input
+          labelClassName="post"
+          type="text"
+          name="title"
+          placeholder="Your post title..."
+          error={actionData?.errors?.fieldErrors?.title}
+        />
+      </div>
       <TextArea
         name="content"
         cols={20}

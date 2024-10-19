@@ -3,12 +3,13 @@
   justify-items: start;
   gap: 2rem;
   padding: 2rem;
-  background-image: var(--gradient-friend);
+  background-color: var(--bgc-notification);
 
   > label {
     flex-direction: column;
 
     input[type="file"] {
+      width: max(100%, 10rem);
       padding: 0;
     }
   }
