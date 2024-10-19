@@ -44,25 +44,25 @@
   /* colors */
   --c-text: #ffffff;
   --c-box-shadow: #d8e1ef;
-  --c-brand: #333377;
+  --c-brand: #808307;
   --c-error: #da3633;
-  --c-heading: #6000ff;
+  --c-heading: #4040ff;
   --c-link: #000;
-  --c-link-active: #4020f0;
+  --c-link-active: #4080f0;
   --c-follow-active: #6080b0;
   --c-logo: #404040;
   --c-pending-message: #4060b0;
   --c-root: #000000;
   --c-inbox: #804000;
 
-  --bgc-brand: #cccccc;
+  --bgc-brand: #aaa;
   --bgc-button: #408fa6;
   --bgc-button-disabled: var(--bgc-emoji-grid);
   --bgc-follow-button-active: #454857;
   --bgc-friend-button: #e0a427;
   --bgc-content: #fff;
   --bgc-emoji-grid: #2c4e70;
-  --bgc-like: #402c80;
+  --bgc-like: #802c80;
   --bgc-notification: #2c4e70;
   --bgc-root: #eff4fb;
   --bgc-chat-sidebar-grid-item: #4e5d6b;
@@ -158,6 +158,12 @@ img {
 ol,
 ul {
   list-style: none;
+}
+
+textarea {
+  padding: 0.2em;
+  width: 100%;
+  max-width: 100%;
 }
 
 /* root styles */

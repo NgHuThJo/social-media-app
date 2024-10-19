@@ -42,7 +42,6 @@ export function Comment({ data: commentData, intent }: CommentProps) {
         commentId,
       };
       const parsedData = updateCommentSchema.safeParse(payload);
-      console.log(parsedData);
 
       if (!parsedData.success) {
         throw new Error(JSON.stringify(parsedData.error.flatten()));

@@ -88,7 +88,9 @@ export function useWebSocket() {
     (userId: string) => {
       if (socket.current) return;
 
-      socket.current = io(import.meta.env.VITE_WEBSOCKET_URL);
+      socket.current = io(import.meta.env.VITE_WEBSOCKET_URL, {
+        reconnectionAttempts: 3,
+      });
 
       // Attach core WebSocket event listeners
       attachCoreListeners(userId);

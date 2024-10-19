@@ -8,6 +8,7 @@
 .list-item {
   display: block;
   padding: var(--p-chat-sidebar-grid-item);
+  border-top: 1px solid var(--c-root);
 
   &:last-child {
     border-bottom: 1px solid var(--c-root);

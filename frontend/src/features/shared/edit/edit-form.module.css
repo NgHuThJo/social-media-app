@@ -5,6 +5,11 @@
   padding: 2rem;
   background-image: var(--gradient-app);
 
+  div:has(> textarea),
+  textarea {
+    width: 100%;
+  }
+
   > label {
     font-weight: var(--fw-button);
     color: var(--c-link);

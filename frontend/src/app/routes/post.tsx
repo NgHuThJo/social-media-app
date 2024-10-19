@@ -65,13 +65,13 @@ export const postAction = async ({ request, params }: ActionFunctionArgs) => {
 
   switch (intent) {
     case "comment": {
-      return await createComment(request, params, formData);
+      return createComment(request, params, formData);
     }
     case "post": {
-      return await createPost(request, params, formData);
+      return createPost(request, params, formData);
     }
     case "postComment": {
-      return await createPostComment(request, params, formData);
+      return createPostComment(request, params, formData);
     }
     default:
       throw new Error("Unknown intent");

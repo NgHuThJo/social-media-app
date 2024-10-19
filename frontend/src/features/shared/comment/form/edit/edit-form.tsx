@@ -16,12 +16,7 @@ export function CommentEditForm({ edit, close, id }: CommentEditFormProps) {
       onSubmit={(event) => edit(event, id)}
       className={styles.form}
     >
-      <TextArea
-        name="content"
-        rows={5}
-        cols={100}
-        placeholder="New content..."
-      />
+      <TextArea name="content" rows={5} placeholder="New content..." />
       <div className={styles.actions}>
         <Button type="submit">Edit</Button>
         <Button type="button" onClick={close}>

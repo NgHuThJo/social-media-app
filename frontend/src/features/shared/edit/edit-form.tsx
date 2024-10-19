@@ -20,7 +20,7 @@ export function EditForm({ edit, close, id, title, content }: EditFormProps) {
       className={styles.form}
     >
       <Input type="text" name="title" label="New title" placeholder={title} />
-      <TextArea name="content" rows={5} cols={100} placeholder={content} />
+      <TextArea name="content" rows={5} placeholder={content} />
       <div className={styles.actions}>
         <Button type="submit">Edit</Button>
         <Button type="button" onClick={close}>
