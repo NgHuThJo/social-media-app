@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { z } from "zod";
-import { useAuthContext } from "@frontend/providers/auth-context";
-import { useFetch } from "@frontend/hooks/use-fetch";
-import { client } from "@frontend/lib/trpc";
-import { validateInput } from "@frontend/utils/input-validation";
-import { numberToStringSchema, numericStringSchema } from "@frontend/types/zod";
+import { useAuthContext } from "#frontend/providers/auth-context";
+import { useFetch } from "#frontend/hooks/use-fetch";
+import { client } from "#frontend/lib/trpc";
+import { validateInput } from "#frontend/utils/input-validation";
+import { numberToStringSchema, numericStringSchema } from "#frontend/types/zod";
 import styles from "./like.module.css";
-import { thumbs_up_icon } from "@frontend/assets/images";
+import { thumbs_up_icon } from "#frontend/assets/images";
 
 type PostLikeProps = {
   isLiked: boolean;

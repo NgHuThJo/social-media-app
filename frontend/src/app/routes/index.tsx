@@ -5,13 +5,13 @@ import {
   LoaderFunctionArgs,
   useLoaderData,
 } from "react-router-dom";
-import { ContentLayout } from "@frontend/components/layouts/content/content";
-import { Index } from "@frontend/features/index";
-import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
-import { client } from "@frontend/lib/trpc";
-import { handleError } from "@frontend/utils/error-handler";
-import { indexSchema } from "@frontend/types/zod";
-import { LoaderData } from "@frontend/types";
+import { ContentLayout } from "#frontend/components/layouts/content/content";
+import { Index } from "#frontend/features/index";
+import { LoadingSpinner } from "#frontend/components/ui/loading/spinner/spinner";
+import { client } from "#frontend/lib/trpc";
+import { handleError } from "#frontend/utils/error-handler";
+import { indexSchema } from "#frontend/types/zod";
+import { LoaderData } from "#frontend/types";
 
 type IndexLoaderData = LoaderData<typeof indexLoader>;
 

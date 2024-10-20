@@ -1,6 +1,6 @@
 import { ComponentPropsWithoutRef } from "react";
 import { FormError } from "../error/error";
-import { FormErrorMessage } from "@frontend/types";
+import { FormErrorMessage } from "#frontend/types";
 import styles from "./label.module.css";
 
 type LabelProps = ComponentPropsWithoutRef<"label"> &

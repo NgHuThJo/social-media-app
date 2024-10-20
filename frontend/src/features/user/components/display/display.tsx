@@ -1,8 +1,8 @@
 import { Navigate, useNavigate } from "react-router-dom";
-import { useAuthContext } from "@frontend/providers/auth-context";
-import { Image } from "@frontend/components/ui/image/image";
+import { useAuthContext } from "#frontend/providers/auth-context";
+import { Image } from "#frontend/components/ui/image/image";
 import styles from "./display.module.css";
-import { avatar_placeholder } from "@frontend/assets/resources/icons";
+import { avatar_placeholder } from "#frontend/assets/resources/icons";
 
 export function UserDisplay() {
   const { user } = useAuthContext();

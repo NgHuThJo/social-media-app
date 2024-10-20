@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { publicProcedure, router } from "./trpc";
-import { chatService } from "@backend/services/chat";
-import { logError } from "@backend/utils/error-logger";
-import { nonEmptyStringSchema, stringToNumberSchema } from "@backend/types/zod";
+import { chatService } from "#backend/services/chat";
+import { logError } from "#backend/utils/error-logger";
+import { nonEmptyStringSchema, stringToNumberSchema } from "#backend/types/zod";
 
 export const chatRouter = router({
   createChatroom: publicProcedure

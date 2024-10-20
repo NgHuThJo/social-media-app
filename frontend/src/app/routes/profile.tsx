@@ -5,14 +5,14 @@ import {
   LoaderFunctionArgs,
   useLoaderData,
 } from "react-router-dom";
-import { ContentLayout } from "@frontend/components/layouts/content/content";
-import { Profile } from "@frontend/features/profile/components/profile";
-import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
-import { client } from "@frontend/lib/trpc";
-import { handleError } from "@frontend/utils/error-handler";
-import { validateInput } from "@frontend/utils/input-validation";
-import { LoaderData } from "@frontend/types";
-import { userIdSchema } from "@frontend/types/zod";
+import { ContentLayout } from "#frontend/components/layouts/content/content";
+import { Profile } from "#frontend/features/profile/components/profile";
+import { LoadingSpinner } from "#frontend/components/ui/loading/spinner/spinner";
+import { client } from "#frontend/lib/trpc";
+import { handleError } from "#frontend/utils/error-handler";
+import { validateInput } from "#frontend/utils/input-validation";
+import { LoaderData } from "#frontend/types";
+import { userIdSchema } from "#frontend/types/zod";
 
 type ProfileLoaderData = LoaderData<typeof profileLoader>;
 

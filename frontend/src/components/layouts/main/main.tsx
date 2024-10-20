@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
-import { useAuthContext } from "@frontend/providers/auth-context";
-import { NavigationList } from "@frontend/components/ui/navigation/list/list";
+import { useAuthContext } from "#frontend/providers/auth-context";
+import { NavigationList } from "#frontend/components/ui/navigation/list/list";
 import styles from "./main.module.css";
 
 export function MainLayout({ children }: PropsWithChildren) {

@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import { useAuthContext } from "@frontend/providers/auth-context";
-import { LogoutButton } from "@frontend/features/auth/components/logout/button";
+import { useAuthContext } from "#frontend/providers/auth-context";
+import { LogoutButton } from "#frontend/features/auth/components/logout/button";
 import { NavigationLink } from "./link/link";
 import { NavigationList } from "./list/list";
 import { NotificationList } from "../notifiication/list";
-import { UserDisplay } from "@frontend/features/user/components/display/display";
+import { UserDisplay } from "#frontend/features/user/components/display/display";
 import styles from "./navigation.module.css";
 
 export function Navigation() {

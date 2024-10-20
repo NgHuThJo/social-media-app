@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { userService } from "@backend/services/user";
+import { userService } from "#backend/services/user";
 import { publicProcedure, router } from "./trpc";
-import { logError } from "@backend/utils/error-logger";
+import { logError } from "#backend/utils/error-logger";
 import {
   emailSchema,
   nameSchema,
@@ -10,7 +10,7 @@ import {
   passwordSchema,
   urlSchema,
   positiveNumberSchema,
-} from "@backend/types/zod";
+} from "#backend/types/zod";
 
 export const userRouter = router({
   getUser: publicProcedure

@@ -1,10 +1,10 @@
 import { Suspense } from "react";
 import { Await, defer, useLoaderData } from "react-router-dom";
-import { ChatLayout } from "@frontend/features/chat/components/layout/layout";
-import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
-import { client } from "@frontend/lib/trpc";
-import { handleError } from "@frontend/utils/error-handler";
-import { LoaderData } from "@frontend/types";
+import { ChatLayout } from "#frontend/features/chat/components/layout/layout";
+import { LoadingSpinner } from "#frontend/components/ui/loading/spinner/spinner";
+import { client } from "#frontend/lib/trpc";
+import { handleError } from "#frontend/utils/error-handler";
+import { LoaderData } from "#frontend/types";
 
 type ChatLoaderData = LoaderData<typeof chatLoader>;
 

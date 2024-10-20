@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useAuthContext } from "@frontend/providers/auth-context";
-import { useCursorPagination } from "@frontend/hooks/use-cursor-pagination";
+import { useAuthContext } from "#frontend/providers/auth-context";
+import { useCursorPagination } from "#frontend/hooks/use-cursor-pagination";
 import { Feed } from "../feed";
-import { client } from "@frontend/lib/trpc";
-import { FeedData } from "@frontend/types/api";
-import { cursorFeedSchema } from "@frontend/types/zod";
+import { client } from "#frontend/lib/trpc";
+import { FeedData } from "#frontend/types/api";
+import { cursorFeedSchema } from "#frontend/types/zod";
 import styles from "./list.module.css";
 
 type FeedListProps = {

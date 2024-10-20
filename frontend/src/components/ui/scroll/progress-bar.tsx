@@ -1,4 +1,4 @@
-import { useScroll } from "@frontend/hooks/use-scroll";
+import { useScroll } from "#frontend/hooks/use-scroll";
 import styles from "./progress-bar.module.css";
 
 export function ScrollProgressBar() {

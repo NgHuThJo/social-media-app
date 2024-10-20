@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { z } from "zod";
-import { useFetch } from "@frontend/hooks/use-fetch";
+import { useFetch } from "#frontend/hooks/use-fetch";
 import { Comment } from "../comment";
-import { client } from "@frontend/lib/trpc";
-import { validateInput } from "@frontend/utils/input-validation";
-import { numberToStringSchema, numericStringSchema } from "@frontend/types/zod";
+import { client } from "#frontend/lib/trpc";
+import { validateInput } from "#frontend/utils/input-validation";
+import { numberToStringSchema, numericStringSchema } from "#frontend/types/zod";
 import styles from "./list.module.css";
-import { useAuthContext } from "@frontend/providers/auth-context";
+import { useAuthContext } from "#frontend/providers/auth-context";
 
 export type CommentListData = Awaited<
   ReturnType<typeof client.post.getChildComments.query>

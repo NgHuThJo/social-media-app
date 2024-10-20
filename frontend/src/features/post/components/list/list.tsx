@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { useAuthContext } from "@frontend/providers/auth-context";
-import { useOffsetPagination } from "@frontend/hooks/use-offset-pagination";
-import { useIntersectionObserver } from "@frontend/hooks/use-intersection-observer";
-import { client } from "@frontend/lib/trpc";
-import { Post } from "@frontend/features/post/components/post";
-import { PostData } from "@frontend/types/api";
-import { paginatedPostSchema } from "@frontend/types/zod";
+import { useAuthContext } from "#frontend/providers/auth-context";
+import { useOffsetPagination } from "#frontend/hooks/use-offset-pagination";
+import { useIntersectionObserver } from "#frontend/hooks/use-intersection-observer";
+import { client } from "#frontend/lib/trpc";
+import { Post } from "#frontend/features/post/components/post";
+import { PostData } from "#frontend/types/api";
+import { paginatedPostSchema } from "#frontend/types/zod";
 import styles from "./list.module.css";
 
 type PostListProps = {

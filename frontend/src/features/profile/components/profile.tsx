@@ -1,11 +1,11 @@
-import { formatDate } from "@frontend/utils/intl";
-import { ProfileData } from "@frontend/types/api";
+import { formatDate } from "#frontend/utils/intl";
+import { ProfileData } from "#frontend/types/api";
 import styles from "./profile.module.css";
-import { avatar_placeholder } from "@frontend/assets/resources/icons";
+import { avatar_placeholder } from "#frontend/assets/resources/icons";
 import {
   capitalizeFirstLetter,
   convertAllUnderscoresToHyphens,
-} from "@frontend/utils/string";
+} from "#frontend/utils/string";
 
 type ProfileInfoProps = {
   data: ProfileData;

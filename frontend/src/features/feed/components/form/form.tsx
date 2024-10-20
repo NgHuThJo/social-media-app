@@ -1,14 +1,14 @@
 import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
-import { Button } from "@frontend/components/ui/button/button";
-import { FormError } from "@frontend/components/ui/form/error/error";
-import { Input } from "@frontend/components/ui/form/input/input";
-import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
-import { TextArea } from "@frontend/components/ui/form/textarea/textarea";
-import { client } from "@frontend/lib/trpc";
-import { handleError } from "@frontend/utils/error-handler";
-import { validateInput } from "@frontend/utils/input-validation";
-import { ActionDispatchFunction } from "@frontend/types";
-import { feedFormSchema, FeedFormSchemaError } from "@frontend/types/zod";
+import { Button } from "#frontend/components/ui/button/button";
+import { FormError } from "#frontend/components/ui/form/error/error";
+import { Input } from "#frontend/components/ui/form/input/input";
+import { LoadingSpinner } from "#frontend/components/ui/loading/spinner/spinner";
+import { TextArea } from "#frontend/components/ui/form/textarea/textarea";
+import { client } from "#frontend/lib/trpc";
+import { handleError } from "#frontend/utils/error-handler";
+import { validateInput } from "#frontend/utils/input-validation";
+import { ActionDispatchFunction } from "#frontend/types";
+import { feedFormSchema, FeedFormSchemaError } from "#frontend/types/zod";
 import styles from "./form.module.css";
 
 type FeedFormProps = {

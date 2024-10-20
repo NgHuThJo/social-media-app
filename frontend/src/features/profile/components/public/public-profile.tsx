@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import { useFetch } from "@frontend/hooks/use-fetch";
+import { useFetch } from "#frontend/hooks/use-fetch";
 import { useParams } from "react-router-dom";
-import { client } from "@frontend/lib/trpc";
+import { client } from "#frontend/lib/trpc";
 import {
   capitalizeFirstLetter,
   convertAllUnderscoresToHyphens,
-} from "@frontend/utils/string";
-import { formatDate } from "@frontend/utils/intl";
-import { ProfileData } from "@frontend/types/api";
-import { userIdSchema } from "@frontend/types/zod";
+} from "#frontend/utils/string";
+import { formatDate } from "#frontend/utils/intl";
+import { ProfileData } from "#frontend/types/api";
+import { userIdSchema } from "#frontend/types/zod";
 import styles from "./public-profile.module.css";
-import { avatar_placeholder } from "@frontend/assets/resources/icons";
+import { avatar_placeholder } from "#frontend/assets/resources/icons";
 
 export function PublicProfile() {
   const [data, setData] = useState<ProfileData>();

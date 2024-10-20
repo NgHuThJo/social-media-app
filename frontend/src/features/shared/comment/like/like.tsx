@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { z } from "zod";
-import { useAuthContext } from "@frontend/providers/auth-context";
-import { useFetch } from "@frontend/hooks/use-fetch";
-import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
-import { client } from "@frontend/lib/trpc";
-import { numberToStringSchema, numericStringSchema } from "@frontend/types/zod";
+import { useAuthContext } from "#frontend/providers/auth-context";
+import { useFetch } from "#frontend/hooks/use-fetch";
+import { LoadingSpinner } from "#frontend/components/ui/loading/spinner/spinner";
+import { client } from "#frontend/lib/trpc";
+import { numberToStringSchema, numericStringSchema } from "#frontend/types/zod";
 import styles from "./like.module.css";
 
 type CommentLikeProps = {

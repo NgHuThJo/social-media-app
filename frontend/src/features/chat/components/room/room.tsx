@@ -7,20 +7,20 @@ import {
   useState,
 } from "react";
 import { useParams } from "react-router-dom";
-import { useWebSocketContextApi } from "@frontend/providers/websocket-context";
-import { useFetch } from "@frontend/hooks/use-fetch";
-import { useScrollIntoView } from "@frontend/hooks/use-scroll-into-view";
-import { Button } from "@frontend/components/ui/button/button";
-import { EmojiButtonGrid } from "@frontend/components/ui/button/emoji/grid";
-import { client } from "@frontend/lib/trpc";
-import { formatRelativeTimeDate } from "@frontend/utils/intl";
-import { validateInput } from "@frontend/utils/input-validation";
+import { useWebSocketContextApi } from "#frontend/providers/websocket-context";
+import { useFetch } from "#frontend/hooks/use-fetch";
+import { useScrollIntoView } from "#frontend/hooks/use-scroll-into-view";
+import { Button } from "#frontend/components/ui/button/button";
+import { EmojiButtonGrid } from "#frontend/components/ui/button/emoji/grid";
+import { client } from "#frontend/lib/trpc";
+import { formatRelativeTimeDate } from "#frontend/utils/intl";
+import { validateInput } from "#frontend/utils/input-validation";
 import {
   messageSchema,
   MessageSchemaError,
   numberToStringSchema,
   SchemaError,
-} from "@frontend/types/zod";
+} from "#frontend/types/zod";
 import styles from "./room.module.css";
 
 export type RoomMessagesType = Awaited<

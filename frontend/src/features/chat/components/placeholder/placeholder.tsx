@@ -3,7 +3,7 @@ import {
   AnimationReturnType,
   animate,
   linear,
-} from "@frontend/utils/animation";
+} from "#frontend/utils/animation";
 import styles from "./placeholder.module.css";
 
 const textArray = [

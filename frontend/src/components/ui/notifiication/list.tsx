@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { useWebSocketContextApi } from "@frontend/providers/websocket-context";
+import { useWebSocketContextApi } from "#frontend/providers/websocket-context";
 import { Button } from "../button/button";
 import { Image } from "../image/image";
 import styles from "./list.module.css";
-import { notification_icon } from "@frontend/assets/resources/icons";
+import { notification_icon } from "#frontend/assets/resources/icons";
 
 export function NotificationList() {
   const [notifications, setNotifications] = useState<string[]>([]);

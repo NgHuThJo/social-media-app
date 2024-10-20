@@ -1,4 +1,4 @@
-import { SocketService } from "@backend/services/socket-io";
+import { SocketService } from "#backend/services/socket-io";
 import { inferAsyncReturnType, initTRPC } from "@trpc/server";
 import { CreateExpressContextOptions } from "@trpc/server/adapters/express";
 

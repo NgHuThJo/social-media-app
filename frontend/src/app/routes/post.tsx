@@ -6,24 +6,24 @@ import {
   LoaderFunctionArgs,
   useLoaderData,
 } from "react-router-dom";
-import { useToggle } from "@frontend/hooks/use-toggle";
-import { Button } from "@frontend/components/ui/button/button";
-import { ContentLayout } from "@frontend/components/layouts/content/content";
-import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
+import { useToggle } from "#frontend/hooks/use-toggle";
+import { Button } from "#frontend/components/ui/button/button";
+import { ContentLayout } from "#frontend/components/layouts/content/content";
+import { LoadingSpinner } from "#frontend/components/ui/loading/spinner/spinner";
 import {
   PostForm,
   createPost,
-} from "@frontend/features/post/components/form/form";
-import { PostList } from "@frontend/features/post/components/list/list";
-import { client } from "@frontend/lib/trpc";
+} from "#frontend/features/post/components/form/form";
+import { PostList } from "#frontend/features/post/components/list/list";
+import { client } from "#frontend/lib/trpc";
 import {
   createComment,
   createPostComment,
-} from "@frontend/features/shared/comment/form/form";
-import { handleError } from "@frontend/utils/error-handler";
-import { validateInput } from "@frontend/utils/input-validation";
-import { LoaderData } from "@frontend/types";
-import { paginatedPostSchema } from "@frontend/types/zod";
+} from "#frontend/features/shared/comment/form/form";
+import { handleError } from "#frontend/utils/error-handler";
+import { validateInput } from "#frontend/utils/input-validation";
+import { LoaderData } from "#frontend/types";
+import { paginatedPostSchema } from "#frontend/types/zod";
 
 type PostLoaderData = LoaderData<typeof postLoader>;
 

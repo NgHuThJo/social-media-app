@@ -1,4 +1,4 @@
-import { useProgress } from "@frontend/hooks/useProgress";
+import { useProgress } from "#frontend/hooks/useProgress";
 
 export function ProgressBar() {
   const { downloadProgress, uploadProgress } = useProgress();

@@ -4,16 +4,16 @@ import {
   redirect,
   useActionData,
 } from "react-router-dom";
-import { Button } from "@frontend/components/ui/button/button";
-import { Input } from "@frontend/components/ui/form/input/input";
-import { NavigationLink } from "@frontend/components/ui/navigation/link/link";
-import { client } from "@frontend/lib/trpc";
-import { handleError } from "@frontend/utils/error-handler";
-import { validateInput } from "@frontend/utils/input-validation";
+import { Button } from "#frontend/components/ui/button/button";
+import { Input } from "#frontend/components/ui/form/input/input";
+import { NavigationLink } from "#frontend/components/ui/navigation/link/link";
+import { client } from "#frontend/lib/trpc";
+import { handleError } from "#frontend/utils/error-handler";
+import { validateInput } from "#frontend/utils/input-validation";
 import {
   registrationSchema,
   RegistrationSchemaError,
-} from "@frontend/types/zod";
+} from "#frontend/types/zod";
 import styles from "./form.module.css";
 
 export const registerAction: ActionFunction = async ({ request }) => {

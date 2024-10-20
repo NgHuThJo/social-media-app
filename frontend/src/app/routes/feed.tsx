@@ -7,22 +7,22 @@ import {
   redirect,
   useLoaderData,
 } from "react-router-dom";
-import { useToggle } from "@frontend/hooks/use-toggle";
-import { Button } from "@frontend/components/ui/button/button";
-import { ContentLayout } from "@frontend/components/layouts/content/content";
-import { FeedList } from "@frontend/features/feed/components/list/list";
-import { FeedForm } from "@frontend/features/feed/components/form/form";
-import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
-import { client } from "@frontend/lib/trpc";
+import { useToggle } from "#frontend/hooks/use-toggle";
+import { Button } from "#frontend/components/ui/button/button";
+import { ContentLayout } from "#frontend/components/layouts/content/content";
+import { FeedList } from "#frontend/features/feed/components/list/list";
+import { FeedForm } from "#frontend/features/feed/components/form/form";
+import { LoadingSpinner } from "#frontend/components/ui/loading/spinner/spinner";
+import { client } from "#frontend/lib/trpc";
 import {
   createComment,
   createPostComment,
-} from "@frontend/features/shared/comment/form/form";
-import { createFeed } from "@frontend/features/feed/components/form/form";
-import { handleError } from "@frontend/utils/error-handler";
-import { validateInput } from "@frontend/utils/input-validation";
-import { LoaderData } from "@frontend/types";
-import { cursorFeedSchema } from "@frontend/types/zod";
+} from "#frontend/features/shared/comment/form/form";
+import { createFeed } from "#frontend/features/feed/components/form/form";
+import { handleError } from "#frontend/utils/error-handler";
+import { validateInput } from "#frontend/utils/input-validation";
+import { LoaderData } from "#frontend/types";
+import { cursorFeedSchema } from "#frontend/types/zod";
 
 type FeedLoaderData = LoaderData<typeof feedLoader>;
 

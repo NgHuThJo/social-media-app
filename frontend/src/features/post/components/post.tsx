@@ -1,17 +1,17 @@
 import { FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuthContext } from "@frontend/providers/auth-context";
-import { useToggle } from "@frontend/hooks/use-toggle";
-import { useFetch } from "@frontend/hooks/use-fetch";
-import { Button } from "@frontend/components/ui/button/button";
-import { CommentForm } from "@frontend/features/shared/comment/form/form";
+import { useAuthContext } from "#frontend/providers/auth-context";
+import { useToggle } from "#frontend/hooks/use-toggle";
+import { useFetch } from "#frontend/hooks/use-fetch";
+import { Button } from "#frontend/components/ui/button/button";
+import { CommentForm } from "#frontend/features/shared/comment/form/form";
 import { CommentList } from "../../shared/comment/list/list";
-import { EditForm } from "@frontend/features/shared/edit/edit-form";
-import { PostLike } from "@frontend/features/shared/post/like/like";
-import { client } from "@frontend/lib/trpc";
-import { formatRelativeTimeDate } from "@frontend/utils/intl";
-import { PostData } from "@frontend/types/api";
-import { updatePostSchema } from "@frontend/types/zod";
+import { EditForm } from "#frontend/features/shared/edit/edit-form";
+import { PostLike } from "#frontend/features/shared/post/like/like";
+import { client } from "#frontend/lib/trpc";
+import { formatRelativeTimeDate } from "#frontend/utils/intl";
+import { PostData } from "#frontend/types/api";
+import { updatePostSchema } from "#frontend/types/zod";
 import styles from "./post.module.css";
 
 type PostItemData = NonNullable<PostData>["posts"][number];

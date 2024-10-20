@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { publicProcedure, router } from "./trpc";
-import { friendService } from "@backend/services/friend";
-import { logError } from "@backend/utils/error-logger";
-import { friendRequestSchema, stringToNumberSchema } from "@backend/types/zod";
+import { friendService } from "#backend/services/friend";
+import { logError } from "#backend/utils/error-logger";
+import { friendRequestSchema, stringToNumberSchema } from "#backend/types/zod";
 
 export const friendRouter = router({
   getAllFriends: publicProcedure

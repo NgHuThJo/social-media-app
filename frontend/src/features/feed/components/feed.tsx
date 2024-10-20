@@ -1,18 +1,18 @@
 import { FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuthContext } from "@frontend/providers/auth-context";
-import { useFetch } from "@frontend/hooks/use-fetch";
-import { useToggle } from "@frontend/hooks/use-toggle";
-import { Button } from "@frontend/components/ui/button/button";
-import { CommentForm } from "@frontend/features/shared/comment/form/form";
-import { CommentList } from "@frontend/features/shared/comment/list/list";
-import { EditForm } from "@frontend/features/shared/edit/edit-form";
-import { Image } from "@frontend/components/ui/image/image";
-import { PostLike } from "@frontend/features/shared/post/like/like";
-import { client } from "@frontend/lib/trpc";
-import { formatRelativeTimeDate } from "@frontend/utils/intl";
+import { useAuthContext } from "#frontend/providers/auth-context";
+import { useFetch } from "#frontend/hooks/use-fetch";
+import { useToggle } from "#frontend/hooks/use-toggle";
+import { Button } from "#frontend/components/ui/button/button";
+import { CommentForm } from "#frontend/features/shared/comment/form/form";
+import { CommentList } from "#frontend/features/shared/comment/list/list";
+import { EditForm } from "#frontend/features/shared/edit/edit-form";
+import { Image } from "#frontend/components/ui/image/image";
+import { PostLike } from "#frontend/features/shared/post/like/like";
+import { client } from "#frontend/lib/trpc";
+import { formatRelativeTimeDate } from "#frontend/utils/intl";
 import { FeedListItemData } from "./list/list";
-import { updatePostSchema } from "@frontend/types/zod";
+import { updatePostSchema } from "#frontend/types/zod";
 import styles from "./feed.module.css";
 
 type FeedProps = {

@@ -1,6 +1,6 @@
 import { ComponentPropsWithoutRef } from "react";
 import { FormError } from "../error/error";
-import { FormErrorMessage } from "@frontend/types";
+import { FormErrorMessage } from "#frontend/types";
 import styles from "./textarea.module.css";
 
 type TextAreaProps = ComponentPropsWithoutRef<"textarea"> & FormErrorMessage;

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { OnlineUsersData } from "@frontend/types/api";
+import { OnlineUsersData } from "#frontend/types/api";
 import styles from "./list.module.css";
 
 type UserListProps = {

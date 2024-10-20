@@ -1,6 +1,6 @@
 import { FormEvent } from "react";
-import { Button } from "@frontend/components/ui/button/button";
-import { TextArea } from "@frontend/components/ui/form/textarea/textarea";
+import { Button } from "#frontend/components/ui/button/button";
+import { TextArea } from "#frontend/components/ui/form/textarea/textarea";
 import styles from "./edit-form.module.css";
 
 type CommentEditFormProps = {

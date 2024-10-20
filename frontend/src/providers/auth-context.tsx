@@ -1,7 +1,7 @@
 import { createContext, PropsWithChildren, useMemo, useState } from "react";
-import { useContextWrapper } from "@frontend/utils/context";
-import { getPersistedValue } from "@frontend/utils/local-storage";
-import { ProfileData } from "@frontend/types/api";
+import { useContextWrapper } from "#frontend/utils/context";
+import { getPersistedValue } from "#frontend/utils/local-storage";
+import { ProfileData } from "#frontend/types/api";
 
 export type AuthContextType = {
   user: ProfileData;

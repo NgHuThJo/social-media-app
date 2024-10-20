@@ -1,15 +1,15 @@
 import { ActionFunction, Form, Link, useActionData } from "react-router-dom";
-import { AuthContextApiType } from "@frontend/providers/auth-context";
-import { Button } from "@frontend/components/ui/button/button";
-import { ContentLayout } from "@frontend/components/layouts/content/content";
-import { Input } from "@frontend/components/ui/form/input/input";
-import { client } from "@frontend/lib/trpc";
-import { handleError } from "@frontend/utils/error-handler";
-import { validateInput } from "@frontend/utils/input-validation";
+import { AuthContextApiType } from "#frontend/providers/auth-context";
+import { Button } from "#frontend/components/ui/button/button";
+import { ContentLayout } from "#frontend/components/layouts/content/content";
+import { Input } from "#frontend/components/ui/form/input/input";
+import { client } from "#frontend/lib/trpc";
+import { handleError } from "#frontend/utils/error-handler";
+import { validateInput } from "#frontend/utils/input-validation";
 import {
   settingsFormSchema,
   SettingsFormSchemaError,
-} from "@frontend/types/zod";
+} from "#frontend/types/zod";
 import styles from "./settings.module.css";
 
 export const settingsAction =

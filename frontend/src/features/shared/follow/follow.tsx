@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { z } from "zod";
-import { useFetch } from "@frontend/hooks/use-fetch";
-import { useDebounce } from "@frontend/hooks/use-debounce";
-import { client } from "@frontend/lib/trpc";
-import { numberToStringSchema } from "@frontend/types/zod";
+import { useFetch } from "#frontend/hooks/use-fetch";
+import { useDebounce } from "#frontend/hooks/use-debounce";
+import { client } from "#frontend/lib/trpc";
+import { numberToStringSchema } from "#frontend/types/zod";
 import styles from "./follow.module.css";
 
 type FollowProps = {

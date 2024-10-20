@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { useDragAndDropSwap } from "@frontend/hooks/use-drag-and-drop-swap";
-import { FriendData } from "@frontend/types/api";
+import { useDragAndDropSwap } from "#frontend/hooks/use-drag-and-drop-swap";
+import { FriendData } from "#frontend/types/api";
 import styles from "./list.module.css";
-import { avatar_placeholder } from "@frontend/assets/resources/icons";
+import { avatar_placeholder } from "#frontend/assets/resources/icons";
 
 type FriendListProps = {
   data: FriendData;

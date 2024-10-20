@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import { useAuthContext } from "@frontend/providers/auth-context";
-import { useInfiniteScroll } from "@frontend/hooks/use-infinite-scroll";
-import { useLatest } from "@frontend/hooks/use-latest";
+import { useAuthContext } from "#frontend/providers/auth-context";
+import { useInfiniteScroll } from "#frontend/hooks/use-infinite-scroll";
+import { useLatest } from "#frontend/hooks/use-latest";
 import { FriendButton } from "../shared/friend/button/button";
 import { Follow } from "../shared/follow/follow";
-import { client } from "@frontend/lib/trpc";
-import { UsersData } from "@frontend/types/api";
-import { indexSchema } from "@frontend/types/zod";
+import { client } from "#frontend/lib/trpc";
+import { UsersData } from "#frontend/types/api";
+import { indexSchema } from "#frontend/types/zod";
 import styles from "./index.module.css";
-import { avatar_placeholder } from "@frontend/assets/resources/icons";
+import { avatar_placeholder } from "#frontend/assets/resources/icons";
 
 type IndexProps = {
   data: UsersData;

@@ -1,5 +1,5 @@
-import { prisma } from "@backend/models";
-import { AppError } from "@backend/utils/app-error";
+import { prisma } from "#backend/models";
+import { AppError } from "#backend/utils/app-error";
 
 class AuthService {
   async loginUser(email: string, password: string) {

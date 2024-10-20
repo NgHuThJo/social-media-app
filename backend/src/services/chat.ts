@@ -1,4 +1,4 @@
-import { prisma } from "@backend/models";
+import { prisma } from "#backend/models";
 
 class ChatService {
   async createChatroom(title: string) {

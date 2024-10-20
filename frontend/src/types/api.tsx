@@ -1,4 +1,4 @@
-import { client } from "@frontend/lib/trpc";
+import { client } from "#frontend/lib/trpc";
 
 export type ChatroomsData = Awaited<
   ReturnType<typeof client.chat.getAllChatrooms.query>

@@ -1,5 +1,5 @@
-import { prisma } from "@backend/models";
-import { FriendRequestAction } from "@backend/types";
+import { prisma } from "#backend/models";
+import { FriendRequestAction } from "#backend/types";
 import { FriendshipStatus } from "@prisma/client";
 
 class FriendService {

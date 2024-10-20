@@ -1,6 +1,6 @@
-import { prisma } from "@backend/models";
-import { Cursors } from "@backend/types";
-// import { AppError } from "@backend/utils/app-error";
+import { prisma } from "#backend/models";
+import { Cursors } from "#backend/types";
+// import { AppError } from "#backend/utils/app-error";
 
 class PostService {
   async getAllPosts(userId: number, page: number, limit: number) {

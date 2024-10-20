@@ -1,13 +1,13 @@
 import { z } from "zod";
 import { publicProcedure, router } from "./trpc";
-import { postService } from "@backend/services/post";
-import { logError } from "@backend/utils/error-logger";
+import { postService } from "#backend/services/post";
+import { logError } from "#backend/utils/error-logger";
 import {
   nonEmptyStringSchema,
   positiveNumberSchema,
   stringToNumberSchema,
   urlSchema,
-} from "@backend/types/zod";
+} from "#backend/types/zod";
 
 export const postRouter = router({
   getAllPosts: publicProcedure

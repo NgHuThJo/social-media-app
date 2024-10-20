@@ -12,6 +12,11 @@
     "format": "prettier --write .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "imports": {
+    "#backend/*": "/backend/dist/*",
+    "#frontend/*": "/frontend/dist/*",
+    "#shared/*": "/shared/*"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

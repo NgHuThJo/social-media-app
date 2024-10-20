@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { useAuthContext } from "@frontend/providers/auth-context";
-import { useWebSocketContextApi } from "@frontend/providers/websocket-context";
-import { useDialog } from "@frontend/hooks/use-dialog";
-import { Button } from "@frontend/components/ui/button/button";
-import { Chatroom } from "@frontend/features/chat/components/room/room";
+import { useAuthContext } from "#frontend/providers/auth-context";
+import { useWebSocketContextApi } from "#frontend/providers/websocket-context";
+import { useDialog } from "#frontend/hooks/use-dialog";
+import { Button } from "#frontend/components/ui/button/button";
+import { Chatroom } from "#frontend/features/chat/components/room/room";
 import { ChatForm } from "../form/form";
 import { ChatPlaceholder } from "../placeholder/placeholder";
 import { ChatroomList } from "../room-list/room-list";
-import { UserList } from "@frontend/features/user/components/list/list";
-import { ChatroomsData, OnlineUsersData } from "@frontend/types/api";
+import { UserList } from "#frontend/features/user/components/list/list";
+import { ChatroomsData, OnlineUsersData } from "#frontend/types/api";
 import styles from "./layout.module.css";
 
 type ChatLayoutProps = {

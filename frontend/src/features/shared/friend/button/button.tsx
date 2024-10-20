@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { z } from "zod";
-import { useFetch } from "@frontend/hooks/use-fetch";
-import { client } from "@frontend/lib/trpc";
-import { friendRequestSchema, numberToStringSchema } from "@frontend/types/zod";
+import { useFetch } from "#frontend/hooks/use-fetch";
+import { client } from "#frontend/lib/trpc";
+import { friendRequestSchema, numberToStringSchema } from "#frontend/types/zod";
 import styles from "./button.module.css";
 
 type FriendButtonProps = {

@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuthContext } from "@frontend/providers/auth-context";
-import { useWebSocketContext } from "@frontend/providers/websocket-context";
-import { useWebSocketContextApi } from "@frontend/providers/websocket-context";
-import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
+import { useAuthContext } from "#frontend/providers/auth-context";
+import { useWebSocketContext } from "#frontend/providers/websocket-context";
+import { useWebSocketContextApi } from "#frontend/providers/websocket-context";
+import { LoadingSpinner } from "#frontend/components/ui/loading/spinner/spinner";
 
 export function ProtectedRoute() {
   const { user } = useAuthContext();

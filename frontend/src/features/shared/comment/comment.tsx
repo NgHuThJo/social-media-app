@@ -1,17 +1,17 @@
 import { FormEvent, useState } from "react";
-import { useAuthContext } from "@frontend/providers/auth-context";
-import { useFetch } from "@frontend/hooks/use-fetch";
-import { useToggle } from "@frontend/hooks/use-toggle";
-import { Button } from "@frontend/components/ui/button/button";
+import { useAuthContext } from "#frontend/providers/auth-context";
+import { useFetch } from "#frontend/hooks/use-fetch";
+import { useToggle } from "#frontend/hooks/use-toggle";
+import { Button } from "#frontend/components/ui/button/button";
 import { CommentList } from "./list/list";
-import { client } from "@frontend/lib/trpc";
-import { formatRelativeTimeDate } from "@frontend/utils/intl";
+import { client } from "#frontend/lib/trpc";
+import { formatRelativeTimeDate } from "#frontend/utils/intl";
 import { CommentForm } from "./form/form";
 import { CommentLike } from "./like/like";
 import { CommentEditForm } from "./form/edit/edit-form";
 import { CommentListData } from "./list/list";
-import { Intent } from "@frontend/types";
-import { updateCommentSchema } from "@frontend/types/zod";
+import { Intent } from "#frontend/types";
+import { updateCommentSchema } from "#frontend/types/zod";
 import styles from "./comment.module.css";
 
 type CommentData = NonNullable<CommentListData>[number];

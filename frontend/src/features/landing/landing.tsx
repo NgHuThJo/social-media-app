@@ -1,12 +1,12 @@
-import { Image } from "@frontend/components/ui/image/image";
-import { Navigation } from "@frontend/components/ui/navigation/navigation";
-import { getBreakpoints } from "@frontend/utils/breakpoints";
+import { Image } from "#frontend/components/ui/image/image";
+import { Navigation } from "#frontend/components/ui/navigation/navigation";
+import { getBreakpoints } from "#frontend/utils/breakpoints";
 import styles from "./landing.module.css";
 import {
   landing_page_desktop,
   landing_page_mobile,
   landing_page_tablet,
-} from "@frontend/assets/resources/images";
+} from "#frontend/assets/resources/images";
 
 const { xs, s } = getBreakpoints();
 

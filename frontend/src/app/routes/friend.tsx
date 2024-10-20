@@ -5,14 +5,14 @@ import {
   LoaderFunctionArgs,
   useLoaderData,
 } from "react-router-dom";
-import { ContentLayout } from "@frontend/components/layouts/content/content";
-import { FriendList } from "@frontend/features/friend/components/list/list";
-import { LoadingSpinner } from "@frontend/components/ui/loading/spinner/spinner";
-import { client } from "@frontend/lib/trpc";
-import { handleError } from "@frontend/utils/error-handler";
-import { validateInput } from "@frontend/utils/input-validation";
-import { LoaderData } from "@frontend/types";
-import { userIdSchema } from "@frontend/types/zod";
+import { ContentLayout } from "#frontend/components/layouts/content/content";
+import { FriendList } from "#frontend/features/friend/components/list/list";
+import { LoadingSpinner } from "#frontend/components/ui/loading/spinner/spinner";
+import { client } from "#frontend/lib/trpc";
+import { handleError } from "#frontend/utils/error-handler";
+import { validateInput } from "#frontend/utils/input-validation";
+import { LoaderData } from "#frontend/types";
+import { userIdSchema } from "#frontend/types/zod";
 
 type FriendLoaderData = LoaderData<typeof friendLoader>;
 

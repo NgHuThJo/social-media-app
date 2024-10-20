@@ -1,4 +1,4 @@
-import { ChatroomsData } from "@frontend/types/api";
+import { ChatroomsData } from "#frontend/types/api";
 import styles from "./room-list.module.css";
 
 type ChatroomListProps = {

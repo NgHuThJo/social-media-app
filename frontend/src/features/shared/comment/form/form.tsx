@@ -1,12 +1,12 @@
 import { Form, redirect, useActionData } from "react-router-dom";
-import { client } from "@frontend/lib/trpc";
-import { Button } from "@frontend/components/ui/button/button";
-import { FormError } from "@frontend/components/ui/form/error/error";
-import { TextArea } from "@frontend/components/ui/form/textarea/textarea";
-import { handleError } from "@frontend/utils/error-handler";
-import { validateInput } from "@frontend/utils/input-validation";
-import { ActionDispatchFunction } from "@frontend/types";
-import { commentSchema, CommentSchemaError } from "@frontend/types/zod";
+import { client } from "#frontend/lib/trpc";
+import { Button } from "#frontend/components/ui/button/button";
+import { FormError } from "#frontend/components/ui/form/error/error";
+import { TextArea } from "#frontend/components/ui/form/textarea/textarea";
+import { handleError } from "#frontend/utils/error-handler";
+import { validateInput } from "#frontend/utils/input-validation";
+import { ActionDispatchFunction } from "#frontend/types";
+import { commentSchema, CommentSchemaError } from "#frontend/types/zod";
 import styles from "./form.module.css";
 
 type CommentProps = {

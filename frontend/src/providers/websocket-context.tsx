@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useMemo } from "react";
-import { useContextWrapper } from "@frontend/utils/context";
-import { useWebSocket } from "@frontend/hooks/use-websocket";
+import { useContextWrapper } from "#frontend/utils/context";
+import { useWebSocket } from "#frontend/hooks/use-websocket";
 
 type WebSocketContextType = {
   isSocketReady: boolean;

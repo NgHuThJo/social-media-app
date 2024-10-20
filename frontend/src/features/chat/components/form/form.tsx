@@ -1,13 +1,13 @@
 import { MouseEvent, forwardRef } from "react";
 import { ActionFunctionArgs, Form, useActionData } from "react-router-dom";
-import { Button } from "@frontend/components/ui/button/button";
-import { Dialog } from "@frontend/components/ui/dialog/dialog";
-import { FormError } from "@frontend/components/ui/form/error/error";
-import { Input } from "@frontend/components/ui/form/input/input";
-import { client } from "@frontend/lib/trpc";
-import { handleError } from "@frontend/utils/error-handler";
-import { validateInput } from "@frontend/utils/input-validation";
-import { chatFormSchema, ChatFormSchemaError } from "@frontend/types/zod";
+import { Button } from "#frontend/components/ui/button/button";
+import { Dialog } from "#frontend/components/ui/dialog/dialog";
+import { FormError } from "#frontend/components/ui/form/error/error";
+import { Input } from "#frontend/components/ui/form/input/input";
+import { client } from "#frontend/lib/trpc";
+import { handleError } from "#frontend/utils/error-handler";
+import { validateInput } from "#frontend/utils/input-validation";
+import { chatFormSchema, ChatFormSchemaError } from "#frontend/types/zod";
 import styles from "./form.module.css";
 
 type ChatFormProps = {
