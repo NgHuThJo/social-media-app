@@ -1,7 +1,7 @@
 import { v2 as cloudinary } from "cloudinary";
-import { prisma } from "#backend/models";
-import { AppError } from "#backend/utils/app-error";
-import { Cursor } from "#backend/types";
+import { prisma } from "#backend/models/index.js";
+import { AppError } from "#backend/utils/app-error.js";
+import { Cursor } from "#backend/types/index.js";
 
 class UserService {
   async getUser(userId: number) {

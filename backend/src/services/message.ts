@@ -1,4 +1,4 @@
-import { prisma } from "#backend/models";
+import { prisma } from "#backend/models/index.js";
 
 class MessageService {
   async getAllRoomMessages(roomId: number) {

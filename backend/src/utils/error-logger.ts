@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
-import { AppError } from "./app-error";
-import logger from "#backend/utils/logger";
+import { AppError } from "./app-error.js";
+import logger from "#backend/utils/logger.js";
 
 export function logError(error: unknown) {
   if (error instanceof AppError) {

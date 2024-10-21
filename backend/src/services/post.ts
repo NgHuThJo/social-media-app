@@ -1,5 +1,5 @@
-import { prisma } from "#backend/models";
-import { Cursors } from "#backend/types";
+import { prisma } from "#backend/models/index.js";
+import { Cursors } from "#backend/types/index.js";
 // import { AppError } from "#backend/utils/app-error";
 
 class PostService {

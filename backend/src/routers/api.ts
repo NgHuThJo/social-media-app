@@ -1,10 +1,10 @@
-import { router } from "./trpc";
-import { authRouter } from "./auth";
-import { chatRouter } from "./chat";
-import { friendRouter } from "./friend";
-import { messageRouter } from "./message";
-import { postRouter } from "./post";
-import { userRouter } from "./user";
+import { router } from "./trpc.js";
+import { authRouter } from "./auth.js";
+import { chatRouter } from "./chat.js";
+import { friendRouter } from "./friend.js";
+import { messageRouter } from "./message.js";
+import { postRouter } from "./post.js";
+import { userRouter } from "./user.js";
 
 export const appRouter = router({
   auth: authRouter,

@@ -1,9 +1,12 @@
 import { Server as HttpServer } from "node:http";
 import { Server as SocketIOServer, Socket } from "socket.io";
 import { z } from "zod";
-import { userService } from "./user";
-import logger from "#backend/utils/logger";
-import { numericStringSchema, stringToNumberSchema } from "#backend/types/zod";
+import { userService } from "./user.js";
+import logger from "#backend/utils/logger.js";
+import {
+  numericStringSchema,
+  stringToNumberSchema,
+} from "#backend/types/zod.js";
 
 export type SocketServiceType = typeof SocketService;
 
