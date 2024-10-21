@@ -5,6 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "build": "tsc --build",
     "client": "cd frontend & npm run dev",
     "server": "cd backend & npm run dev",
     "lint": "eslint .",
@@ -12,10 +13,12 @@
     "format": "prettier --write .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "workspaces": [
+    "./*"
+  ],
   "imports": {
-    "#backend/*": "/backend/dist/*",
-    "#frontend/*": "/frontend/dist/*",
-    "#shared/*": "/shared/*"
+    "#backend/*": "./backend/dist/*",
+    "#frontend/*": "./frontend/dist/*"
   },
   "keywords": [],
   "author": "",

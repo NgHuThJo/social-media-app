@@ -7,7 +7,7 @@ import { client } from "#frontend/lib/trpc";
 import { validateInput } from "#frontend/utils/input-validation";
 import { numberToStringSchema, numericStringSchema } from "#frontend/types/zod";
 import styles from "./like.module.css";
-import { thumbs_up_icon } from "#frontend/assets/images";
+import { thumbs_up_icon } from "#frontend/assets/resources/icons";
 
 type PostLikeProps = {
   isLiked: boolean;

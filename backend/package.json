@@ -13,9 +13,6 @@
   "prisma": {
     "seed": "tsx prisma/seed/seed.ts"
   },
-  "imports": {
-    "#backend/*": "./src/*"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",

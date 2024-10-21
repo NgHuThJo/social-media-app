@@ -1,11 +1,4 @@
-import {
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useWebSocketContextApi } from "#frontend/providers/websocket-context";
 import { useFetch } from "#frontend/hooks/use-fetch";
@@ -15,17 +8,10 @@ import { EmojiButtonGrid } from "#frontend/components/ui/button/emoji/grid";
 import { client } from "#frontend/lib/trpc";
 import { formatRelativeTimeDate } from "#frontend/utils/intl";
 import { validateInput } from "#frontend/utils/input-validation";
-import {
-  messageSchema,
-  MessageSchemaError,
-  numberToStringSchema,
-  SchemaError,
-} from "#frontend/types/zod";
+import { messageSchema, MessageSchemaError, numberToStringSchema, SchemaError } from "#frontend/types/zod";
 import styles from "./room.module.css";
 
-export type RoomMessagesType = Awaited<
-  ReturnType<typeof client.message.getAllRoomMessages.query>
->;
+export type RoomMessagesType = Awaited<ReturnType<typeof client.message.getAllRoomMessages.query>>;
 
 type ChatroomProps = {
   currentRoomId: number;
@@ -34,19 +20,12 @@ type ChatroomProps = {
 export function Chatroom({ currentRoomId }: ChatroomProps) {
   const [messages, setMessages] = useState<RoomMessagesType>();
   const messageInputRef = useRef<HTMLInputElement>(null);
-  const { scrollRef, scrollIntoView } = useScrollIntoView<HTMLParagraphElement>(
-    {
-      behavior: "smooth",
-    },
-  );
+  const { scrollRef, scrollIntoView } = useScrollIntoView<HTMLParagraphElement>({
+    behavior: "smooth",
+  });
   const { subscribe } = useWebSocketContextApi();
-  const { isLoading, error, fetchData } =
-    useFetch<typeof numberToStringSchema>();
-  const {
-    isLoading: eventIsLoading,
-    error: eventError,
-    fetchData: eventFetchData,
-  } = useFetch<typeof messageSchema>();
+  const { isLoading, error, fetchData } = useFetch();
+  const { isLoading: eventIsLoading, error: eventError, fetchData: eventFetchData } = useFetch();
   const { userId } = useParams();
 
   useEffect(() => {
@@ -62,14 +41,11 @@ export function Chatroom({ currentRoomId }: ChatroomProps) {
   }, [messages]);
 
   useEffect(() => {
-    fetchData(async (abortController, setError) => {
-      const { data, errors, isValid } = validateInput(
-        numberToStringSchema,
-        currentRoomId,
-      );
+    fetchData(async (abortController) => {
+      const { data, errors, isValid } = validateInput(numberToStringSchema, currentRoomId);
 
       if (!isValid) {
-        return setError({ errors });
+        throw new Error("Invalid data format");
       }
 
       const response = await client.message.getAllRoomMessages.query(
@@ -86,7 +62,7 @@ export function Chatroom({ currentRoomId }: ChatroomProps) {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    eventFetchData(async (abortController, setError) => {
+    eventFetchData(async (abortController) => {
       const formData = new FormData(event.currentTarget);
       const payload = {
         ...Object.fromEntries(formData),
@@ -96,7 +72,7 @@ export function Chatroom({ currentRoomId }: ChatroomProps) {
       const { data, errors, isValid } = validateInput(messageSchema, payload);
 
       if (!isValid) {
-        return setError({ errors });
+        throw new Error("Invalid data format");
       }
 
       const response = await client.message.createMessage.mutate(data, {
@@ -119,13 +95,9 @@ export function Chatroom({ currentRoomId }: ChatroomProps) {
     <div className={styles.layout}>
       <div className={styles.chatbox}>
         {messages?.map((message, index) => (
-          <p
-            key={message.id}
-            ref={index === messages.length - 1 ? scrollRef : null}
-          >
+          <p key={message.id} ref={index === messages.length - 1 ? scrollRef : null}>
             <span>
-              {message.author.displayName} (
-              {formatRelativeTimeDate(new Date(message.createdAt), "en")})
+              {message.author.displayName} ({formatRelativeTimeDate(new Date(message.createdAt), "en")})
             </span>
             : {message.content}
           </p>
@@ -133,13 +105,7 @@ export function Chatroom({ currentRoomId }: ChatroomProps) {
       </div>
       <form method="post" className={styles.form} onSubmit={handleSubmit}>
         <EmojiButtonGrid writeEmoji={writeEmoji} />
-        <input
-          type="text"
-          name="content"
-          id="content"
-          placeholder="Enter your message..."
-          ref={messageInputRef}
-        />
+        <input type="text" name="content" id="content" placeholder="Enter your message..." ref={messageInputRef} />
         <input type="hidden" name="userId" id="userId" value={userId} />
         <Button type="submit">Submit message</Button>
       </form>

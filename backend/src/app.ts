@@ -10,7 +10,7 @@ import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { appRouter } from "#backend/routers/api.js";
 import { createContext } from "./routers/trpc.js";
 import { SocketService } from "./services/socket-io.js";
-import logger from "#shared/utils/logger.js";
+import logger from "#backend/utils/logger.js";
 
 // Entry point file
 const app = express();

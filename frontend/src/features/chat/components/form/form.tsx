@@ -33,7 +33,7 @@ export const chatAction = async ({ request, params }: ActionFunctionArgs) => {
 
     return response;
   } catch (error) {
-    return handleError(error, "Could not create new chatroom");
+    return handleError(error);
   }
 };
 
@@ -48,7 +48,7 @@ export const ChatForm = forwardRef<HTMLDialogElement, ChatFormProps>(
             name="title"
             label="Name of the chatroom"
             placeholder="Chatroom name..."
-            error={actionData?.errors?.title && actionData.errors.title}
+            error={actionData?.errors?.fieldErrors?.title && actionData.errors.fieldErrors?.title}
             labelClassName="chatroom"
           />
           <div className={styles.actions}>
@@ -59,9 +59,7 @@ export const ChatForm = forwardRef<HTMLDialogElement, ChatFormProps>(
               Close dialog
             </Button>
           </div>
-          {actionData?.errors?.general && (
-            <FormError message={actionData.errors.general} />
-          )}
+          {actionData?.errors?.general && <FormError message={actionData.errors.general} />}
         </Form>
       </Dialog>
     );

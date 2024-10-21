@@ -8,8 +8,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "#frontend": path.resolve(__dirname, "src"),
-      "#shared": path.resolve(__dirname, "../shared"),
-      "@publicAssets": path.resolve(__dirname, "public"),
+      "#backend": path.resolve(__dirname, "../backend"),
+      "#publicAssets": path.resolve(__dirname, "public"),
     },
   },
 });

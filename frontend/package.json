@@ -11,9 +11,6 @@
     "preview": "vite preview",
     "asset": "node asset-export-generator.js"
   },
-  "imports": {
-    "#frontend/*": "./src/*"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
