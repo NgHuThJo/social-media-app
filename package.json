@@ -17,8 +17,8 @@
     "./*"
   ],
   "imports": {
-    "#backend/*": "./backend/dist/*",
-    "#frontend/*": "./frontend/dist/*"
+    "#backend/*": "./backend/dist/src/*",
+    "#frontend/*": "./frontend/dist/src/*"
   },
   "keywords": [],
   "author": "",
