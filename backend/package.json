@@ -5,9 +5,12 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "build": "npm run prisma:generate && npm run prisma:deploy && tsc",
+    "start": "node --conditions=production dist/src/app.js",
     "dev": "tsx --watch --env-file=.env ./src/app.ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "prisma": "npx prisma migrate dev",
+    "prisma:deploy": "npx prisma migrate deploy",
+    "prisma:generate": "npx prisma generate",
     "prisma:reset": "npx prisma migrate reset"
   },
   "prisma": {

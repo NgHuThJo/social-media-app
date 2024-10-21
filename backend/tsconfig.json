@@ -5,6 +5,7 @@
     "paths": {
       "#backend/*": ["./src/*"]
     },
+    "customConditions": ["production"],
     "outDir": "dist"
   },
   "include": ["./src/**/*"],
