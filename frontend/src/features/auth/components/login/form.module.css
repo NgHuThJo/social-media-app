@@ -20,6 +20,7 @@
   display: grid;
   gap: var(--space-gutter);
   padding: 2rem;
+  box-shadow: var(--box-shadow);
   background-image: var(--gradient-friend);
 }
 

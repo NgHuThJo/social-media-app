@@ -1,5 +1,6 @@
 .layout {
   display: grid;
+  box-shadow: var(--box-shadow);
   background-color: var(--bgc-content);
 
   @media screen and (min-width: 480px) {
@@ -11,8 +12,9 @@
   display: grid;
   grid-template-rows: 1fr auto;
   padding-block-start: 2rem;
+  border: 1px solid var(--c-root);
   text-align: center;
-  background-color: var(--bgc-notification);
+  background-color: var(--bgc-chat-sidebar);
 }
 
 .actions {
@@ -20,10 +22,6 @@
 
   > * {
     border-top: 1px solid var(--c-root);
-  }
-
-  > :last-child {
-    border-bottom: 1px solid var(--c-root);
   }
 }
 

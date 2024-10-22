@@ -18,6 +18,7 @@
   grid-template-areas: "avatar name" "avatar email";
   padding: 1.5rem;
   outline: 0px solid transparent;
+  box-shadow: var(--box-shadow);
   font-weight: var(--fw-link);
   background-color: var(--bgc-content);
   transition:
@@ -38,7 +39,7 @@
   }
 
   a {
-    color: var(--c-error);
+    color: var(--c-author);
   }
 }
 

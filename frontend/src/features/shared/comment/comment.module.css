@@ -3,7 +3,7 @@
 
   padding-left: var(--line-spacing);
   margin-left: var(--line-spacing);
-  border-left: 2px solid var(--c-box-shadow);
+  border-left: 2px solid var(--c-divider);
 }
 
 .comment {

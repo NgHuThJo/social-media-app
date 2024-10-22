@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import {
   ActionFunction,
   Form,
@@ -35,11 +36,34 @@ export const registerAction: ActionFunction = async ({ request }) => {
 
 export function RegisterForm() {
   const actionData = useActionData() as RegistrationSchemaError;
+  const leftCurtainRef = useRef<HTMLDivElement | null>(null);
+  const rightCurtainRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const onAnimationEnd = (event: AnimationEvent) => {
+      const currentTarget = event.currentTarget as HTMLElement;
+      currentTarget.style.display = "none";
+    };
+
+    leftCurtainRef.current?.addEventListener("animationend", onAnimationEnd);
+    rightCurtainRef.current?.addEventListener("animationend", onAnimationEnd);
+
+    return () => {
+      leftCurtainRef.current?.removeEventListener(
+        "animationend",
+        onAnimationEnd,
+      );
+      rightCurtainRef.current?.removeEventListener(
+        "animationend",
+        onAnimationEnd,
+      );
+    };
+  }, []);
 
   return (
     <div className={styles.container}>
-      <div className={styles.left}></div>
-      <div className={styles.right}></div>
+      <div className={styles.left} ref={leftCurtainRef}></div>
+      <div className={styles.right} ref={rightCurtainRef}></div>
       <Form method="post" className={styles.form}>
         <h2>Register form</h2>
         <Input

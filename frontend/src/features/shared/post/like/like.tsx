@@ -7,7 +7,6 @@ import { client } from "#frontend/lib/trpc";
 import { validateInput } from "#frontend/utils/input-validation";
 import { numberToStringSchema, numericStringSchema } from "#frontend/types/zod";
 import styles from "./like.module.css";
-import { thumbs_up_icon } from "#frontend/assets/resources/icons";
 
 type PostLikeProps = {
   isLiked: boolean;
@@ -56,11 +55,11 @@ export function PostLike({ postId, likes, isLiked }: PostLikeProps) {
     <button type="button" onClick={likePost} className={styles.button}>
       <svg
         className={isPostLiked ? styles.active : ""}
-        height="32px"
+        height="24px"
         id="Layer_1"
         version="1.1"
         viewBox="0 0 32 32"
-        width="32px"
+        width="24px"
         xmlSpace="preserve"
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"

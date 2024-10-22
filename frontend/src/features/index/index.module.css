@@ -6,7 +6,7 @@
 }
 
 .item {
-  --avatar-width: 4.5rem;
+  --avatar-width: 5rem;
 
   display: grid;
   align-items: center;
@@ -15,7 +15,8 @@
   grid-template-areas: "avatar name" "avatar email" "button friend";
   min-width: fit-content;
   padding: 2rem;
-  background-color: var(--bgc-notification);
+  box-shadow: var(--box-shadow);
+  background-color: var(--bgc-content);
 
   img {
     grid-area: avatar;
@@ -24,16 +25,10 @@
     border-radius: 50%;
   }
 
-  > p {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-size: 1.25rem;
-  }
-
   a {
     font-weight: var(--fw-heading);
-    font-size: var(--fs-h3);
-    color: var(--c-brand);
+    font-size: var(--fs-h4);
+    color: var(--c-author);
   }
 }
 

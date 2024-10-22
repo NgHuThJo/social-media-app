@@ -2,7 +2,7 @@
   display: grid;
   gap: 2rem;
   padding: 2rem;
-  background-color: var(--bgc-notification);
+  background-color: var(--bgc-form);
   font-weight: var(--fw-button);
 
   input,

@@ -3,17 +3,19 @@
   grid-template-columns: min(100%, 40rem);
   place-content: center;
   padding-inline: clamp(1rem, -1rem + 10vw, 3rem);
-  background-image: var(--gradient-app);
+  background-image: var(--gradient-inbox);
+  contain: layout;
 }
 
 .form {
   display: grid;
   gap: 2rem;
   padding: 2rem;
+  box-shadow: var(--box-shadow);
   background-image: var(--gradient-friend);
 
   h2 {
-    color: var(--c-inbox);
+    color: var(--c-nav);
   }
 }
 
@@ -27,7 +29,7 @@
   display: grid;
   position: absolute;
   background-image: var(--gradient-profile);
-  animation: 1s linear 0.5s forwards move;
+  animation: 1s linear 0.25s forwards move;
 }
 
 .left {
@@ -49,7 +51,6 @@
     transform: translateX(0);
   }
   to {
-    display: none;
     transform: translateX(var(--translateX));
   }
 }

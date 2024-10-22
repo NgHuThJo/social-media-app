@@ -16,7 +16,7 @@
 }
 
 .active {
-  background-color: var(--bgc-active-chat);
+  background-color: var(--bgc-chat-active);
 }
 
 .no-chatroom {

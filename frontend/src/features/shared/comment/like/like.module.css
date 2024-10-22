@@ -5,7 +5,7 @@
 
   > span {
     font-weight: var(--fw-heading);
-    font-size: var(--fs-h3);
+    font-size: var(--fs-h4);
   }
 }
 

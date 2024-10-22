@@ -4,5 +4,6 @@
 
 .button {
   align-self: stretch;
-  background-color: var(--bgc-follow-button-active);
+  padding: 0.5rem;
+  background-color: var(--bgc-follow-button);
 }

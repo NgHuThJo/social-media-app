@@ -12,6 +12,8 @@
   --p-inline-container: 2rem;
   --p-chat-sidebar-grid-item: 0.5rem;
   --w-icon: 2rem;
+  --box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
 
   /* grid */
   --auto-grid-column-w: 15rem;
@@ -42,32 +44,22 @@
   --fs-root: 0.9375rem;
 
   /* colors */
-  --c-text: #ffffff;
-  --c-box-shadow: #d8e1ef;
-  --c-brand: #b08307;
-  --c-error: #da3633;
-  --c-heading: #4040ff;
-  --c-link: #000;
-  --c-link-active: #4080f0;
-  --c-follow-active: #6080b0;
-  --c-logo: #404040;
-  --c-pending-message: #4060b0;
-  --c-root: #000000;
-  --c-inbox: #804000;
+  --c-white-900: #fff;
+  --c-black-900: #000;
+  --c-red-900: #f00;
+  --c-orange-900: #ff7f00;
+  --c-yellow-900: #ff0;
+  --c-spring-900-green: #7fff00;
+  --c-green-900: #0f0;
+  --c-turquoise-900: #00ff7f;
+  --c-cyan-900: #0ff;
+  --c-ocean-900: #007fff;
+  --c-blue-900: #00f;
+  --c-violet-900: #7f00ff;
+  --c-magenta-900: #f0f;
+  --c-raspberry-900: #ff007f;
 
-  --bgc-brand: #803070;
-  --bgc-button: #408fa6;
-  --bgc-button-disabled: var(--bgc-emoji-grid);
-  --bgc-follow-button-active: #454857;
-  --bgc-friend-button: #e0a427;
-  --bgc-content: #fff;
-  --bgc-emoji-grid: #2c4e70;
-  --bgc-like: #802c80;
-  --bgc-notification: #2c4e70;
-  --bgc-root: #eff4fb;
-  --bgc-chat-sidebar-grid-item: #4e5d6b;
-  --bgc-active-chat: #88230b;
-  --bgc-progress-bar: #0f1880;
+  /* gradients */
   --gradient-inbox: linear-gradient(0deg, #d9afd9 0%, #97d9e1 100%);
   --gradient-app: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
   --gradient-friend: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
@@ -76,7 +68,6 @@
     rgba(80, 12, 139, 0.87) 0%,
     rgba(161, 10, 144, 0.72) 83.6%
   );
-
   --gradient-progress-bar: linear-gradient(
     43deg,
     #4158d0 0%,
@@ -87,6 +78,48 @@
   /* transition */
   --transition-duration: 0.5s;
   --fade-transition-duration: 1s;
+}
+
+.light,
+.dark {
+  --c-error: var(--c-red-900);
+  --c-follow-active: var(--c-black);
+  --c-link-active: var(--c-blue-900);
+  --c-nav: var(--c-black-900);
+  --c-friend-request-pending: var(--c-violet-900);
+  --c-text-landing-page: var(--c-white-900);
+}
+
+.light {
+  --c-author: var(--c-violet-900);
+  --c-divider: var(--c-black-900);
+  --c-logo: inherit;
+  --c-root: var(--c-black-900);
+
+  --bgc-brand: var(--c-white-900);
+  --bgc-button: var(--c-ocean-900);
+  --bgc-button-disabled: #007f007f;
+  --bgc-chat-active: var(--c-magenta-900);
+  --bgc-chat-sidebar: var(--c-white-900);
+  --bgc-chat-sidebar-grid-item: var(--c-ocean-900);
+  --bgc-chat-room: var(--c-raspberry-900);
+  --bgc-content: var(--c-white-900);
+  --bgc-emoji-grid: var(--c-violet-900);
+  --bgc-follow-button: var(--c-ocean-900);
+  --bgc-form: var(--c-white-900);
+  --bgc-friend-button: var(--c-ocean-900);
+  --bgc-like: var(--c-violet-900);
+  --bgc-notification: #eee;
+  --bgc-placeholder: var(--c-violet-900);
+  --bgc-profile: var(--c-white-900);
+  --bgc-progress-bar: var(--c-blue-900);
+  --bgc-root: #eee;
+}
+
+.dark {
+  --c-root: var(--c-white-900);
+
+  --bgc-brand: (--c-blue-900);
 }
 
 /* reset */

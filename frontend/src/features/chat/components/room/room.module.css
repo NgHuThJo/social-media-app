@@ -8,7 +8,7 @@
   display: flex;
   padding: 1.5rem;
   position: relative;
-  background-color: var(--bgc-notification);
+  background-color: var(--bgc-chat-room);
 
   > input {
     flex-grow: 1;

@@ -1,19 +1,17 @@
 .profile {
-  --outer-breakout: 4rem;
   --avatar-width: 5rem;
   --p-container: 2rem;
 
   display: grid;
   justify-items: center;
   grid-template-rows: [avatar-start] auto [avatar-end info-start] 1fr [info-end];
-  grid-template-columns: var(--outer-breakout) [info-start] auto [avatar-start] auto [avatar-end] auto [info-end] var(
-      --outer-breakout
-    );
+  grid-template-columns: [info-start] auto [avatar-start] auto [avatar-end] auto [info-end];
   row-gap: 2rem;
   padding: var(--p-container);
+  box-shadow: var(--box-shadow);
   position: relative;
   text-align: center;
-  background-color: var(--bgc-notification);
+  background-color: var(--bgc-profile);
 
   [data-bg] {
     width: 100%;
@@ -46,7 +44,7 @@
   padding: 6px;
   border-radius: 50%;
   position: relative;
-  background-image: linear-gradient(green, orange);
+  background-image: var(--gradient-app);
 
   img {
     width: 100%;

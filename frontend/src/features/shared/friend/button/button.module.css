@@ -8,11 +8,11 @@
 
   > button {
     align-self: stretch;
-    padding-inline: 1rem;
+    padding: 0.5rem;
     background-color: var(--bgc-friend-button);
   }
 
   > p {
-    color: var(--c-pending-message);
+    color: var(--c-friend-request-pending);
   }
 }

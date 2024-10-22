@@ -2,14 +2,10 @@
   display: grid;
   justify-items: center;
   align-items: center;
-  height: 20rem;
   padding: 2rem;
   font-weight: var(--fw-heading);
-  font-size: var(--fs-h1);
-
-  @media screen and (min-width: 480px) {
-    height: revert;
-  }
+  font-size: var(--fs-h2);
+  background-color: var(--bgc-placeholder);
 }
 
 .cursor {

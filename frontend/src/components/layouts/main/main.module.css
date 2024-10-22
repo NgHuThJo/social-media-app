@@ -11,5 +11,5 @@
 .nav {
   padding: var(--p-inline-container);
   background-color: var(--bgc-content);
-  color: var(--c-inbox);
+  color: var(--c-nav);
 }

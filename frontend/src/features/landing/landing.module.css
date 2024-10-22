@@ -34,7 +34,7 @@
   grid-template-rows: repeat(3, auto);
   padding: 2rem;
   text-align: center;
-  color: var(--c-text);
+  color: var(--c-text-landing-page);
 
   h1 {
     font-size: var(--fs-h1);

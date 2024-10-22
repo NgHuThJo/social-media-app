@@ -7,5 +7,5 @@
 
   padding-left: var(--divider-spacing);
   margin-left: var(--divider-spacing);
-  border-left: 2px solid var(--c-box-shadow);
+  border-left: 2px solid var(--c-divider);
 }

@@ -3,7 +3,6 @@ import { Navigate } from "react-router-dom";
 import { z } from "zod";
 import { useAuthContext } from "#frontend/providers/auth-context";
 import { useFetch } from "#frontend/hooks/use-fetch";
-import { LoadingSpinner } from "#frontend/components/ui/loading/spinner/spinner";
 import { client } from "#frontend/lib/trpc";
 import { numberToStringSchema, numericStringSchema } from "#frontend/types/zod";
 import styles from "./like.module.css";
@@ -70,11 +69,11 @@ export function CommentLike({ commentId, likes, isLiked }: CommentLikeProps) {
     >
       <svg
         className={isCommentLiked ? styles.active : ""}
-        height="32px"
+        height="24px"
         id="Layer_1"
         version="1.1"
         viewBox="0 0 32 32"
-        width="32px"
+        width="24px"
         xmlSpace="preserve"
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
