@@ -91,6 +91,8 @@ async function main() {
   const postCountPerUser = 2;
   const commentCountPerPost = 2;
 
+  await prisma.user.deleteMany();
+
   await prisma.user.create({
     data: {
       ...createGuest(),

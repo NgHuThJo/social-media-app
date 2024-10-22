@@ -10,8 +10,15 @@
     "dev": "tsx --watch --env-file=.env ./src/app.ts",
     "prisma": "npx prisma migrate dev",
     "prisma:deploy": "npx prisma migrate deploy",
+    "prisma:seed": "npx prisma db seed",
     "prisma:generate": "npx prisma generate",
     "prisma:reset": "npx prisma migrate reset"
+  },
+  "imports": {
+    "#backend/*": {
+      "production": "./dist/src/*",
+      "default": "./src/*"
+    }
   },
   "prisma": {
     "seed": "tsx prisma/seed/seed.ts"
