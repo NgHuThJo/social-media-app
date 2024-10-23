@@ -3,7 +3,7 @@
   justify-items: start;
   gap: 2rem;
   padding: 2rem;
-  background-color: var(--bgc-notification);
+  background-color: var(--bgc-form);
 
   > label {
     flex-direction: column;

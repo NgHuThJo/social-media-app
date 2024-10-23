@@ -3,12 +3,16 @@
   grid-template-columns: 1fr;
   max-height: var(--max-h-notification-box);
   position: absolute;
-  top: 100%;
+  top: 0;
   right: 0;
   background-color: var(--bgc-notification);
   visibility: hidden;
   z-index: 1;
   overflow: auto;
+
+  @media screen and (min-width: 480px) {
+    top: 100%;
+  }
 
   > * {
     padding: 1rem;
@@ -27,6 +31,7 @@
   > span {
     justify-self: end;
     align-self: end;
-    color: var(--bgc-content);
+    font-weight: var(--fw-heading);
+    color: var(--c-root);
   }
 }

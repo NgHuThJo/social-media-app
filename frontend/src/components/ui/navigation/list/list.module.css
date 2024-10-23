@@ -2,3 +2,13 @@
   composes: flex-wrap from global;
   gap: 1rem;
 }
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  @media screen and (min-width: 480px) {
+    flex-direction: revert;
+  }
+}

@@ -109,7 +109,8 @@
   --bgc-form: var(--c-white-900);
   --bgc-friend-button: var(--c-ocean-900);
   --bgc-like: var(--c-violet-900);
-  --bgc-notification: #eee;
+  --bgc-navigation: #eee;
+  --bgc-notification: var(--c-cyan-900);
   --bgc-placeholder: var(--c-violet-900);
   --bgc-profile: var(--c-white-900);
   --bgc-progress-bar: var(--c-blue-900);

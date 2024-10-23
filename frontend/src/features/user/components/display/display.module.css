@@ -4,6 +4,7 @@
   grid-template-areas:
     "avatar name name"
     "avatar email email";
+  font-weight: var(--fw-button);
 }
 
 .avatar {
