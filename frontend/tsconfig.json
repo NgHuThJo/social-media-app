@@ -10,7 +10,6 @@
       "#frontend/*": ["./src/*"],
       "#backend/*": ["../backend/src/*"]
     },
-    "customConditions": ["production"],
     "outDir": "dist"
   },
   "include": ["./src/**/*"],
